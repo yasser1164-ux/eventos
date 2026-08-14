@@ -86,6 +86,37 @@ not the repo: Dashboard → Storage → `posters` bucket → Upload, then copy t
 file's public URL into the item's `poster_ref`. If an image URL fails to
 load, the pin falls back to the emoji badge and the popup hides the image.
 
+## Geocoding (free — OpenStreetMap Nominatim)
+
+Coordinates are never typed by hand:
+
+- **Fixing existing places**: `scripts/geocode-places.js` reads every
+  `type='place'` row, queries the free
+  [Nominatim](https://nominatim.org) geocoder (no API key) with
+  "title, venue, Saudi Arabia" — falling back to just the title — and writes
+  the top result's lat/lon back, logging every change as `Old → New`. Rows
+  with no match are left unchanged and listed as warnings for manual fixing.
+  Event rows are never touched. It respects Nominatim's usage policy: max
+  1 request/second and an identifying `User-Agent`. Results are bounded to
+  an Eastern-Province box so a same-named place elsewhere can't be matched.
+
+  ```
+  SUPABASE_SERVICE_ROLE_KEY=<service key> node scripts/geocode-places.js
+  node scripts/geocode-places.js --dry-run   # preview only, no key needed
+  ```
+
+  The service role key (Project Settings → API) is needed to write, because
+  the public anon key is read-only. Never commit it. Tip: names in
+  OpenStreetMap are often Arabic — if a place won't match, try its Arabic
+  name in the Supabase Table Editor search, or fix lat/lng by hand there.
+
+- **Submitting new places**: `submit.html` is the submission flow (currently
+  an admin stub). The user types a name/address — never coordinates — the
+  page geocodes it via Nominatim, drops a draggable pin on a map preview so
+  the spot can be nudged, then generates the SQL `insert` to paste into the
+  Supabase SQL editor. To open it to real users later, replace the SQL step
+  with an insert into a moderated `suggestions` table.
+
 ## Filters (app.js)
 
 Three chip rows combine with AND logic:
