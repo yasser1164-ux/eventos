@@ -8,27 +8,31 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 
 const markers = {};
 const allMarkers = [];
+const entries = []; // { ev, marker, circle, card } — one per event, for filtering
 
 EVENTS.forEach(ev => {
   // Heat glow — bigger + brighter for hotter events
-  L.circle([ev.lat, ev.lng], {
+  const circle = L.circle([ev.lat, ev.lng], {
     radius: 150 + ev.heat * 6,
     color: 'transparent',
     fillColor: '#ff5a5f',
     fillOpacity: 0.06 + (ev.heat / 100) * 0.22
   }).addTo(map);
 
+  // Round photo thumbnail; if the image fails, it's removed and the
+  // emoji (layered underneath on the gradient) shows instead.
   const icon = L.divIcon({
     className: '',
-    html: `<div class="pin"><span>${ev.emoji}</span></div>`,
-    iconSize: [34, 34],
-    iconAnchor: [17, 34],
-    popupAnchor: [0, -34]
+    html: `<div class="pin-thumb"><span class="pin-emoji">${ev.emoji}</span><img src="${ev.image}" alt="" onerror="this.remove()"></div>`,
+    iconSize: [44, 44],
+    iconAnchor: [22, 22],
+    popupAnchor: [0, -26]
   });
 
   const marker = L.marker([ev.lat, ev.lng], { icon }).addTo(map);
   marker.bindPopup(`
     <div class="popup">
+      <img class="poster" src="${ev.image}" alt="${ev.title}" onerror="this.remove()">
       <h3>${ev.title}</h3>
       <div class="meta">${ev.venue} &middot; ${ev.time}</div>
       <a href="${ev.ticketUrl}" target="_blank" rel="noopener">Get tickets</a>
@@ -37,6 +41,7 @@ EVENTS.forEach(ev => {
 
   markers[ev.id] = marker;
   allMarkers.push(marker);
+  entries.push({ ev, marker, circle, card: null });
 });
 
 // Zoom so every event (Khobar + Dammam) is visible at once
@@ -44,9 +49,10 @@ map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.25));
 
 // ---- SIDEBAR -------------------------------------------------------------
 const listEl = document.getElementById('event-list');
-document.getElementById('event-count').textContent = `${EVENTS.length} events happening`;
+const countEl = document.getElementById('event-count');
 
-EVENTS.forEach(ev => {
+entries.forEach(entry => {
+  const ev = entry.ev;
   const card = document.createElement('div');
   card.className = 'event-card';
   card.innerHTML = `
@@ -63,4 +69,42 @@ EVENTS.forEach(ev => {
     card.classList.add('active');
   });
   listEl.appendChild(card);
+  entry.card = card;
 });
+
+// ---- FILTERS -------------------------------------------------------------
+const chips = document.querySelectorAll('#filters .chip');
+let activeFilter = 'all';
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    activeFilter = chip.dataset.filter;
+    chips.forEach(c => c.classList.toggle('active', c === chip));
+    applyFilter();
+  });
+});
+
+function applyFilter() {
+  let nEvents = 0, nPlaces = 0;
+  entries.forEach(({ ev, marker, circle, card }) => {
+    const show = activeFilter === 'all' || ev.type === activeFilter;
+    card.style.display = show ? '' : 'none';
+    if (show) {
+      marker.addTo(map);
+      circle.addTo(map);
+      if (ev.type === 'place') nPlaces++; else nEvents++;
+    } else {
+      map.removeLayer(marker);
+      map.removeLayer(circle);
+    }
+  });
+  if (activeFilter === 'event') {
+    countEl.textContent = `${nEvents} events happening`;
+  } else if (activeFilter === 'place') {
+    countEl.textContent = `${nPlaces} place${nPlaces === 1 ? '' : 's'} to explore`;
+  } else {
+    countEl.textContent = `${nEvents} events · ${nPlaces} place${nPlaces === 1 ? '' : 's'}`;
+  }
+}
+
+applyFilter();
