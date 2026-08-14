@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="Food and Culture Festival poster">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#150900"/>
+      <stop offset=".5" stop-color="#2b1305"/>
+      <stop offset="1" stop-color="#120701"/>
+    </linearGradient>
+    <radialGradient id="amber" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffb347" stop-opacity=".6"/>
+      <stop offset="1" stop-color="#ffb347" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="candle" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffd9a0" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bowl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a63b2a"/>
+      <stop offset="1" stop-color="#5e1b10"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bg)"/>
+
+  <!-- hanging lanterns with candlelight glow -->
+  <g stroke="#7a4a1c" stroke-width="2">
+    <line x1="90" y1="0" x2="90" y2="72"/>
+    <line x1="510" y1="0" x2="510" y2="96"/>
+    <line x1="300" y1="0" x2="300" y2="40"/>
+  </g>
+  <ellipse cx="90" cy="108" rx="90" ry="80" fill="url(#candle)" opacity=".6"/>
+  <ellipse cx="510" cy="132" rx="90" ry="80" fill="url(#candle)" opacity=".6"/>
+  <g fill="#e2591f">
+    <ellipse cx="90" cy="100" rx="26" ry="30"/>
+    <ellipse cx="510" cy="124" rx="26" ry="30"/>
+  </g>
+  <g fill="#ffd9a0">
+    <rect x="80" y="66" width="20" height="7" rx="3"/>
+    <rect x="500" y="90" width="20" height="7" rx="3"/>
+    <rect x="80" y="126" width="20" height="7" rx="3"/>
+    <rect x="500" y="150" width="20" height="7" rx="3"/>
+  </g>
+
+  <!-- title -->
+  <text x="300" y="212" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="74" fill="#ffe8c8" textLength="520" lengthAdjust="spacingAndGlyphs">FOOD &amp; CULTURE</text>
+  <text x="300" y="286" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="74" fill="#ffb347" textLength="340" lengthAdjust="spacingAndGlyphs">FESTIVAL</text>
+
+  <!-- hero: noodle bowl in amber glow -->
+  <ellipse cx="300" cy="480" rx="240" ry="160" fill="url(#amber)"/>
+  <g stroke="#ffd9a0" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85">
+    <path d="M258 352c-14-22 14-34 0-56"/>
+    <path d="M300 340c-14-22 14-34 0-56"/>
+    <path d="M342 352c-14-22 14-34 0-56"/>
+  </g>
+  <g stroke="#e8c890" stroke-width="7" stroke-linecap="round">
+    <line x1="352" y1="300" x2="424" y2="416"/>
+    <line x1="374" y1="292" x2="438" y2="404"/>
+  </g>
+  <path d="M158 428h284c0 66-44 118-100 130l-6 26h-72l-6-26c-56-12-100-64-100-130z" fill="url(#bowl)"/>
+  <path d="M158 428h284c-4 14-46 26-142 26s-138-12-142-26z" fill="#3d1008"/>
+  <g stroke="#ffe8c8" stroke-width="6" fill="none" stroke-linecap="round" opacity=".9">
+    <path d="M180 428c22-16 48-24 120-24s98 8 120 24"/>
+    <path d="M208 416c18-10 40-16 92-16s74 6 92 16" stroke="#ffb347"/>
+  </g>
+  <path d="M226 500c20 24 128 24 148 0" stroke="#ffb347" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+
+  <!-- divider -->
+  <rect x="40" y="640" width="520" height="2" fill="#ffb347" opacity=".55"/>
+
+  <!-- info strip -->
+  <g fill="none" stroke="#ffb347" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="44" y="672" width="24" height="22" rx="4"/>
+    <line x1="44" y1="680" x2="68" y2="680"/>
+    <line x1="51" y1="668" x2="51" y2="675"/>
+    <line x1="61" y1="668" x2="61" y2="675"/>
+  </g>
+  <text x="84" y="690" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="24" fill="#fff2df">ALL WEEKEND</text>
+
+  <g fill="none" stroke="#ffb347" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 710c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z"/>
+    <circle cx="56" cy="726" r="5"/>
+  </g>
+  <text x="84" y="738" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="20" fill="#ecd9bd">AL RASHID MALL PLAZA</text>
+
+  <text x="300" y="782" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="20" letter-spacing="8" fill="#ffb347">TASTE THE WORLD</text>
+
+  <rect width="600" height="800" filter="url(#grain)" opacity=".07"/>
+</svg>

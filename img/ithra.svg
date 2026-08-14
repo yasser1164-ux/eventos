@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="Ithra explore card">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#080e1c"/>
+      <stop offset=".5" stop-color="#132441"/>
+      <stop offset="1" stop-color="#070d19"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dce7f5"/>
+      <stop offset=".5" stop-color="#9db2cf"/>
+      <stop offset="1" stop-color="#5a7096"/>
+    </linearGradient>
+    <linearGradient id="stoneDim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b9c9e0"/>
+      <stop offset="1" stop-color="#46597c"/>
+    </linearGradient>
+    <radialGradient id="coolGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#7fa8e0" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#7fa8e0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bg)"/>
+
+  <!-- soft cool flares -->
+  <ellipse cx="300" cy="120" rx="280" ry="160" fill="url(#coolGlow)" opacity=".5"/>
+  <ellipse cx="300" cy="430" rx="270" ry="220" fill="url(#coolGlow)"/>
+
+  <!-- name -->
+  <text x="300" y="132" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="86" letter-spacing="26" fill="#eef4fc">ITHRA</text>
+  <text x="300" y="176" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="17" letter-spacing="4" fill="#9db2cf">KING ABDULAZIZ CENTER FOR WORLD CULTURE</text>
+
+  <!-- hero: abstract stacked-stone architecture -->
+  <g>
+    <ellipse cx="332" cy="266" rx="74" ry="52" fill="url(#stoneDim)" transform="rotate(-8 332 266)"/>
+    <ellipse cx="286" cy="356" rx="112" ry="66" fill="url(#stone)" transform="rotate(5 286 356)"/>
+    <ellipse cx="318" cy="466" rx="150" ry="80" fill="url(#stoneDim)" transform="rotate(-4 318 466)"/>
+    <ellipse cx="300" cy="566" rx="196" ry="72" fill="url(#stone)"/>
+  </g>
+  <!-- contour lines wrapping the stones -->
+  <g stroke="#0e1a30" stroke-width="2.5" fill="none" opacity=".5">
+    <path d="M264 240c40-14 92-10 132 12"/>
+    <path d="M258 268c44-16 104-12 146 14"/>
+    <path d="M184 340c60-26 148-26 204 6"/>
+    <path d="M176 372c64-28 160-28 220 8"/>
+    <path d="M176 444c80-34 200-34 276 8"/>
+    <path d="M170 484c84-36 212-36 292 10"/>
+    <path d="M110 552c104-40 276-40 380 0"/>
+    <path d="M108 588c106-42 280-42 386 0"/>
+  </g>
+  <ellipse cx="300" cy="650" rx="220" ry="20" fill="#03060c" opacity=".6"/>
+
+  <!-- thin divider -->
+  <rect x="150" y="694" width="300" height="1.5" fill="#9db2cf" opacity=".5"/>
+
+  <!-- calm tagline, no date -->
+  <text x="300" y="734" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="500" font-size="24" fill="#dce7f5">Where culture comes alive</text>
+  <g fill="none" stroke="#9db2cf" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M243 754c-7 0-12 5-12 12 0 9 12 21 12 21s12-12 12-21c0-7-5-12-12-12z"/>
+    <circle cx="243" cy="766" r="3.5"/>
+  </g>
+  <text x="266" y="774" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="18" letter-spacing="3" fill="#9db2cf">DHAHRAN</text>
+
+  <rect width="600" height="800" filter="url(#grain)" opacity=".06"/>
+</svg>

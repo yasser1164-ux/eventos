@@ -37,7 +37,7 @@ EVENTS.forEach(ev => {
       <div class="meta">${ev.venue} &middot; ${ev.time}</div>
       <a href="${ev.ticketUrl}" target="_blank" rel="noopener">Get tickets</a>
     </div>
-  `);
+  `, { autoPanPadding: [24, 24] });
 
   markers[ev.id] = marker;
   allMarkers.push(marker);
@@ -64,7 +64,7 @@ entries.forEach(entry => {
   card.addEventListener('click', (e) => {
     if (e.target.classList.contains('buy')) return;
     map.flyTo([ev.lat, ev.lng], 15, { duration: 0.6 });
-    markers[ev.id].openPopup();
+    map.once('moveend', () => markers[ev.id].openPopup());
     document.querySelectorAll('.event-card').forEach(c => c.classList.remove('active'));
     card.classList.add('active');
   });
