@@ -24,6 +24,10 @@
     <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation="10"/>
     </filter>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="2" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/>
+    </filter>
     <filter id="grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
       <feColorMatrix type="saturate" values="0"/>
@@ -33,59 +37,75 @@
   <rect width="600" height="800" fill="url(#bg)"/>
 
   <!-- stage light beams -->
-  <polygon points="120,0 190,0 420,600 280,600" fill="#4be3d0" opacity=".10"/>
-  <polygon points="410,0 480,0 320,600 180,600" fill="#a78bfa" opacity=".12"/>
+  <polygon points="120,0 190,0 420,610 280,610" fill="#4be3d0" opacity=".10"/>
+  <polygon points="410,0 480,0 320,610 180,610" fill="#a78bfa" opacity=".12"/>
   <ellipse cx="140" cy="70" rx="200" ry="150" fill="url(#tealGlow)"/>
   <ellipse cx="470" cy="90" rx="200" ry="150" fill="url(#stageGlow)"/>
 
-  <!-- title -->
-  <text x="300" y="130" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="88" fill="#f4f0ff" textLength="520" lengthAdjust="spacingAndGlyphs">LIVE MUSIC</text>
-  <text x="300" y="204" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="70" fill="#4be3d0" textLength="260" lengthAdjust="spacingAndGlyphs">NIGHT</text>
+  <!-- two-tone grunge title -->
+  <g filter="url(#rough)">
+    <text x="300" y="122" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="80" fill="#f4f0ff" textLength="520" lengthAdjust="spacingAndGlyphs">LIVE MUSIC</text>
+    <text x="300" y="188" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="60" fill="#4be3d0" textLength="240" lengthAdjust="spacingAndGlyphs">NIGHT</text>
+  </g>
+
+  <!-- date line between thin rules + venue line -->
+  <rect x="140" y="210" width="320" height="1.5" fill="#4be3d0" opacity=".6"/>
+  <text x="300" y="238" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="22" letter-spacing="8" fill="#4be3d0">TONIGHT &#183; 9:00 PM</text>
+  <rect x="140" y="250" width="320" height="1.5" fill="#4be3d0" opacity=".6"/>
+  <text x="300" y="280" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="16" letter-spacing="5" fill="#cfc7ec">AL KHOBAR CORNICHE</text>
 
   <!-- hero: glowing equalizer -->
-  <ellipse cx="300" cy="450" rx="260" ry="170" fill="url(#stageGlow)"/>
+  <ellipse cx="300" cy="460" rx="260" ry="170" fill="url(#stageGlow)"/>
   <g filter="url(#soft)" opacity=".8">
-    <rect x="152" y="392" width="30" height="116" rx="15" fill="url(#barA)"/>
-    <rect x="196" y="344" width="30" height="212" rx="15" fill="url(#barB)"/>
-    <rect x="240" y="304" width="30" height="292" rx="15" fill="url(#barA)"/>
-    <rect x="284" y="356" width="30" height="188" rx="15" fill="url(#barB)"/>
-    <rect x="328" y="288" width="30" height="324" rx="15" fill="url(#barA)"/>
-    <rect x="372" y="368" width="30" height="164" rx="15" fill="url(#barB)"/>
-    <rect x="416" y="416" width="30" height="68" rx="15" fill="url(#barA)"/>
+    <rect x="152" y="404" width="30" height="116" rx="15" fill="url(#barA)"/>
+    <rect x="196" y="356" width="30" height="212" rx="15" fill="url(#barB)"/>
+    <rect x="240" y="316" width="30" height="292" rx="15" fill="url(#barA)"/>
+    <rect x="284" y="368" width="30" height="188" rx="15" fill="url(#barB)"/>
+    <rect x="328" y="300" width="30" height="324" rx="15" fill="url(#barA)"/>
+    <rect x="372" y="380" width="30" height="164" rx="15" fill="url(#barB)"/>
+    <rect x="416" y="428" width="30" height="68" rx="15" fill="url(#barA)"/>
   </g>
   <g>
-    <rect x="152" y="392" width="30" height="116" rx="15" fill="url(#barA)"/>
-    <rect x="196" y="344" width="30" height="212" rx="15" fill="url(#barB)"/>
-    <rect x="240" y="304" width="30" height="292" rx="15" fill="url(#barA)"/>
-    <rect x="284" y="356" width="30" height="188" rx="15" fill="url(#barB)"/>
-    <rect x="328" y="288" width="30" height="324" rx="15" fill="url(#barA)"/>
-    <rect x="372" y="368" width="30" height="164" rx="15" fill="url(#barB)"/>
-    <rect x="416" y="416" width="30" height="68" rx="15" fill="url(#barA)"/>
-  </g>
-  <g stroke="#4be3d0" stroke-opacity=".45" fill="none" stroke-width="3" stroke-linecap="round">
-    <path d="M120 258a210 210 0 0 1 360 0"/>
-    <path d="M160 232a170 170 0 0 1 280 0" stroke="#a78bfa"/>
+    <rect x="152" y="404" width="30" height="116" rx="15" fill="url(#barA)"/>
+    <rect x="196" y="356" width="30" height="212" rx="15" fill="url(#barB)"/>
+    <rect x="240" y="316" width="30" height="292" rx="15" fill="url(#barA)"/>
+    <rect x="284" y="368" width="30" height="188" rx="15" fill="url(#barB)"/>
+    <rect x="328" y="300" width="30" height="324" rx="15" fill="url(#barA)"/>
+    <rect x="372" y="380" width="30" height="164" rx="15" fill="url(#barB)"/>
+    <rect x="416" y="428" width="30" height="68" rx="15" fill="url(#barA)"/>
   </g>
 
   <!-- divider -->
-  <rect x="40" y="640" width="520" height="2" fill="#a78bfa" opacity=".55"/>
+  <rect x="40" y="650" width="520" height="2" fill="#a78bfa" opacity=".55"/>
 
-  <!-- info strip -->
-  <g fill="none" stroke="#4be3d0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="44" y="672" width="24" height="22" rx="4"/>
-    <line x1="44" y1="680" x2="68" y2="680"/>
-    <line x1="51" y1="668" x2="51" y2="675"/>
-    <line x1="61" y1="668" x2="61" y2="675"/>
+  <!-- three-segment info strip -->
+  <g fill="none" stroke="#4be3d0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="42" y="676" width="22" height="20" rx="3"/>
+    <line x1="42" y1="683" x2="64" y2="683"/>
+    <line x1="48" y1="672" x2="48" y2="679"/>
+    <line x1="58" y1="672" x2="58" y2="679"/>
   </g>
-  <text x="84" y="690" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="24" fill="#f4f0ff">TONIGHT &#183; 9:00 PM</text>
+  <text x="74" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#4be3d0">TONIGHT</text>
+  <text x="74" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">9:00 PM</text>
 
-  <g fill="none" stroke="#4be3d0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M56 710c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z"/>
-    <circle cx="56" cy="726" r="5"/>
+  <rect x="203" y="668" width="1.5" height="42" fill="#a78bfa" opacity=".4"/>
+
+  <g fill="none" stroke="#4be3d0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232 672c-8 0-14 6-14 14 0 10 14 24 14 24s14-14 14-24c0-8-6-14-14-14z"/>
+    <circle cx="232" cy="686" r="4"/>
   </g>
-  <text x="84" y="738" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="20" fill="#d9d2f0">AL KHOBAR CORNICHE</text>
+  <text x="258" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#4be3d0">AL KHOBAR</text>
+  <text x="258" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">CORNICHE</text>
 
-  <text x="300" y="782" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="20" letter-spacing="7" fill="#a78bfa">LIVE ON THE CORNICHE</text>
+  <rect x="408" y="668" width="1.5" height="42" fill="#a78bfa" opacity=".4"/>
+
+  <g stroke="#4be3d0" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <circle cx="430" cy="696" r="6"/>
+    <line x1="436" y1="696" x2="436" y2="674"/>
+    <path d="M436 674c6 2 10 4 12 8"/>
+  </g>
+  <text x="458" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#4be3d0">LIVE ON</text>
+  <text x="458" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">THE CORNICHE</text>
 
   <rect width="600" height="800" filter="url(#grain)" opacity=".07"/>
 </svg>

@@ -21,6 +21,10 @@
     <pattern id="holes" width="34" height="34" patternUnits="userSpaceOnUse">
       <circle cx="17" cy="17" r="7" fill="#043046"/>
     </pattern>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="2" seed="19" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/>
+    </filter>
     <filter id="grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
       <feColorMatrix type="saturate" values="0"/>
@@ -31,22 +35,30 @@
 
   <!-- court glass wall grid -->
   <g stroke="#35d6ff" stroke-opacity=".14" stroke-width="2">
-    <line x1="0" y1="260" x2="600" y2="230"/>
-    <line x1="0" y1="360" x2="600" y2="330"/>
-    <line x1="0" y1="460" x2="600" y2="430"/>
-    <line x1="0" y1="560" x2="600" y2="530"/>
-    <line x1="120" y1="200" x2="120" y2="620"/>
-    <line x1="300" y1="200" x2="300" y2="620"/>
-    <line x1="480" y1="200" x2="480" y2="620"/>
+    <line x1="0" y1="300" x2="600" y2="270"/>
+    <line x1="0" y1="400" x2="600" y2="370"/>
+    <line x1="0" y1="500" x2="600" y2="470"/>
+    <line x1="0" y1="590" x2="600" y2="560"/>
+    <line x1="120" y1="240" x2="120" y2="630"/>
+    <line x1="300" y1="240" x2="300" y2="630"/>
+    <line x1="480" y1="240" x2="480" y2="630"/>
   </g>
 
-  <!-- title -->
-  <text x="300" y="150" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="128" fill="#eafcff" textLength="440" lengthAdjust="spacingAndGlyphs">PADEL</text>
-  <text x="300" y="216" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="54" fill="#b6ff3d" textLength="520" lengthAdjust="spacingAndGlyphs">CHAMPIONSHIP</text>
+  <!-- two-tone grunge title -->
+  <g filter="url(#rough)">
+    <text x="300" y="142" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="118" fill="#eafcff" textLength="400" lengthAdjust="spacingAndGlyphs">PADEL</text>
+    <text x="300" y="198" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="46" fill="#b6ff3d" textLength="440" lengthAdjust="spacingAndGlyphs">CHAMPIONSHIP</text>
+  </g>
+
+  <!-- date line between thin rules + venue line -->
+  <rect x="140" y="220" width="320" height="1.5" fill="#b6ff3d" opacity=".55"/>
+  <text x="300" y="248" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="22" letter-spacing="8" fill="#b6ff3d">TOMORROW &#183; 5 PM</text>
+  <rect x="140" y="260" width="320" height="1.5" fill="#b6ff3d" opacity=".55"/>
+  <text x="300" y="290" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="16" letter-spacing="5" fill="#bfe3ef">KHOBAR SPORTS HUB</text>
 
   <!-- hero: racket + neon ball -->
-  <ellipse cx="300" cy="440" rx="250" ry="170" fill="url(#neonGlow)" opacity=".55"/>
-  <g transform="rotate(-18 300 430)">
+  <ellipse cx="300" cy="470" rx="250" ry="170" fill="url(#neonGlow)" opacity=".55"/>
+  <g transform="translate(0 28) rotate(-18 300 430)">
     <rect x="272" y="500" width="56" height="110" rx="24" fill="#0a5f86"/>
     <rect x="272" y="500" width="56" height="110" rx="24" fill="none" stroke="#35d6ff" stroke-width="4"/>
     <path d="M300 260c86 0 148 52 148 128 0 82-62 132-148 132s-148-50-148-132c0-76 62-128 148-128z" fill="url(#racket)"/>
@@ -54,31 +66,43 @@
     <path d="M300 260c86 0 148 52 148 128 0 82-62 132-148 132s-148-50-148-132c0-76 62-128 148-128z" fill="none" stroke="#35d6ff" stroke-width="6"/>
   </g>
   <g stroke="#b6ff3d" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8">
-    <path d="M424 306a96 96 0 0 1 44 66"/>
-    <path d="M452 282a132 132 0 0 1 58 88" opacity=".5"/>
+    <path d="M424 334a96 96 0 0 1 44 66"/>
+    <path d="M452 310a132 132 0 0 1 58 88" opacity=".5"/>
   </g>
-  <circle cx="452" cy="404" r="40" fill="url(#ballGrad)"/>
-  <path d="M420 380c18 14 20 36 8 56" stroke="#3a5c08" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="452" cy="432" r="40" fill="url(#ballGrad)"/>
+  <path d="M420 408c18 14 20 36 8 56" stroke="#3a5c08" stroke-width="4" fill="none" stroke-linecap="round"/>
 
   <!-- divider -->
-  <rect x="40" y="640" width="520" height="2" fill="#b6ff3d" opacity=".5"/>
+  <rect x="40" y="650" width="520" height="2" fill="#b6ff3d" opacity=".5"/>
 
-  <!-- info strip -->
-  <g fill="none" stroke="#b6ff3d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="44" y="672" width="24" height="22" rx="4"/>
-    <line x1="44" y1="680" x2="68" y2="680"/>
-    <line x1="51" y1="668" x2="51" y2="675"/>
-    <line x1="61" y1="668" x2="61" y2="675"/>
+  <!-- three-segment info strip -->
+  <g fill="none" stroke="#b6ff3d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="42" y="676" width="22" height="20" rx="3"/>
+    <line x1="42" y1="683" x2="64" y2="683"/>
+    <line x1="48" y1="672" x2="48" y2="679"/>
+    <line x1="58" y1="672" x2="58" y2="679"/>
   </g>
-  <text x="84" y="690" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="24" fill="#eafcff">TOMORROW &#183; 5:00 PM</text>
+  <text x="74" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#b6ff3d">TOMORROW</text>
+  <text x="74" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">5:00 PM</text>
 
-  <g fill="none" stroke="#b6ff3d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M56 710c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z"/>
-    <circle cx="56" cy="726" r="5"/>
+  <rect x="203" y="668" width="1.5" height="42" fill="#b6ff3d" opacity=".35"/>
+
+  <g fill="none" stroke="#b6ff3d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232 672c-8 0-14 6-14 14 0 10 14 24 14 24s14-14 14-24c0-8-6-14-14-14z"/>
+    <circle cx="232" cy="686" r="4"/>
   </g>
-  <text x="84" y="738" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="20" fill="#bfe3ef">KHOBAR SPORTS HUB</text>
+  <text x="258" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#b6ff3d">KHOBAR</text>
+  <text x="258" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">SPORTS HUB</text>
 
-  <text x="300" y="782" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="20" letter-spacing="10" fill="#b6ff3d">GAME ON</text>
+  <rect x="408" y="668" width="1.5" height="42" fill="#b6ff3d" opacity=".35"/>
+
+  <g stroke="#b6ff3d" stroke-width="2.5" fill="none">
+    <circle cx="434" cy="688" r="13"/>
+    <path d="M424 679c7 5 7 13 0 18"/>
+    <path d="M444 679c-7 5-7 13 0 18"/>
+  </g>
+  <text x="458" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#b6ff3d">OPEN DRAW</text>
+  <text x="458" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">GAME ON</text>
 
   <rect width="600" height="800" filter="url(#grain)" opacity=".07"/>
 </svg>

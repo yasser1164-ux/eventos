@@ -17,6 +17,10 @@
       <stop offset="0" stop-color="#a63b2a"/>
       <stop offset="1" stop-color="#5e1b10"/>
     </linearGradient>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/>
+    </filter>
     <filter id="grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
       <feColorMatrix type="saturate" values="0"/>
@@ -25,67 +29,86 @@
 
   <rect width="600" height="800" fill="url(#bg)"/>
 
-  <!-- hanging lanterns with candlelight glow -->
+  <!-- corner lanterns with candlelight glow -->
   <g stroke="#7a4a1c" stroke-width="2">
-    <line x1="90" y1="0" x2="90" y2="72"/>
-    <line x1="510" y1="0" x2="510" y2="96"/>
-    <line x1="300" y1="0" x2="300" y2="40"/>
+    <line x1="64" y1="0" x2="64" y2="34"/>
+    <line x1="536" y1="0" x2="536" y2="52"/>
   </g>
-  <ellipse cx="90" cy="108" rx="90" ry="80" fill="url(#candle)" opacity=".6"/>
-  <ellipse cx="510" cy="132" rx="90" ry="80" fill="url(#candle)" opacity=".6"/>
+  <ellipse cx="64" cy="66" rx="80" ry="70" fill="url(#candle)" opacity=".55"/>
+  <ellipse cx="536" cy="84" rx="80" ry="70" fill="url(#candle)" opacity=".55"/>
   <g fill="#e2591f">
-    <ellipse cx="90" cy="100" rx="26" ry="30"/>
-    <ellipse cx="510" cy="124" rx="26" ry="30"/>
+    <ellipse cx="64" cy="60" rx="22" ry="26"/>
+    <ellipse cx="536" cy="78" rx="22" ry="26"/>
   </g>
   <g fill="#ffd9a0">
-    <rect x="80" y="66" width="20" height="7" rx="3"/>
-    <rect x="500" y="90" width="20" height="7" rx="3"/>
-    <rect x="80" y="126" width="20" height="7" rx="3"/>
-    <rect x="500" y="150" width="20" height="7" rx="3"/>
+    <rect x="55" y="30" width="18" height="6" rx="3"/>
+    <rect x="527" y="48" width="18" height="6" rx="3"/>
+    <rect x="55" y="82" width="18" height="6" rx="3"/>
+    <rect x="527" y="100" width="18" height="6" rx="3"/>
   </g>
 
-  <!-- title -->
-  <text x="300" y="212" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="74" fill="#ffe8c8" textLength="520" lengthAdjust="spacingAndGlyphs">FOOD &amp; CULTURE</text>
-  <text x="300" y="286" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="74" fill="#ffb347" textLength="340" lengthAdjust="spacingAndGlyphs">FESTIVAL</text>
+  <!-- two-tone grunge title -->
+  <g filter="url(#rough)">
+    <text x="300" y="126" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="64" fill="#ffe8c8" textLength="520" lengthAdjust="spacingAndGlyphs">FOOD &amp; CULTURE</text>
+    <text x="300" y="192" text-anchor="middle" font-family="'Arial Narrow','Oswald',Impact,'Helvetica Neue',sans-serif" font-weight="900" font-size="62" fill="#ffb347" textLength="300" lengthAdjust="spacingAndGlyphs">FESTIVAL</text>
+  </g>
+
+  <!-- date line between thin rules + venue line -->
+  <rect x="140" y="214" width="320" height="1.5" fill="#ffb347" opacity=".6"/>
+  <text x="300" y="242" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="22" letter-spacing="8" fill="#ffb347">ALL WEEKEND</text>
+  <rect x="140" y="254" width="320" height="1.5" fill="#ffb347" opacity=".6"/>
+  <text x="300" y="284" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="16" letter-spacing="5" fill="#ecd9bd">AL RASHID MALL PLAZA</text>
 
   <!-- hero: noodle bowl in amber glow -->
-  <ellipse cx="300" cy="480" rx="240" ry="160" fill="url(#amber)"/>
+  <ellipse cx="300" cy="490" rx="240" ry="160" fill="url(#amber)"/>
   <g stroke="#ffd9a0" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85">
-    <path d="M258 352c-14-22 14-34 0-56"/>
-    <path d="M300 340c-14-22 14-34 0-56"/>
-    <path d="M342 352c-14-22 14-34 0-56"/>
+    <path d="M258 372c-14-22 14-34 0-56"/>
+    <path d="M300 360c-14-22 14-34 0-56"/>
+    <path d="M342 372c-14-22 14-34 0-56"/>
   </g>
   <g stroke="#e8c890" stroke-width="7" stroke-linecap="round">
-    <line x1="352" y1="300" x2="424" y2="416"/>
-    <line x1="374" y1="292" x2="438" y2="404"/>
+    <line x1="352" y1="320" x2="424" y2="436"/>
+    <line x1="374" y1="312" x2="438" y2="424"/>
   </g>
-  <path d="M158 428h284c0 66-44 118-100 130l-6 26h-72l-6-26c-56-12-100-64-100-130z" fill="url(#bowl)"/>
-  <path d="M158 428h284c-4 14-46 26-142 26s-138-12-142-26z" fill="#3d1008"/>
+  <path d="M158 448h284c0 66-44 118-100 130l-6 26h-72l-6-26c-56-12-100-64-100-130z" fill="url(#bowl)"/>
+  <path d="M158 448h284c-4 14-46 26-142 26s-138-12-142-26z" fill="#3d1008"/>
   <g stroke="#ffe8c8" stroke-width="6" fill="none" stroke-linecap="round" opacity=".9">
-    <path d="M180 428c22-16 48-24 120-24s98 8 120 24"/>
-    <path d="M208 416c18-10 40-16 92-16s74 6 92 16" stroke="#ffb347"/>
+    <path d="M180 448c22-16 48-24 120-24s98 8 120 24"/>
+    <path d="M208 436c18-10 40-16 92-16s74 6 92 16" stroke="#ffb347"/>
   </g>
-  <path d="M226 500c20 24 128 24 148 0" stroke="#ffb347" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+  <path d="M226 520c20 24 128 24 148 0" stroke="#ffb347" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
 
   <!-- divider -->
-  <rect x="40" y="640" width="520" height="2" fill="#ffb347" opacity=".55"/>
+  <rect x="40" y="650" width="520" height="2" fill="#ffb347" opacity=".55"/>
 
-  <!-- info strip -->
-  <g fill="none" stroke="#ffb347" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="44" y="672" width="24" height="22" rx="4"/>
-    <line x1="44" y1="680" x2="68" y2="680"/>
-    <line x1="51" y1="668" x2="51" y2="675"/>
-    <line x1="61" y1="668" x2="61" y2="675"/>
+  <!-- three-segment info strip -->
+  <g fill="none" stroke="#ffb347" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="42" y="676" width="22" height="20" rx="3"/>
+    <line x1="42" y1="683" x2="64" y2="683"/>
+    <line x1="48" y1="672" x2="48" y2="679"/>
+    <line x1="58" y1="672" x2="58" y2="679"/>
   </g>
-  <text x="84" y="690" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="24" fill="#fff2df">ALL WEEKEND</text>
+  <text x="74" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#ffb347">ALL</text>
+  <text x="74" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">WEEKEND</text>
 
-  <g fill="none" stroke="#ffb347" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M56 710c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z"/>
-    <circle cx="56" cy="726" r="5"/>
+  <rect x="203" y="668" width="1.5" height="42" fill="#ffb347" opacity=".35"/>
+
+  <g fill="none" stroke="#ffb347" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M232 672c-8 0-14 6-14 14 0 10 14 24 14 24s14-14 14-24c0-8-6-14-14-14z"/>
+    <circle cx="232" cy="686" r="4"/>
   </g>
-  <text x="84" y="738" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="20" fill="#ecd9bd">AL RASHID MALL PLAZA</text>
+  <text x="258" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#ffb347">AL RASHID</text>
+  <text x="258" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">MALL PLAZA</text>
 
-  <text x="300" y="782" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="20" letter-spacing="8" fill="#ffb347">TASTE THE WORLD</text>
+  <rect x="408" y="668" width="1.5" height="42" fill="#ffb347" opacity=".35"/>
+
+  <g stroke="#ffb347" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <path d="M422 690h24a12 12 0 0 1-24 0z"/>
+    <path d="M428 684c-4-6 4-8 0-14"/>
+    <path d="M438 684c-4-6 4-8 0-14"/>
+  </g>
+  <text x="458" y="684" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#ffb347">TASTE</text>
+  <text x="458" y="704" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="17" fill="#ffffff">THE WORLD</text>
 
   <rect width="600" height="800" filter="url(#grain)" opacity=".07"/>
 </svg>
