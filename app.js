@@ -38,7 +38,13 @@ EVENTS.forEach(ev => {
       <div class="meta">${ev.venue} &middot; ${ev.time}</div>
       <a href="${ev.ticketUrl}" target="_blank" rel="noopener">${cta}</a>
     </div>
-  `, { autoPanPadding: [24, 24] });
+  `, {
+    autoPanPadding: [24, 24],
+    maxWidth: 230,
+    // Cap popup height to the map area so it never overflows off-screen;
+    // Leaflet makes the content scrollable when it exceeds this.
+    maxHeight: Math.max(240, Math.round(map.getSize().y * 0.82))
+  });
 
   markers[ev.id] = marker;
   allMarkers.push(marker);
@@ -116,12 +122,14 @@ function applyFilter() {
       map.removeLayer(circle);
     }
   });
+  const evLabel = `${nEvents} event${nEvents === 1 ? '' : 's'}`;
+  const plLabel = `${nPlaces} place${nPlaces === 1 ? '' : 's'}`;
   if (activeFilter === 'event') {
-    countEl.textContent = `${nEvents} events happening`;
+    countEl.textContent = `${evLabel} happening`;
   } else if (activeFilter === 'place') {
-    countEl.textContent = `${nPlaces} place${nPlaces === 1 ? '' : 's'} to explore`;
+    countEl.textContent = `${plLabel} to explore`;
   } else {
-    countEl.textContent = `${nEvents} events · ${nPlaces} place${nPlaces === 1 ? '' : 's'}`;
+    countEl.textContent = `${evLabel} · ${plLabel}`;
   }
 }
 
