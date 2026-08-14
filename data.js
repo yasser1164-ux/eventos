@@ -23,6 +23,38 @@ function rowToItem(row) {
   };
 }
 
+// Append referral tags to an outbound link so the destination site can see
+// the visit came from eventos — the first step toward affiliate/partner deals.
+function trackedUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+    url.searchParams.set('utm_source', 'eventos-khobar');
+    url.searchParams.set('utm_medium', 'referral');
+    return url.toString();
+  } catch {
+    return rawUrl;
+  }
+}
+
+// Fire-and-forget click log (needs the clicks table from supabase/clicks.sql;
+// silently does nothing if Supabase isn't configured or the table is missing).
+function logClick(itemId) {
+  if (typeof SUPABASE_URL !== 'string' || !SUPABASE_URL.startsWith('http')) return;
+  try {
+    fetch(`${SUPABASE_URL}/rest/v1/clicks`, {
+      method: 'POST',
+      keepalive: true,
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ item_id: itemId })
+    }).catch(() => {});
+  } catch { /* never block the user's navigation */ }
+}
+
 async function loadItems() {
   const configured =
     typeof SUPABASE_URL === 'string' && SUPABASE_URL.startsWith('http') &&

@@ -63,7 +63,7 @@ function initApp(ITEMS) {
         <img class="poster" src="${poster}" alt="${ev.title}" onerror="this.remove()">
         <h3>${ev.title}</h3>
         <div class="meta">${ev.venue} &middot; ${ev.time}</div>
-        <a href="${ev.ticketUrl}" target="_blank" rel="noopener">${cta}</a>
+        <a href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${cta}</a>
       </div>
     `, {
       autoPanPadding: [24, 24],
@@ -119,7 +119,7 @@ function initApp(ITEMS) {
       <span class="cat">${ev.category}</span>${badge}
       <h3>${ev.emoji} ${ev.title}</h3>
       <div class="meta">${ev.venue}<br>${ev.time}</div>
-      <a class="buy" href="${ev.ticketUrl}" target="_blank" rel="noopener">${ev.type === 'place' ? 'Explore' : 'Get tickets'}</a>
+      <a class="buy" href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${ev.type === 'place' ? 'Explore' : 'Get tickets'}</a>
     `;
     card.addEventListener('click', (e) => {
       if (e.target.classList.contains('buy')) return;
@@ -206,4 +206,10 @@ function initApp(ITEMS) {
   }
 
   applyFilter();
+
+  // Log every CTA tap (sidebar cards and map popups) for referral stats
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[data-item]');
+    if (link) logClick(Number(link.dataset.item));
+  });
 }
