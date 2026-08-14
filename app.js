@@ -7,7 +7,18 @@ loadItems().then(initApp);
 
 function initApp(ITEMS) {
   // ---- MAP ---------------------------------------------------------------
-  const map = L.map('map', { zoomControl: true }).setView([26.2854, 50.2083], 12);
+  const map = L.map('map', { zoomControl: true, closePopupOnClick: false }).setView([26.2854, 50.2083], 12);
+
+  // iOS Safari can fire a stray "ghost click" on the map right after the tap
+  // that opened a popup, which would instantly close it again. So we close
+  // popups on map tap ourselves, but only once the popup has been open for a
+  // moment. (closePopupOnClick is off above; this replaces it.)
+  const POPUP_GRACE_MS = 700;
+  let popupOpenedAt = 0;
+  map.on('popupopen', () => { popupOpenedAt = Date.now(); });
+  map.on('click', () => {
+    if (Date.now() - popupOpenedAt > POPUP_GRACE_MS) map.closePopup();
+  });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO',
@@ -41,7 +52,8 @@ function initApp(ITEMS) {
           radius: 150 + ev.heat * 6,
           color: 'transparent',
           fillColor: '#ff5a5f',
-          fillOpacity: 0.05 + (ev.heat / 100) * 0.16
+          fillOpacity: 0.05 + (ev.heat / 100) * 0.16,
+          interactive: false // taps pass through to the map, not the glow
         }).addTo(map)
       : null;
 
@@ -49,7 +61,7 @@ function initApp(ITEMS) {
     // emoji (layered underneath on the gradient) shows instead.
     const icon = L.divIcon({
       className: '',
-      html: `<div class="pin-thumb"><span class="pin-emoji">${ev.emoji}</span><img src="${poster}" alt="" onerror="this.remove()"></div>`,
+      html: `<div class="pin-thumb" data-id="${ev.id}"><span class="pin-emoji">${ev.emoji}</span><img src="${poster}" alt="" onerror="this.remove()"></div>`,
       iconSize: [44, 44],
       iconAnchor: [22, 22],
       popupAnchor: [0, -26]
