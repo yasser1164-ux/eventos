@@ -1,8 +1,11 @@
 // ---- EVENT DATA ----------------------------------------------------------
 // To add an event: copy one block, change the values, keep the commas.
 // The first one is a REAL match (Saudi Pro League, Matchweek 1).
-// type: "event" (something happening) or "place" (somewhere to visit).
+// type:  "event" (something happening) or "place" (somewhere to visit).
 // image: poster artwork (img/*.svg) shown on the map pin and in the popup.
+// start/end: ISO dates (YYYY-MM-DD) the event runs, inclusive — used by the
+//   Today / This weekend / Next weekend filter. Places have no dates
+//   (they're always open, so they match every date filter).
 const EVENTS = [
   {
     id: 1,
@@ -11,6 +14,8 @@ const EVENTS = [
     emoji: "⚽",
     venue: "Prince Mohamed bin Fahd Stadium, Dammam",
     time: "Tonight · Aug 14",
+    start: "2026-08-14",
+    end: "2026-08-14",
     lat: 26.3927,
     lng: 49.9777,
     heat: 90, // 0-100 popularity — drives the glow size
@@ -25,6 +30,8 @@ const EVENTS = [
     emoji: "🎸",
     venue: "Al Khobar Corniche",
     time: "Tonight · 9:00 PM",
+    start: "2026-08-14",
+    end: "2026-08-14",
     lat: 26.2870,
     lng: 50.2130,
     heat: 70,
@@ -38,7 +45,9 @@ const EVENTS = [
     category: "Festival",
     emoji: "🍜",
     venue: "Al Rashid Mall Plaza",
-    time: "All weekend",
+    time: "This weekend",
+    start: "2026-08-14",
+    end: "2026-08-15",
     lat: 26.3050,
     lng: 50.1980,
     heat: 55,
@@ -53,6 +62,8 @@ const EVENTS = [
     emoji: "🎾",
     venue: "Khobar Sports Hub",
     time: "Tomorrow · 5:00 PM",
+    start: "2026-08-15",
+    end: "2026-08-15",
     lat: 26.2680,
     lng: 50.2200,
     heat: 40,
@@ -67,6 +78,8 @@ const EVENTS = [
     emoji: "🎮",
     venue: "Dhahran Expo",
     time: "Saturday · 7:00 PM",
+    start: "2026-08-15",
+    end: "2026-08-15",
     lat: 26.3016,
     lng: 50.1477,
     heat: 75,
@@ -80,7 +93,9 @@ const EVENTS = [
     category: "Comedy",
     emoji: "🎤",
     venue: "Ajdan Walk, Al Khobar",
-    time: "Friday · 9:00 PM",
+    time: "Fri Aug 21 · 9:00 PM",
+    start: "2026-08-21",
+    end: "2026-08-21",
     lat: 26.2986,
     lng: 50.2211,
     heat: 60,
@@ -95,6 +110,8 @@ const EVENTS = [
     emoji: "🏮",
     venue: "Heritage Village, Dammam",
     time: "Daily · 6–11 PM",
+    start: "2026-08-14",
+    end: "2026-09-30",
     lat: 26.4344,
     lng: 50.1032,
     heat: 50,
@@ -109,6 +126,8 @@ const EVENTS = [
     emoji: "🎬",
     venue: "Khobar Sea Front",
     time: "Thu–Sat · 8:00 PM",
+    start: "2026-08-13",
+    end: "2026-09-26",
     lat: 26.2570,
     lng: 50.2090,
     heat: 45,
@@ -118,6 +137,38 @@ const EVENTS = [
   },
   {
     id: 9,
+    title: "Global City Dammam",
+    category: "Festival",
+    emoji: "🌍",
+    venue: "Global City, Dammam",
+    time: "Daily · 4 PM–12 AM",
+    start: "2026-08-14",
+    end: "2026-10-31",
+    lat: 26.4140,
+    lng: 50.0920,
+    heat: 80,
+    type: "event",
+    image: "img/global-city.svg",
+    ticketUrl: "https://webook.com/en/zones/global-city-dammam-2026"
+  },
+  {
+    id: 10,
+    title: "The Big Bounce Arabia",
+    category: "Family",
+    emoji: "🎈",
+    venue: "Al Khobar",
+    time: "Aug 20–29",
+    start: "2026-08-20",
+    end: "2026-08-29",
+    lat: 26.2790,
+    lng: 50.2060,
+    heat: 65,
+    type: "event",
+    image: "img/big-bounce.svg",
+    ticketUrl: "https://webook.com/en/events/the-big-bounce-arabia-alkhobar-25"
+  },
+  {
+    id: 11,
     title: "Ithra — King Abdulaziz Center for World Culture",
     category: "Culture",
     emoji: "🏛️",
@@ -131,7 +182,7 @@ const EVENTS = [
     ticketUrl: "https://www.ithra.com/en"
   },
   {
-    id: 10,
+    id: 12,
     title: "Scitech",
     category: "Science",
     emoji: "🔭",
@@ -145,7 +196,7 @@ const EVENTS = [
     ticketUrl: "https://webook.com"
   },
   {
-    id: 11,
+    id: 13,
     title: "Khobar Water Tower",
     category: "Landmark",
     emoji: "🗼",
@@ -159,7 +210,7 @@ const EVENTS = [
     ticketUrl: "https://webook.com"
   },
   {
-    id: 12,
+    id: 14,
     title: "Half Moon Bay",
     category: "Beach",
     emoji: "🏖️",
@@ -173,7 +224,7 @@ const EVENTS = [
     ticketUrl: "https://webook.com"
   },
   {
-    id: 13,
+    id: 15,
     title: "Marjan Island",
     category: "Island",
     emoji: "🏝️",
@@ -184,6 +235,48 @@ const EVENTS = [
     heat: 45,
     type: "place",
     image: "img/marjan-island.svg",
+    ticketUrl: "https://webook.com"
+  },
+  {
+    id: 16,
+    title: "Dolphin Village",
+    category: "Family",
+    emoji: "🐬",
+    venue: "Aziziyah, Al Khobar",
+    time: "Shows daily",
+    lat: 26.1610,
+    lng: 50.1905,
+    heat: 55,
+    type: "place",
+    image: "img/dolphin-village.svg",
+    ticketUrl: "https://webook.com"
+  },
+  {
+    id: 17,
+    title: "Tarout Island & Castle",
+    category: "Heritage",
+    emoji: "🏰",
+    venue: "Tarout, Qatif",
+    time: "Open all day",
+    lat: 26.5700,
+    lng: 50.0620,
+    heat: 45,
+    type: "place",
+    image: "img/tarout-island.svg",
+    ticketUrl: "https://webook.com"
+  },
+  {
+    id: 18,
+    title: "King Fahd Park",
+    category: "Park",
+    emoji: "🌳",
+    venue: "North Dammam",
+    time: "Open till late",
+    lat: 26.4046,
+    lng: 50.0779,
+    heat: 50,
+    type: "place",
+    image: "img/king-fahd-park.svg",
     ticketUrl: "https://webook.com"
   }
 ];

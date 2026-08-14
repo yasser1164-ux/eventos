@@ -54,6 +54,30 @@ EVENTS.forEach(ev => {
 // Zoom so every event (Khobar + Dammam) is visible at once
 map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.25));
 
+// ---- DATES ---------------------------------------------------------------
+// The Saudi weekend is Friday & Saturday. Places have no start/end, so they
+// match every date filter (they're always open).
+function parseDay(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+const dow = TODAY.getDay(); // Fri = 5, Sat = 6
+const FRI = new Date(TODAY);
+FRI.setDate(TODAY.getDate() + (dow === 6 ? -1 : (5 - dow + 7) % 7));
+const SAT = new Date(FRI);
+SAT.setDate(FRI.getDate() + 1);
+const NEXT_FRI = new Date(FRI);
+NEXT_FRI.setDate(FRI.getDate() + 7);
+const NEXT_SAT = new Date(SAT);
+NEXT_SAT.setDate(SAT.getDate() + 7);
+
+function runsBetween(ev, from, to) {
+  if (!ev.start) return true;
+  return parseDay(ev.start) <= to && parseDay(ev.end || ev.start) >= from;
+}
+
 // ---- SIDEBAR -------------------------------------------------------------
 const listEl = document.getElementById('event-list');
 const countEl = document.getElementById('event-count');
@@ -62,8 +86,10 @@ entries.forEach(entry => {
   const ev = entry.ev;
   const card = document.createElement('div');
   card.className = 'event-card';
+  const todayBadge = ev.type === 'event' && ev.start && runsBetween(ev, TODAY, TODAY)
+    ? '<span class="today-badge">Today</span>' : '';
   card.innerHTML = `
-    <span class="cat">${ev.category}</span>
+    <span class="cat">${ev.category}</span>${todayBadge}
     <h3>${ev.emoji} ${ev.title}</h3>
     <div class="meta">${ev.venue}<br>${ev.time}</div>
     <a class="buy" href="${ev.ticketUrl}" target="_blank" rel="noopener">${ev.type === 'place' ? 'Explore' : 'Get tickets'}</a>
@@ -91,6 +117,24 @@ chips.forEach(chip => {
   });
 });
 
+const whenChips = document.querySelectorAll('#when-filters .chip');
+let activeWhen = 'any';
+
+whenChips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    activeWhen = chip.dataset.when;
+    whenChips.forEach(c => c.classList.toggle('active', c === chip));
+    applyFilter();
+  });
+});
+
+function matchesWhen(ev) {
+  if (activeWhen === 'today') return runsBetween(ev, TODAY, TODAY);
+  if (activeWhen === 'weekend') return runsBetween(ev, FRI, SAT);
+  if (activeWhen === 'nextweekend') return runsBetween(ev, NEXT_FRI, NEXT_SAT);
+  return true;
+}
+
 // Category chips (scrollable row), built from whatever categories exist
 const catWrap = document.getElementById('cat-filters');
 let activeCat = 'all';
@@ -111,7 +155,8 @@ function applyFilter() {
   let nEvents = 0, nPlaces = 0;
   entries.forEach(({ ev, marker, circle, card }) => {
     const show = (activeFilter === 'all' || ev.type === activeFilter) &&
-                 (activeCat === 'all' || ev.category === activeCat);
+                 (activeCat === 'all' || ev.category === activeCat) &&
+                 matchesWhen(ev);
     card.style.display = show ? '' : 'none';
     if (show) {
       marker.addTo(map);
