@@ -86,6 +86,29 @@ not the repo: Dashboard → Storage → `posters` bucket → Upload, then copy t
 file's public URL into the item's `poster_ref`. If an image URL fails to
 load, the pin falls back to the emoji badge and the popup hides the image.
 
+## Referral tracking (the money foundation)
+
+Every "Get tickets" / "Explore" tap:
+
+- goes out with `utm_source=eventos-khobar&utm_medium=referral` appended, so
+  the destination platform can see the visit came from this site — the basis
+  for affiliate/partner conversations;
+- is logged to the `clicks` table (see `supabase/clicks.sql` — paste it in
+  the SQL editor once). Visitors can only insert, never read. Check your
+  numbers anytime with:
+
+  ```sql
+  select i.title, count(c.id) as clicks
+  from public.clicks c join public.items i on i.id = c.item_id
+  group by i.title order by clicks desc;
+  ```
+
+To earn per ticket: Platinumlist runs an affiliate program (~10% per referred
+sale) — put your personalised tracking links in `ticket_url` for events
+listed there. webook has no public affiliate program; use your click numbers
+to pitch a partnership. Deep-link `ticket_url` to the specific event page,
+never a homepage.
+
 ## Geocoding (free — OpenStreetMap Nominatim)
 
 Coordinates are never typed by hand:
