@@ -1,61 +1,90 @@
 # Eventos
 
 A map of what's happening in the Eastern Province (Khobar · Dammam · Dhahran):
-events with poster pins, plus good places to visit. Built with plain
-HTML/CSS/JS and [Leaflet](https://leafletjs.com) — no build step, no
-frameworks.
+events with poster pins, plus good places to visit. Plain HTML/CSS/JS +
+[Leaflet](https://leafletjs.com) — no build step — with
+[Supabase](https://supabase.com) as the data backend.
 
 **Live site:** https://eventos-khobar.netlify.app
 (auto-deploys from `main` via Netlify — merge to `main` and it's live in ~1 minute)
 
-## Files
+## Architecture
+
+Data, logic and UI are separated:
 
 ```
-index.html    The page skeleton: top bar, sidebar, filter chips, map container.
-styles.css    All styling, including mobile layout (breakpoint at 720px).
-app.js        All behavior: Leaflet map, pins, popups, sidebar cards, filters.
-events.js     ONLY the data — one object per event/place. Edit this to add content.
-img/          One SVG poster per item, named after it (e.g. comedy-night.svg).
+index.html          Page skeleton: top bar, sidebar, filter chips, map container.
+styles.css          All styling, including mobile layout (breakpoint at 720px).
+config.js           Supabase URL + anon key (paste yours here — see Setup).
+data.js             DATA layer: fetches items from Supabase; falls back to seed.js.
+seed.js             Bundled copy of the data — used until Supabase is configured,
+                    and whenever the database is unreachable. Keep in sync with
+                    supabase/schema.sql.
+posters.js          POSTER templates: renders each item's poster as SVG at runtime
+                    from its title/date/venue/emoji, by category style.
+app.js              UI layer: map, pins, popups, sidebar cards, filters.
+supabase/schema.sql The database: table, security policy, storage bucket, seed rows.
 ```
 
-`index.html` loads `events.js` **before** `app.js` (the logic reads the
-`EVENTS` array), so keep that script order.
+Script order in `index.html` matters: `config → seed → posters → data → app`.
 
-## How to add an event or place
+## Setup (one time, ~5 minutes)
 
-1. Open `events.js`, copy an existing block, and change the values:
-   - `id` — any unused number.
-   - `type` — `"event"` (something happening) or `"place"` (somewhere to visit).
-   - `category` — free text; a filter chip is created automatically for
-     each distinct category.
-   - `emoji` — shown on the sidebar card, and on the map pin if the poster
-     image fails to load.
-   - `lat` / `lng` — position on the map.
-   - `heat` — 0–100 popularity; drives the red glow size on the map.
-   - `start` / `end` — ISO dates (`YYYY-MM-DD`, inclusive) the event runs.
-     Used by the Today / This weekend / Next weekend filter. **Places omit
-     these** — they're treated as always open and match every date filter.
-   - `image` — path to the poster, e.g. `img/my-event.svg`.
-   - `ticketUrl` — where the CTA button goes (events say "Get tickets",
-     places say "Explore").
-2. Add a poster in `img/` (see below).
-3. Open `index.html` locally to check, then commit and merge to `main`.
+1. Create a free account at https://supabase.com and click **New project**
+   (any name, e.g. `eventos`; pick a region near you; the free tier is fine).
+2. In the project, open **SQL Editor**, paste the whole contents of
+   `supabase/schema.sql`, and click **Run**. This creates the `items` table,
+   a read-only security policy, the public `posters` storage bucket, and
+   inserts the 18 current items.
+3. Open **Project Settings → API** and copy two values:
+   - **Project URL** (like `https://abcdefgh.supabase.co`)
+   - **anon / public** key (the long string)
+4. Paste both into `config.js`, commit, and merge to `main`.
+
+Until step 4 is done — and any time Supabase is unreachable — the app
+automatically uses the bundled data in `seed.js`, so the site never breaks.
+
+The anon key is safe to publish: row level security only permits `SELECT`,
+so visitors can read events but nothing can be changed with that key.
+
+## Managing content
+
+Add/edit rows in **Supabase → Table Editor → items**. Changes appear on the
+site on the next page load — no deploy needed. Fields:
+
+| column     | meaning                                                        |
+|------------|----------------------------------------------------------------|
+| type       | `event` or `place`                                             |
+| category   | free text; a filter chip appears automatically per category    |
+| emoji      | shown on cards, used as poster centerpiece and pin fallback    |
+| time_label | human text shown in the UI, e.g. `Tonight · 9:00 PM`           |
+| start_date / end_date | inclusive range for the date filters; null for places |
+| status     | `live` (running), `soon` (upcoming — gets a badge), `open` (places) |
+| heat       | 0–100 popularity; drives the red glow size on the map          |
+| ticket_url | where the button goes (events: "Get tickets", places: "Explore") |
+| poster_ref | `template:<name>` or a full image URL (see Posters)            |
 
 ## Posters
 
-All posters are hand-coded SVGs, 600×800 (3:4 portrait). Two templates:
+Posters are **reusable templates**, rendered in the browser from each item's
+data — a repeat event reuses its category's artwork with just a new date.
+Available templates (`poster_ref` values):
 
-- **Event poster** (see `comedy-night.svg`): two-tone condensed uppercase
-  title → date line between two thin rules → letter-spaced venue line →
-  hero artwork in the vertical center → thin divider → bottom info strip
-  with three icon segments (calendar+date | pin+venue | themed icon+tagline).
-- **Place card** (see `ithra.svg`): calmer — letter-spaced name, small
-  subtitle, hero artwork, thin divider, tagline and pin+city. No date.
+- `template:football` — pitch green + gold (football, padel, sports)
+- `template:concert` — purple/teal stage light
+- `template:candlelight` — warm amber lanterns (food, heritage)
+- `template:family` — playful pink/blue
+- `template:exhibition` — dark neon (esports, comedy, cinema, expos)
+- `template:place` — calm blue/silver explore card (no date)
 
-Keep the hero artwork centered vertically: the map pin shows a round
-center-crop of the poster, so the middle of the image is what reads at 44px.
-Dark backgrounds, one accent color per poster, subtle grain
-(`feTurbulence` filter) — match the existing files for consistency.
+Each renders the item's title, date line, venue, and its emoji as the hero,
+in that category's style. To design a new template, add a theme to
+`POSTER_THEMES` in `posters.js`.
+
+**Real poster images** (photos, official artwork) go in **Supabase Storage**,
+not the repo: Dashboard → Storage → `posters` bucket → Upload, then copy the
+file's public URL into the item's `poster_ref`. If an image URL fails to
+load, the pin falls back to the emoji badge and the popup hides the image.
 
 ## Filters (app.js)
 
@@ -64,18 +93,18 @@ Three chip rows combine with AND logic:
 - **Type**: All / Events / Places.
 - **When**: Any time / Today / This weekend / Next weekend. The weekend is
   **Friday–Saturday** (Saudi weekend). An event matches if its
-  `start`–`end` range overlaps the window; places always match.
+  `start_date`–`end_date` range overlaps the window; places always match.
 - **Category**: built automatically from the data; horizontally scrollable.
 
-Sidebar cards of events running today get a "Today" badge.
+Event cards running today get a "Today" badge; upcoming ones (`status =
+soon`) get a "Soon" badge.
 
 ## Local development
-
-Any static server works:
 
 ```
 python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-(Directly opening `index.html` as a file also works.)
+Without Supabase keys in `config.js` you'll see the seed data — which is the
+same content, so everything is testable offline.
