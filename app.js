@@ -30,12 +30,13 @@ EVENTS.forEach(ev => {
   });
 
   const marker = L.marker([ev.lat, ev.lng], { icon }).addTo(map);
+  const cta = ev.type === 'place' ? 'Explore' : 'Get tickets';
   marker.bindPopup(`
     <div class="popup">
       <img class="poster" src="${ev.image}" alt="${ev.title}" onerror="this.remove()">
       <h3>${ev.title}</h3>
       <div class="meta">${ev.venue} &middot; ${ev.time}</div>
-      <a href="${ev.ticketUrl}" target="_blank" rel="noopener">Get tickets</a>
+      <a href="${ev.ticketUrl}" target="_blank" rel="noopener">${cta}</a>
     </div>
   `, { autoPanPadding: [24, 24] });
 
@@ -59,7 +60,7 @@ entries.forEach(entry => {
     <span class="cat">${ev.category}</span>
     <h3>${ev.emoji} ${ev.title}</h3>
     <div class="meta">${ev.venue}<br>${ev.time}</div>
-    <a class="buy" href="${ev.ticketUrl}" target="_blank" rel="noopener">Get tickets</a>
+    <a class="buy" href="${ev.ticketUrl}" target="_blank" rel="noopener">${ev.type === 'place' ? 'Explore' : 'Get tickets'}</a>
   `;
   card.addEventListener('click', (e) => {
     if (e.target.classList.contains('buy')) return;
@@ -84,10 +85,27 @@ chips.forEach(chip => {
   });
 });
 
+// Category chips (scrollable row), built from whatever categories exist
+const catWrap = document.getElementById('cat-filters');
+let activeCat = 'all';
+
+['all', ...new Set(EVENTS.map(ev => ev.category))].forEach(cat => {
+  const chip = document.createElement('button');
+  chip.className = 'chip' + (cat === 'all' ? ' active' : '');
+  chip.textContent = cat === 'all' ? 'Everything' : cat;
+  chip.addEventListener('click', () => {
+    activeCat = cat;
+    catWrap.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === chip));
+    applyFilter();
+  });
+  catWrap.appendChild(chip);
+});
+
 function applyFilter() {
   let nEvents = 0, nPlaces = 0;
   entries.forEach(({ ev, marker, circle, card }) => {
-    const show = activeFilter === 'all' || ev.type === activeFilter;
+    const show = (activeFilter === 'all' || ev.type === activeFilter) &&
+                 (activeCat === 'all' || ev.category === activeCat);
     card.style.display = show ? '' : 'none';
     if (show) {
       marker.addTo(map);
