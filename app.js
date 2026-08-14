@@ -14,20 +14,36 @@ function initApp(ITEMS) {
     maxZoom: 19
   }).addTo(map);
 
+  // Nearby pins collapse into a count badge; tapping it zooms in/fans out.
+  const clusterGroup = L.markerClusterGroup({
+    maxClusterRadius: 46,
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    iconCreateFunction: cluster => L.divIcon({
+      className: '',
+      html: `<div class="cluster-badge">${cluster.getChildCount()}</div>`,
+      iconSize: [44, 44],
+      iconAnchor: [22, 22]
+    })
+  });
+  map.addLayer(clusterGroup);
+
   const markers = {};
-  const allMarkers = [];
   const entries = []; // { ev, marker, circle, card } — one per item, for filtering
 
   ITEMS.forEach(ev => {
     const poster = posterSrc(ev);
 
-    // Heat glow — bigger + brighter for hotter items
-    const circle = L.circle([ev.lat, ev.lng], {
-      radius: 150 + ev.heat * 6,
-      color: 'transparent',
-      fillColor: '#ff5a5f',
-      fillOpacity: 0.06 + (ev.heat / 100) * 0.22
-    }).addTo(map);
+    // Heat glow — events only (it marks how busy an event is); places
+    // stay clean so dense areas don't turn into red blobs.
+    const circle = ev.type === 'event'
+      ? L.circle([ev.lat, ev.lng], {
+          radius: 150 + ev.heat * 6,
+          color: 'transparent',
+          fillColor: '#ff5a5f',
+          fillOpacity: 0.05 + (ev.heat / 100) * 0.16
+        }).addTo(map)
+      : null;
 
     // Round poster thumbnail; if the image fails, it's removed and the
     // emoji (layered underneath on the gradient) shows instead.
@@ -39,7 +55,8 @@ function initApp(ITEMS) {
       popupAnchor: [0, -26]
     });
 
-    const marker = L.marker([ev.lat, ev.lng], { icon }).addTo(map);
+    const marker = L.marker([ev.lat, ev.lng], { icon });
+    clusterGroup.addLayer(marker);
     const cta = ev.type === 'place' ? 'Explore' : 'Get tickets';
     marker.bindPopup(`
       <div class="popup">
@@ -57,12 +74,11 @@ function initApp(ITEMS) {
     });
 
     markers[ev.id] = marker;
-    allMarkers.push(marker);
     entries.push({ ev, marker, circle, card: null });
   });
 
   // Zoom so every item (Khobar + Dammam + Dhahran) is visible at once
-  map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(0.25));
+  map.fitBounds(clusterGroup.getBounds().pad(0.25));
 
   // ---- DATES -------------------------------------------------------------
   // The Saudi weekend is Friday & Saturday. Places have no start/end, so
@@ -107,8 +123,8 @@ function initApp(ITEMS) {
     `;
     card.addEventListener('click', (e) => {
       if (e.target.classList.contains('buy')) return;
-      map.flyTo([ev.lat, ev.lng], 15, { duration: 0.6 });
-      map.once('moveend', () => markers[ev.id].openPopup());
+      // Zoom until the marker leaves its cluster, then open its popup
+      clusterGroup.zoomToShowLayer(markers[ev.id], () => markers[ev.id].openPopup());
       document.querySelectorAll('.event-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
     });
@@ -170,12 +186,12 @@ function initApp(ITEMS) {
                    matchesWhen(ev);
       card.style.display = show ? '' : 'none';
       if (show) {
-        marker.addTo(map);
-        circle.addTo(map);
+        if (!clusterGroup.hasLayer(marker)) clusterGroup.addLayer(marker);
+        if (circle) circle.addTo(map);
         if (ev.type === 'place') nPlaces++; else nEvents++;
       } else {
-        map.removeLayer(marker);
-        map.removeLayer(circle);
+        clusterGroup.removeLayer(marker);
+        if (circle) map.removeLayer(circle);
       }
     });
     const evLabel = `${nEvents} event${nEvents === 1 ? '' : 's'}`;
