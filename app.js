@@ -126,7 +126,7 @@ function initApp(ITEMS) {
     // emoji (layered underneath on the gradient) shows instead.
     const icon = L.divIcon({
       className: '',
-      html: `<div class="pin-thumb" data-id="${ev.id}"><span class="pin-emoji">${ev.emoji}</span><img src="${poster}" alt="" onerror="this.remove()"></div>`,
+      html: `<div class="pin-thumb" data-id="${ev.id}"><span class="pin-emoji">${itemIcon(ev)}</span><img src="${poster}" alt="" onerror="this.remove()"></div>`,
       iconSize: [44, 44],
       iconAnchor: [22, 22],
       popupAnchor: [0, -26]
@@ -205,7 +205,7 @@ function initApp(ITEMS) {
       : ev.status === 'soon' ? '<span class="soon-badge">Soon</span>' : '';
     card.innerHTML = `
       <span class="cat">${ev.category}</span>${badge}
-      <h3>${ev.emoji} ${ev.title}</h3>
+      <h3>${itemIcon(ev)} ${ev.title}</h3>
       <div class="meta">${ev.venue}<br>${ev.time}</div>
       <a class="buy" href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${ev.type === 'place' ? 'Explore' : 'Get tickets'}</a>
     `;
