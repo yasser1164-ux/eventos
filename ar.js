@@ -121,7 +121,7 @@ function buildMarkers() {
 
     const label = document.createElement('span');
     label.className = 'ar-marker-label';
-    label.innerHTML = `${m.ev.title.length > 22 ? m.ev.title.slice(0, 21) + '…' : m.ev.title}<br>${distLabel}`;
+    label.innerHTML = `${m.ev.title.length > 22 ? m.ev.title.slice(0, 21) + '…' : m.ev.title}<br>${distLabel}<br><span class="ar-status2">${itemStatus(m.ev).short}</span>`;
     el.appendChild(label);
 
     // atmospheric fade: far beams become faint ghosts, not slightly-dimmer twins
