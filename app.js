@@ -9,15 +9,39 @@ function initApp(ITEMS) {
   // ---- MAP ---------------------------------------------------------------
   const map = L.map('map', { zoomControl: true, closePopupOnClick: false }).setView([26.2854, 50.2083], 12);
 
-  // iOS Safari can fire a stray "ghost click" on the map right after the tap
-  // that opened a popup, which would instantly close it again. So we close
-  // popups on map tap ourselves, but only once the popup has been open for a
-  // moment. (closePopupOnClick is off above; this replaces it.)
-  const POPUP_GRACE_MS = 700;
+  // iOS Safari fires a delayed duplicate of the tap that opened a popup.
+  // After the popup's autoPan has shifted the map, that duplicate can land on
+  // the map, the pin itself, or a cluster badge — each of which would close
+  // the popup mid-pan. All three paths are grace-guarded below: for the
+  // first POPUP_GRACE_MS after a popup opens, nothing can dismiss it except
+  // its ✕ button, and any unexpected close in that window is undone.
+  const POPUP_GRACE_MS = 900;
   let popupOpenedAt = 0;
+  let manualCloseAt = 0;
+
+  const inGrace = () => Date.now() - popupOpenedAt < POPUP_GRACE_MS;
+
   map.on('popupopen', () => { popupOpenedAt = Date.now(); });
+
+  // ✕ button = always a deliberate close (capture phase so we see it first)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.leaflet-popup-close-button')) manualCloseAt = Date.now();
+  }, true);
+
+  // Map tap closes the popup only after the grace period
+  // (closePopupOnClick is off above; this replaces it).
   map.on('click', () => {
-    if (Date.now() - popupOpenedAt > POPUP_GRACE_MS) map.closePopup();
+    if (!inGrace()) map.closePopup();
+  });
+
+  // Safety net: a popup closed within the grace window by anything other
+  // than its ✕ button (ghost tap, cluster churn during autoPan) is reopened.
+  map.on('popupclose', (e) => {
+    const source = e.popup && e.popup._source;
+    if (!source || !inGrace() || Date.now() - manualCloseAt < 1000) return;
+    setTimeout(() => {
+      if (!map._popup && source._map) source.openPopup();
+    }, 150);
   });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -30,6 +54,7 @@ function initApp(ITEMS) {
     maxClusterRadius: 46,
     showCoverageOnHover: false,
     spiderfyOnMaxZoom: true,
+    zoomToBoundsOnClick: false, // done manually below, grace-guarded
     iconCreateFunction: cluster => L.divIcon({
       className: '',
       html: `<div class="cluster-badge">${cluster.getChildCount()}</div>`,
@@ -38,6 +63,12 @@ function initApp(ITEMS) {
     })
   });
   map.addLayer(clusterGroup);
+
+  // A ghost tap on a cluster badge right after a popup opened would zoom the
+  // map and re-absorb the open marker — ignore cluster taps during the grace.
+  clusterGroup.on('clusterclick', (e) => {
+    if (!inGrace()) e.layer.zoomToBounds({ padding: [24, 24] });
+  });
 
   const markers = {};
   const entries = []; // { ev, marker, circle, card } — one per item, for filtering
@@ -83,6 +114,17 @@ function initApp(ITEMS) {
       // Cap popup height to the map area so it never overflows off-screen;
       // Leaflet makes the content scrollable when it exceeds this.
       maxHeight: Math.max(240, Math.round(map.getSize().y * 0.82))
+    });
+
+    // Replace bindPopup's default click-toggle: a ghost tap landing back on
+    // the pin right after its popup opened must not toggle it closed.
+    marker.off('click');
+    marker.on('click', () => {
+      if (marker.isPopupOpen()) {
+        if (!inGrace()) marker.closePopup();
+      } else {
+        marker.openPopup();
+      }
     });
 
     markers[ev.id] = marker;
