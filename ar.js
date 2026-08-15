@@ -62,6 +62,68 @@ function angleDiff(a, b) {
   return ((b - a + 540) % 360) - 180;
 }
 
+// ---- sky art (test) -------------------------------------------------------
+// A virtual "drone show" anchored at one real point in the sky — everyone who
+// opens the link sees the SAME artwork from their own position: correct
+// direction, and sized by true perspective (angular size = physical size /
+// distance), so it's big up close, shrinks with distance, and past the point
+// where a real 200 m object would be a speck it disappears entirely. It
+// floats 250 m above the sea off the Khobar corniche so buildings rarely
+// stand between a viewer and it.
+
+const SKY_ART = {
+  lat: 26.296, lng: 50.230,  // over the water, off the Khobar corniche
+  altM: 250,                  // height of the swarm's centre above the ground
+  sizeM: 200,                 // physical width of the artwork
+  minAngDeg: 1.8,             // apparent size below this = too far to see
+  maxPx: 340,
+  title: 'Drone art · test'
+};
+let skyEl = null, skyDots = [], skyGeom = null;
+
+function buildSkyArt() {
+  skyEl = document.createElement('div');
+  skyEl.className = 'sky-art';
+  skyEl.style.display = 'none';
+  // heart outline traced by "drones", with a small ring inside and a little
+  // depth jitter so the slow sway reads as 3D
+  const pts = [];
+  for (let i = 0; i < 60; i++) {
+    const t = i / 60 * Math.PI * 2;
+    pts.push({
+      x: 16 * Math.sin(t) ** 3 / 34,
+      y: (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 34,
+      z: Math.sin(3 * t) * 0.05
+    });
+  }
+  for (let i = 0; i < 12; i++) {
+    const t = i / 12 * Math.PI * 2;
+    pts.push({ x: Math.sin(t) * 0.16, y: Math.cos(t) * 0.14 + 0.05, z: Math.cos(2 * t) * 0.07 });
+  }
+  for (const p of pts) {
+    const d = document.createElement('span');
+    d.className = 'sky-dot';
+    d.style.animationDelay = `${(((p.x * 7 + p.z * 13) % 1.6) + 1.6) % 1.6}s`;
+    skyEl.appendChild(d);
+    skyDots.push({ p, el: d });
+  }
+  const lbl = document.createElement('span');
+  lbl.className = 'sky-label';
+  skyEl.appendChild(lbl);
+  skyEl._label = lbl;
+}
+buildSkyArt();
+
+function updateSkyGeom() {
+  const distKm = haversineKm(userPos, SKY_ART);
+  skyGeom = {
+    bearing: bearingDeg(userPos, SKY_ART),
+    distKm,
+    elevDeg: toDeg(Math.atan2(SKY_ART.altM, distKm * 1000)),
+    angDeg: 2 * toDeg(Math.atan2(SKY_ART.sizeM / 2, distKm * 1000))
+  };
+}
+
 // ---- markers --------------------------------------------------------------
 // Midnight-Club style: each item is a vertical beam of light rising from its
 // real-world position on the skyline into the sky. Near/hot items get wide,
@@ -71,6 +133,8 @@ function angleDiff(a, b) {
 
 function buildMarkers() {
   layer.textContent = '';
+  layer.appendChild(skyEl); // survives the wipe — geo state refreshes with us
+  updateSkyGeom();
   markers = items
     .map(ev => ({ ev, bearing: bearingDeg(userPos, ev), distKm: haversineKm(userPos, ev) }))
     .filter(m => m.distKm <= AR_MAX_KM)
@@ -163,6 +227,42 @@ function renderFrame() {
     const y = horizonY + m.dropFrac * H; // beam base (bottom of the element)
     m.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -100%)`;
   }
+  renderSkyArt(W, H, horizonY);
+}
+
+function renderSkyArt(W, H, horizonY) {
+  if (!skyGeom || !skyEl) return;
+  const rel = angleDiff(headingSmooth, skyGeom.bearing);
+  // too far to see (a real 200 m object would be a speck) or out of frame
+  if (skyGeom.angDeg < SKY_ART.minAngDeg || Math.abs(rel) > AR_FOV / 2 + 10) {
+    skyEl.style.display = 'none';
+    return;
+  }
+  skyEl.style.display = '';
+  const pxPerDeg = W / AR_FOV;
+  const S = Math.min(SKY_ART.maxPx, skyGeom.angDeg * pxPerDeg * 1.4);
+  const x = W * (0.5 + rel / AR_FOV);
+  const centerY = horizonY - skyGeom.elevDeg * pxPerDeg * 0.6;
+  const t = performance.now() / 1000;
+  const bob = Math.sin(t * 0.8) * S * 0.02;
+  skyEl.style.width = skyEl.style.height = `${Math.round(S)}px`;
+  // fade in near the visibility limit instead of popping
+  skyEl.style.opacity = Math.min(1, 0.3 + (skyGeom.angDeg - SKY_ART.minAngDeg) * 0.6).toFixed(2);
+  skyEl.style.transform = `translate(${Math.round(x - S / 2)}px, ${Math.round(centerY - S / 2 + bob)}px)`;
+  // gentle 3D sway: the swarm oscillates ±26° around vertical, and each
+  // drone's size/brightness follows its depth
+  const rot = Math.sin(t * 0.4) * 0.45;
+  const cos = Math.cos(rot), sin = Math.sin(rot);
+  const dotSize = Math.max(2, Math.min(8, S * 0.035));
+  for (const { p, el } of skyDots) {
+    const xr = p.x * cos + p.z * sin;
+    const zr = -p.x * sin + p.z * cos;
+    const depth = 1 + zr * 1.4;
+    el.style.width = el.style.height = `${(dotSize * depth).toFixed(1)}px`;
+    el.style.transform = `translate(${((0.5 + xr) * S).toFixed(1)}px, ${((0.42 - p.y * 0.9) * S).toFixed(1)}px)`;
+    el.style.opacity = (0.55 + 0.45 * Math.min(1, depth)).toFixed(2);
+  }
+  skyEl._label.textContent = `🚁 ${SKY_ART.title} · ${skyGeom.distKm.toFixed(1)} km`;
 }
 
 // ---- detail card (same content as the map popup) --------------------------
