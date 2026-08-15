@@ -157,6 +157,19 @@ Coordinates are never typed by hand:
   Supabase SQL editor. To open it to real users later, replace the SQL step
   with an insert into a moderated `suggestions` table.
 
+## AR view (experimental — ar.html)
+
+A standalone screen (the AR button on the map opens it; the map code is
+untouched). It uses the phone camera as a live background, the device
+compass + GPS to work out the user's position and facing, and overlays a
+glowing marker for every item within ~45 km at its real-world bearing —
+size and glow scale with the item's heat and proximity. Tapping a marker
+opens the same detail card as the map popup. Camera, motion/compass and
+location permissions are each requested on "Start AR"; a refusal (or a
+device without a compass) shows a friendly message instead of a broken
+view. iOS needs the tap-triggered motion-permission prompt, which is
+handled.
+
 ## Filters (app.js)
 
 Three chip rows combine with AND logic:
