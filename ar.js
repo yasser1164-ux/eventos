@@ -17,6 +17,7 @@ const failTitle = document.getElementById('ar-fail-title');
 const failText = document.getElementById('ar-fail-text');
 const card = document.getElementById('ar-card');
 const cardBody = document.getElementById('ar-card-body');
+const hintEl = document.getElementById('ar-hint');
 
 let items = [];
 let userPos = null;      // { lat, lng }
@@ -24,6 +25,8 @@ let heading = null;      // degrees clockwise from true north
 let headingSmooth = null;
 let markers = [];        // { ev, el, bearing, distKm } — bearing/dist vs userPos
 let rafId = null;
+let manualMode = false;  // no compass: the user drags to look around
+let userDragged = false;
 
 // ---- geometry -------------------------------------------------------------
 
@@ -81,6 +84,12 @@ function buildMarkers() {
     // offset avoids exact stacking for same-direction items
     m.yFrac = 0.62 - 0.3 * (m.distKm / AR_MAX_KM) + (((m.ev.id * 37) % 5) - 2) * 0.015;
   }
+  // without a compass, start the view aimed at the nearest item so the user
+  // sees something immediately (unless they've already dragged elsewhere)
+  if (manualMode && !userDragged && markers.length) {
+    heading = markers[markers.length - 1].bearing;
+    headingSmooth = heading;
+  }
 }
 
 function renderFrame() {
@@ -133,7 +142,14 @@ function fail(title, text) {
   failOverlay.hidden = false;
 }
 
+function showHint(text) {
+  hintEl.textContent = text;
+  hintEl.hidden = false;
+}
+hintEl.addEventListener('click', () => { hintEl.hidden = true; });
+
 function onOrientation(e) {
+  if (manualMode) return; // the user is steering by hand — don't fight them
   if (typeof e.webkitCompassHeading === 'number' && !isNaN(e.webkitCompassHeading)) {
     heading = e.webkitCompassHeading;                 // iOS: already from north
   } else if (e.alpha !== null && (e.absolute || e.type === 'deviceorientationabsolute')) {
@@ -141,11 +157,77 @@ function onOrientation(e) {
   }
 }
 
+// ---- manual look-around: AR without a compass -----------------------------
+// Grab-the-world drag: pulling left turns the view right, one screen width
+// sweeps one field of view.
+
+function enterManualMode(reason) {
+  manualMode = true;
+  if (markers.length && !userDragged) {
+    heading = markers[markers.length - 1].bearing; // nearest item
+  } else if (heading === null) {
+    heading = 0;
+  }
+  headingSmooth = heading;
+  showHint(`${reason} You can still use AR — drag the screen to look around.`);
+}
+
+let dragStartX = null, dragStartHeading = 0, dragMovedPx = 0, suppressClickUntil = 0;
+layer.addEventListener('pointerdown', e => {
+  if (!manualMode) return;
+  dragStartX = e.clientX;
+  dragStartHeading = heading ?? 0;
+  dragMovedPx = 0;
+});
+layer.addEventListener('pointermove', e => {
+  if (!manualMode || dragStartX === null) return;
+  const dx = e.clientX - dragStartX;
+  dragMovedPx = Math.max(dragMovedPx, Math.abs(dx));
+  heading = (dragStartHeading - dx * (AR_FOV / window.innerWidth) + 360) % 360;
+  headingSmooth = heading; // no smoothing lag while the finger steers directly
+  if (dragMovedPx > 8) userDragged = true;
+});
+const endDrag = e => {
+  // a real drag is followed (within ms) by a click on whatever is under the
+  // finger — swallow that one so it doesn't open a marker card
+  if (e.type === 'pointerup' && dragMovedPx > 8) suppressClickUntil = performance.now() + 300;
+  dragStartX = null;
+  dragMovedPx = 0;
+};
+layer.addEventListener('pointerup', endDrag);
+layer.addEventListener('pointercancel', endDrag);
+layer.addEventListener('click', e => {
+  if (performance.now() < suppressClickUntil) {
+    suppressClickUntil = 0;
+    e.stopPropagation();
+    e.preventDefault();
+  }
+}, true);
+
 async function start() {
   startOverlay.hidden = true;
   failOverlay.hidden = true;
+  hintEl.hidden = true;
+  manualMode = false;
 
-  // 1. Camera
+  // 1. Motion/compass permission — iOS only shows this prompt while the tap's
+  // "user activation" is alive, and awaiting the camera first consumes it. So
+  // fire the request synchronously here, before ANY await, and read the
+  // answer after the camera is up.
+  let motionPromise = null;
+  let motionAskedAt = 0;
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    motionAskedAt = performance.now();
+    try {
+      motionPromise = DeviceOrientationEvent.requestPermission();
+    } catch (err) {
+      motionPromise = Promise.reject(err);
+    }
+    motionPromise.catch(() => {}); // handled later — avoid an unhandled rejection
+  }
+
+  // 2. Camera
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment' }, audio: false
@@ -157,22 +239,30 @@ async function start() {
     return;
   }
 
-  // 2. Compass — on iOS this must be requested inside the same tap
-  try {
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-      const state = await DeviceOrientationEvent.requestPermission();
-      if (state !== 'granted') throw new Error('denied');
+  // 3. Compass — read the motion answer; without it, fall back to drag-to-look
+  let motionState = 'granted';
+  let motionThrew = false;
+  if (motionPromise) {
+    try {
+      motionState = await motionPromise;
+    } catch {
+      motionThrew = true;
     }
-  } catch {
-    fail('Compass not available',
-      'AR needs the compass to know which way you are facing. Allow motion & orientation access and try again.');
-    return;
   }
-  window.addEventListener('deviceorientationabsolute', onOrientation);
-  window.addEventListener('deviceorientation', onOrientation);
+  if (motionThrew || motionState !== 'granted') {
+    // If the promise rejected, or settled too fast for a human to have seen a
+    // prompt, Safari never asked — that's the global "Motion & Orientation
+    // Access" toggle being off (Settings → Safari), not a tap on "Don't Allow".
+    const promptWasShown = !motionThrew && (performance.now() - motionAskedAt) > 350;
+    enterManualMode(promptWasShown
+      ? 'Motion access was declined, so the compass is off.'
+      : 'Safari never showed the motion prompt — "Motion & Orientation Access" is probably off in Settings → Safari.');
+  } else {
+    window.addEventListener('deviceorientationabsolute', onOrientation);
+    window.addEventListener('deviceorientation', onOrientation);
+  }
 
-  // 3. Location
+  // 4. Location
   navigator.geolocation.getCurrentPosition(
     pos => {
       userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
@@ -186,11 +276,11 @@ async function start() {
         buildMarkers();
       }, () => {}, { enableHighAccuracy: true, maximumAge: 10000 });
       if (!rafId) renderFrame();
-      // If no compass reading arrives, say so rather than showing a blank view
+      // Permission granted but no reading ever arrives (no magnetometer,
+      // desktop browser, …) — switch to drag-to-look instead of failing.
       setTimeout(() => {
-        if (heading === null) {
-          fail('No compass signal',
-            'Your device did not report a compass heading. AR needs a phone with a magnetometer — the map view has everything too.');
+        if (heading === null && !manualMode) {
+          enterManualMode('Your device is not reporting a compass heading.');
         }
       }, 4000);
     },

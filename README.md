@@ -164,11 +164,22 @@ untouched). It uses the phone camera as a live background, the device
 compass + GPS to work out the user's position and facing, and overlays a
 glowing marker for every item within ~45 km at its real-world bearing —
 size and glow scale with the item's heat and proximity. Tapping a marker
-opens the same detail card as the map popup. Camera, motion/compass and
-location permissions are each requested on "Start AR"; a refusal (or a
-device without a compass) shows a friendly message instead of a broken
-view. iOS needs the tap-triggered motion-permission prompt, which is
-handled.
+opens the same detail card as the map popup.
+
+Permissions: camera, motion/compass and location are all requested on
+"Start AR". On iOS the motion prompt only appears while the tap that
+triggered it is still "live", so `ar.js` fires
+`DeviceOrientationEvent.requestPermission()` synchronously in the tap
+handler — before awaiting the camera — and reads the answer afterwards.
+If Safari never shows the prompt (the global **Settings → Safari →
+Motion & Orientation Access** toggle is off) that is detected and named
+specifically. Camera or location refusals show a friendly message.
+
+No compass is not fatal: whether the permission was refused, the prompt
+was blocked, or the device simply has no magnetometer, AR switches to a
+**drag-to-look** mode — the view starts aimed at the nearest item and the
+user drags the screen to pan (one screen width ≈ one field of view), with
+a dismissible hint explaining what happened.
 
 ## Filters (app.js)
 
