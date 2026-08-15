@@ -7,7 +7,7 @@
 
 const AR_FOV = 70;      // assumed horizontal camera field of view, degrees
 const AR_VFOV = 110;    // assumed vertical field of view (portrait), degrees
-const AR_MAX_KM = 45;   // how far away items may be and still appear
+const AR_MAX_KM = 25;   // items beyond this never render in AR (map shows all)
 
 // Browser flavour — behaviour is the same everywhere, but the settings path
 // the user must visit when a permission is stuck differs per browser.

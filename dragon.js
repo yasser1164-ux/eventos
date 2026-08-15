@@ -112,7 +112,7 @@ function renderDragon(W, H, horizonY) {
     // honestly too far for anyone to see — but say so instead of silently
     // showing nothing, which reads as "broken"
     DRAGON.el.style.display = 'none';
-    if (distKm <= AR_MAX_KM) {
+    if (distKm <= 45) { // the dragon keeps its own radius — AR_MAX_KM is for items
       cue.textContent = `🐉 Dragon ${distKm.toFixed(1)} km away — too far to see`;
       cue.style.left = '50%';
       cue.style.right = 'auto';
