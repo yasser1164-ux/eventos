@@ -161,10 +161,18 @@ Coordinates are never typed by hand:
 
 A standalone screen (the AR button on the map opens it; the map code is
 untouched). It uses the phone camera as a live background, the device
-compass + GPS to work out the user's position and facing, and overlays a
-glowing marker for every item within ~45 km at its real-world bearing —
-size and glow scale with the item's heat and proximity. Tapping a marker
-opens the same detail card as the map popup.
+compass + GPS to work out the user's position and facing, and draws a
+**vertical beam of light** rising into the sky from every item within
+~45 km at its real-world bearing (Midnight Club style). Beam width, glow
+and brightness scale with the item's heat and proximity; places are cool
+teal→violet, events hot red→gold. The horizon follows the phone's tilt
+(beta) so beam bases stay pinned to the skyline, and each base fades in
+from nothing so foreground buildings appear to swallow it — only the
+upper glow shows over the skyline. Labels appear on the three nearest
+beams only; tapping a beam's chip opens the same detail card as the map
+popup. True per-building occlusion (hiding a beam an obstacle really
+blocks) would need 3D building data — a possible later step is
+OpenStreetMap building footprints + heights with a line-of-sight check.
 
 Permissions: camera, motion/compass and location are all requested on
 "Start AR". On iOS the motion prompt only appears while the tap that
