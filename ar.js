@@ -6,6 +6,7 @@
 // code is untouched.
 
 const AR_FOV = 70;      // assumed horizontal camera field of view, degrees
+const AR_VFOV = 110;    // assumed vertical field of view (portrait), degrees
 const AR_MAX_KM = 45;   // how far away items may be and still appear
 
 // Browser flavour — behaviour is the same everywhere, but the settings path
@@ -190,8 +191,10 @@ function buildMarkers() {
     layer.appendChild(el);
     m.el = el;
     // how far below the horizon the beam base sits: near items drop lower
-    // (perspective), tiny per-item jitter avoids exact stacking
-    m.dropFrac = 0.04 + Math.pow(proximity, 1.3) * 0.18 + (((m.ev.id * 37) % 5) - 2) * 0.008;
+    // (perspective), tiny per-item jitter avoids exact stacking. Kept small —
+    // km-distant items really sit at the horizon, and a big drop would keep
+    // them on screen when the phone points at the ground.
+    m.dropFrac = 0.03 + Math.pow(proximity, 1.3) * 0.10 + (((m.ev.id * 37) % 5) - 2) * 0.006;
   }
   // labels only on the three nearest beams — the rest stay clean columns
   markers.forEach((m, i) => {
@@ -216,12 +219,14 @@ function renderFrame() {
 
   const W = window.innerWidth, H = window.innerHeight;
   // horizon follows the phone's tilt: pointing the camera up slides the
-  // skyline down, so beam bases stay pinned to the real horizon
+  // skyline down, pointing at the ground pushes it (and everything hung on
+  // it) right off the top of the screen — deliberately NOT clamped to stay
+  // visible, that's what makes it feel anchored to the world
   let horizonY = H * 0.42;
   if (pitch !== null) {
     pitchSmooth = pitchSmooth === null ? pitch : pitchSmooth + (pitch - pitchSmooth) * 0.15;
-    horizonY = Math.min(H * 0.9, Math.max(H * 0.12,
-      H * 0.42 + (pitchSmooth - 90) * (W / AR_FOV) * 0.6));
+    horizonY = Math.min(H * 2.5, Math.max(-H * 1.5,
+      H * 0.42 + (pitchSmooth - 90) * (H / AR_VFOV)));
   }
   for (const m of markers) {
     const rel = angleDiff(headingSmooth, m.bearing); // - left … + right
@@ -255,16 +260,31 @@ function renderSkyArt(W, H, horizonY) {
       : `← 🚁 Drone art ${skyGeom.distKm.toFixed(1)} km`;
     skyCue.style.left = right ? 'auto' : '10px';
     skyCue.style.right = right ? '10px' : 'auto';
+    skyCue.style.transform = '';
     skyCue.hidden = false;
     return;
   }
-  skyCue.hidden = true;
-  skyEl.style.display = '';
   const pxPerDeg = W / AR_FOV;
   const S = Math.max(SKY_ART.minPx,
     Math.min(SKY_ART.maxPx, skyGeom.angDeg * pxPerDeg * SKY_ART.boost));
   const x = W * (0.5 + rel / AR_FOV);
-  const centerY = horizonY - skyGeom.elevDeg * pxPerDeg * 0.6;
+  const centerY = horizonY - skyGeom.elevDeg * (H / AR_VFOV);
+  // vertically out of frame (phone pointing at the ground or straight up):
+  // hide the art and cue which way to tilt
+  if (centerY < -S * 0.6 || centerY > H + S * 0.6) {
+    skyEl.style.display = 'none';
+    skyCue.textContent = centerY < 0
+      ? `🚁 Drone art ${skyGeom.distKm.toFixed(1)} km — tilt up ↑`
+      : `🚁 Drone art ${skyGeom.distKm.toFixed(1)} km — tilt down ↓`;
+    skyCue.style.left = '50%';
+    skyCue.style.right = 'auto';
+    skyCue.style.transform = 'translateX(-50%)';
+    skyCue.hidden = false;
+    return;
+  }
+  skyCue.style.transform = '';
+  skyCue.hidden = true;
+  skyEl.style.display = '';
   const t = performance.now() / 1000;
   const bob = Math.sin(t * 0.8) * S * 0.02;
   skyEl.style.width = skyEl.style.height = `${Math.round(S)}px`;
