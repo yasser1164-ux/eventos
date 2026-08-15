@@ -112,7 +112,7 @@ function buildMarkers() {
 
     const dot = document.createElement('span');
     dot.className = 'ar-marker-dot';
-    dot.innerHTML = `<span>${m.ev.emoji}</span>`;
+    dot.innerHTML = `<span>${itemIcon(m.ev)}</span>`;
     const size = Math.round(16 + depth * 22);
     dot.style.width = dot.style.height = `${size}px`;
     dot.style.fontSize = `${Math.round(size * 0.55)}px`;
@@ -187,7 +187,7 @@ function openCard(ev) {
   const cta = ev.type === 'place' ? 'Explore' : 'Get tickets';
   cardBody.innerHTML = `
     <img class="poster" src="${poster}" alt="${ev.title}" onerror="this.remove()">
-    <h3>${ev.emoji} ${ev.title}</h3>
+    <h3>${itemIcon(ev)} ${ev.title}</h3>
     <div class="meta">${ev.venue} &middot; ${ev.time}</div>
     <a class="buy" href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${cta}</a>`;
   card.hidden = false;
