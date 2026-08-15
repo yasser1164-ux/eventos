@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const USER_AGENT = 'eventos-khobar/1.0 (https://eventos-khobar.netlify.app)';
+const USER_AGENT = 'eventos-khobar/1.0 (https://yasser1164-ux.github.io/eventos/)';
 const NOMINATIM = process.env.NOMINATIM_URL || 'https://nominatim.openstreetmap.org/search';
 // Bounding box around the Eastern Province (left,top,right,bottom) so a name
 // that also exists elsewhere can't yank a pin to another city.

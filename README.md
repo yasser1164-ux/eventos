@@ -5,8 +5,9 @@ events with poster pins, plus good places to visit. Plain HTML/CSS/JS +
 [Leaflet](https://leafletjs.com) — no build step — with
 [Supabase](https://supabase.com) as the data backend.
 
-**Live site:** https://eventos-khobar.netlify.app
-(auto-deploys from `main` via Netlify — merge to `main` and it's live in ~1 minute)
+**Live site:** https://yasser1164-ux.github.io/eventos/
+(auto-deploys from `main` via GitHub Pages — the `Deploy to GitHub Pages`
+action runs on every merge to `main`; live in ~1 minute)
 
 ## Architecture
 
