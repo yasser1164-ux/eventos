@@ -188,6 +188,17 @@ was blocked, or the device simply has no magnetometer, AR switches to a
 user drags the screen to pan (one screen width ≈ one field of view), with
 a dismissible hint explaining what happened.
 
+Browser differences are handled (`IS_IOS` / `IS_CRIOS` / `IS_ANDROID` in
+`ar.js`): every stuck-permission message names the settings path for
+*that* browser — Safari iOS ("aA" menu / Settings → Safari), Chrome on
+iPhone (Settings app → Chrome: Camera, Location, **Motion & Fitness** —
+Chrome iOS gates motion at the app level), Android Chrome (lock icon →
+Permissions; Motion sensors under Site settings). Android Chrome's
+compass often reports rotation without a true north reference — in that
+case AR uses the sensor **relatively**: the view turns with the phone,
+starts aimed at the nearest item, and one drag rotates the world to line
+it up with reality (the sensor keeps steering from the corrected offset).
+
 ## Filters (app.js)
 
 Three chip rows combine with AND logic:
