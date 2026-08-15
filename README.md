@@ -14,7 +14,12 @@ action runs on every merge to `main`; live in ~1 minute)
 Data, logic and UI are separated:
 
 ```
-index.html          Page skeleton: top bar, sidebar, filter chips, map container.
+index.html          HOME screen — the landing view: search, curated rows
+                    (Happening tonight / This weekend / Places to go anytime),
+                    and big buttons into the map and AR view.
+home.js             Logic for the home screen. Reads items via loadItems()
+                    (data.js) — nothing hardcoded; rows with no items hide.
+map.html            Map page skeleton: top bar, sidebar, filter chips, map.
 styles.css          All styling, including mobile layout (breakpoint at 720px).
 config.js           Supabase URL + anon key (paste yours here — see Setup).
 data.js             DATA layer: fetches items from Supabase; falls back to seed.js.
@@ -27,7 +32,7 @@ app.js              UI layer: map, pins, popups, sidebar cards, filters.
 supabase/schema.sql The database: table, security policy, storage bucket, seed rows.
 ```
 
-Script order in `index.html` matters: `config → seed → posters → data → app`.
+Script order matters on every page: `config → seed → posters → data → (app|home|ar)`.
 
 ## Setup (one time, ~5 minutes)
 
