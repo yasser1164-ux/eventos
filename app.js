@@ -49,8 +49,19 @@ function initApp(ITEMS) {
     maxZoom: 19
   }).addTo(map);
 
+  // Attribution links must never hijack the session: a tap meant for a pin
+  // near the bottom edge can land on them — open in a new tab instead.
+  document.querySelectorAll('.leaflet-control-attribution a').forEach(a => {
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+
   // Nearby pins collapse into a count badge; tapping it zooms in/fans out.
   const clusterGroup = L.markerClusterGroup({
+    // keep markers on the map when they pan out of view: the tall detail
+    // popup can auto-pan its own pin off-screen, and removing that pin
+    // would close the popup the user just opened
+    removeOutsideVisibleBounds: false,
     maxClusterRadius: 46,
     showCoverageOnHover: false,
     spiderfyOnMaxZoom: true,
