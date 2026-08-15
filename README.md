@@ -177,13 +177,15 @@ OpenStreetMap building footprints + heights with a line-of-sight check.
 
 **Sky art (test)**: `SKY_ART` in `ar.js` anchors a virtual "drone show"
 (a heart of ~70 twinkling drone dots with a gentle 3D sway) at one real
-point in the sky — 250 m above the water off the Khobar corniche.
+point in the sky — 350 m above the water off the Khobar corniche.
 Everyone who opens the link sees the *same* artwork from their own
-position: at its true bearing, sized by real perspective (angular size =
-physical size ÷ distance — big up close, small far away), floating at
-the correct height above the tilt-tracked horizon. Beyond the point
-where a real 200 m object would be a speck (~6 km) it disappears, with a
-fade near the limit. It sits over the sea so buildings rarely block the
+position: at its true bearing, sized by perspective (angular size =
+physical size ÷ distance — big up close, small far away, exaggerated by
+`boost` with a `minPx` floor so the test is findable on a phone screen),
+floating at the correct height above the tilt-tracked horizon. Beyond
+~19 km it disappears entirely, with a fade near the limit. While it's in
+range but out of frame, an edge chip ("🚁 Drone art 3.2 km →") points
+which way to turn. It sits over the sea so buildings rarely block the
 sight line; per-building occlusion and indoor detection aren't possible
 in a mobile browser (no depth sensing) — a native ARKit app would be
 needed for that. Edit the `SKY_ART` constants to move or resize it.

@@ -73,13 +73,15 @@ function angleDiff(a, b) {
 
 const SKY_ART = {
   lat: 26.296, lng: 50.230,  // over the water, off the Khobar corniche
-  altM: 250,                  // height of the swarm's centre above the ground
-  sizeM: 200,                 // physical width of the artwork
-  minAngDeg: 1.8,             // apparent size below this = too far to see
-  maxPx: 340,
+  altM: 350,                  // height of the swarm's centre above the ground
+  sizeM: 300,                 // physical width of the artwork
+  minAngDeg: 0.9,             // apparent size below this = too far to see (~19 km)
+  boost: 2.6,                 // exaggerate apparent size so the test is findable
+  minPx: 56,                  // never smaller than this while in range
+  maxPx: 360,
   title: 'Drone art · test'
 };
-let skyEl = null, skyDots = [], skyGeom = null;
+let skyEl = null, skyDots = [], skyGeom = null, skyCue = null;
 
 function buildSkyArt() {
   skyEl = document.createElement('div');
@@ -111,6 +113,11 @@ function buildSkyArt() {
   lbl.className = 'sky-label';
   skyEl.appendChild(lbl);
   skyEl._label = lbl;
+  // edge cue: when the art is in range but out of frame, point the way to it
+  skyCue = document.createElement('div');
+  skyCue.className = 'sky-cue';
+  skyCue.hidden = true;
+  document.body.appendChild(skyCue);
 }
 buildSkyArt();
 
@@ -233,14 +240,29 @@ function renderFrame() {
 function renderSkyArt(W, H, horizonY) {
   if (!skyGeom || !skyEl) return;
   const rel = angleDiff(headingSmooth, skyGeom.bearing);
-  // too far to see (a real 200 m object would be a speck) or out of frame
-  if (skyGeom.angDeg < SKY_ART.minAngDeg || Math.abs(rel) > AR_FOV / 2 + 10) {
+  // too far away: a real object this size would be a speck in the sky
+  if (skyGeom.angDeg < SKY_ART.minAngDeg) {
     skyEl.style.display = 'none';
+    skyCue.hidden = true;
     return;
   }
+  // in range but out of frame: show an edge cue pointing the way
+  if (Math.abs(rel) > AR_FOV / 2 + 10) {
+    skyEl.style.display = 'none';
+    const right = rel > 0;
+    skyCue.textContent = right
+      ? `🚁 Drone art ${skyGeom.distKm.toFixed(1)} km →`
+      : `← 🚁 Drone art ${skyGeom.distKm.toFixed(1)} km`;
+    skyCue.style.left = right ? 'auto' : '10px';
+    skyCue.style.right = right ? '10px' : 'auto';
+    skyCue.hidden = false;
+    return;
+  }
+  skyCue.hidden = true;
   skyEl.style.display = '';
   const pxPerDeg = W / AR_FOV;
-  const S = Math.min(SKY_ART.maxPx, skyGeom.angDeg * pxPerDeg * 1.4);
+  const S = Math.max(SKY_ART.minPx,
+    Math.min(SKY_ART.maxPx, skyGeom.angDeg * pxPerDeg * SKY_ART.boost));
   const x = W * (0.5 + rel / AR_FOV);
   const centerY = horizonY - skyGeom.elevDeg * pxPerDeg * 0.6;
   const t = performance.now() / 1000;
