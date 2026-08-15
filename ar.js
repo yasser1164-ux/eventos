@@ -8,6 +8,13 @@
 const AR_FOV = 70;      // assumed horizontal camera field of view, degrees
 const AR_MAX_KM = 45;   // how far away items may be and still appear
 
+// Browser flavour — behaviour is the same everywhere, but the settings path
+// the user must visit when a permission is stuck differs per browser.
+const UA = navigator.userAgent;
+const IS_CRIOS = /CriOS/.test(UA);                      // Chrome on iPhone/iPad
+const IS_IOS = /iPhone|iPad|iPod/.test(UA) && !IS_CRIOS; // Safari-ish on iOS
+const IS_ANDROID = /Android/.test(UA);
+
 const video = document.getElementById('ar-video');
 const layer = document.getElementById('ar-layer');
 const compassEl = document.getElementById('ar-compass');
@@ -148,12 +155,23 @@ function showHint(text) {
 }
 hintEl.addEventListener('click', () => { hintEl.hidden = true; });
 
+let relativeMode = false; // sensor turns with the phone but has no north
+let relOffset = 0;        // user-dragged correction added to the relative sensor
+let lastRelAlpha = null;
+
 function onOrientation(e) {
   if (manualMode) return; // the user is steering by hand — don't fight them
   if (typeof e.webkitCompassHeading === 'number' && !isNaN(e.webkitCompassHeading)) {
     heading = e.webkitCompassHeading;                 // iOS: already from north
+    relativeMode = false;
   } else if (e.alpha !== null && (e.absolute || e.type === 'deviceorientationabsolute')) {
     heading = (360 - e.alpha) % 360;                  // Android absolute
+    relativeMode = false;
+  } else if (e.alpha !== null) {
+    // non-absolute reading (Chrome without a compass reference): remember it —
+    // if nothing better arrives we'll use it relatively, aligned by hand
+    lastRelAlpha = e.alpha;
+    if (relativeMode) heading = (360 - e.alpha + relOffset) % 360;
   }
 }
 
@@ -172,18 +190,28 @@ function enterManualMode(reason) {
   showHint(`${reason} You can still use AR — drag the screen to look around.`);
 }
 
-let dragStartX = null, dragStartHeading = 0, dragMovedPx = 0, suppressClickUntil = 0;
+let dragStartX = null, dragStartHeading = 0, dragStartOffset = 0, dragMovedPx = 0, suppressClickUntil = 0;
 layer.addEventListener('pointerdown', e => {
-  if (!manualMode) return;
+  if (!manualMode && !relativeMode) return;
   dragStartX = e.clientX;
   dragStartHeading = heading ?? 0;
+  dragStartOffset = relOffset;
   dragMovedPx = 0;
 });
 layer.addEventListener('pointermove', e => {
-  if (!manualMode || dragStartX === null) return;
+  if ((!manualMode && !relativeMode) || dragStartX === null) return;
   const dx = e.clientX - dragStartX;
   dragMovedPx = Math.max(dragMovedPx, Math.abs(dx));
-  heading = (dragStartHeading - dx * (AR_FOV / window.innerWidth) + 360) % 360;
+  const dDeg = -dx * (AR_FOV / window.innerWidth);
+  if (relativeMode) {
+    // dragging re-aims north: the sensor keeps turning the view afterwards
+    relOffset = (dragStartOffset + dDeg + 360) % 360;
+    heading = lastRelAlpha !== null
+      ? (360 - lastRelAlpha + relOffset) % 360
+      : (dragStartHeading + dDeg + 360) % 360;
+  } else {
+    heading = (dragStartHeading + dDeg + 360) % 360;
+  }
   headingSmooth = heading; // no smoothing lag while the finger steers directly
   if (dragMovedPx > 8) userDragged = true;
 });
@@ -209,6 +237,8 @@ async function start() {
   failOverlay.hidden = true;
   hintEl.hidden = true;
   manualMode = false;
+  relativeMode = false;
+  lastRelAlpha = null;
 
   // 1. Motion/compass permission — iOS only shows this prompt while the tap's
   // "user activation" is alive, and awaiting the camera first consumes it. So
@@ -234,8 +264,11 @@ async function start() {
     });
     video.srcObject = stream;
   } catch {
-    fail('Camera not available',
-      'AR needs the camera as its background. Allow camera access for this site in your browser settings and try again.');
+    fail('Camera not available', 'AR needs the camera as its background. ' + (
+      IS_CRIOS ? 'Open the iPhone Settings app → Chrome → allow Camera, then reload this page.'
+      : IS_IOS ? 'Tap “aA” in the address bar → Website Settings → Camera → Allow, and check Settings → Safari → Camera.'
+      : IS_ANDROID ? 'Tap the lock icon in the address bar → Permissions → Camera → Allow, then try again.'
+      : 'Allow camera access for this site in your browser settings and try again.'));
     return;
   }
 
@@ -256,7 +289,9 @@ async function start() {
     const promptWasShown = !motionThrew && (performance.now() - motionAskedAt) > 350;
     enterManualMode(promptWasShown
       ? 'Motion access was declined, so the compass is off.'
-      : 'Safari never showed the motion prompt — "Motion & Orientation Access" is probably off in Settings → Safari.');
+      : IS_CRIOS
+        ? 'Chrome never showed the motion prompt — open the iPhone Settings app → Chrome and turn on “Motion & Fitness”, then reload.'
+        : 'Safari never showed the motion prompt — "Motion & Orientation Access" is probably off in Settings → Safari.');
   } else {
     window.addEventListener('deviceorientationabsolute', onOrientation);
     window.addEventListener('deviceorientation', onOrientation);
@@ -279,19 +314,34 @@ async function start() {
       buildMarkers();
     }, () => {}, { enableHighAccuracy: true, maximumAge: 10000 });
     if (!rafId) renderFrame();
-    // Permission granted but no reading ever arrives (no magnetometer,
-    // desktop browser, …) — switch to drag-to-look instead of failing.
+    // Permission granted but no north-referenced reading ever arrives —
+    // use the relative sensor if there is one, else switch to drag-to-look.
     setTimeout(() => {
-      if (heading === null && !manualMode) {
-        enterManualMode('Your device is not reporting a compass heading.');
+      if (heading !== null || manualMode) return;
+      if (lastRelAlpha !== null) {
+        // Sensor works but has no compass reference (common in Chrome and
+        // in-app browsers): drive the view with it relatively, starting
+        // aimed at the nearest item; a drag rotates the world to true it up.
+        relativeMode = true;
+        const aim = markers.length ? markers[markers.length - 1].bearing : 0;
+        relOffset = (aim - (360 - lastRelAlpha) + 720) % 360;
+        heading = aim;
+        headingSmooth = aim;
+        showHint('This browser has no true compass — the view turns with your phone, but north is approximate. Drag the screen to line it up with what you see.');
+      } else {
+        enterManualMode('Your device is not reporting a compass heading.' +
+          (IS_ANDROID ? ' In Chrome, check ⋮ → Settings → Site settings → Motion sensors.' : ''));
       }
     }, 4000);
   };
   const locFail = err => {
     if (locatingHint) { hintEl.hidden = true; locatingHint = false; }
     if (err && err.code === 1) {
-      fail('Location access declined',
-        'AR needs your location to know where things are around you. Tap “aA” in the address bar → Website Settings → Location → Allow, and check Settings → Privacy & Security → Location Services → Safari Websites is “While Using”. Then try again.');
+      fail('Location access declined', 'AR needs your location to know where things are around you. ' + (
+        IS_CRIOS ? 'Open the iPhone Settings app → Chrome → Location and choose “While Using the App”, then try again.'
+        : IS_IOS ? 'Tap “aA” in the address bar → Website Settings → Location → Allow, and check Settings → Privacy & Security → Location Services → Safari Websites is “While Using”. Then try again.'
+        : IS_ANDROID ? 'Tap the lock icon in the address bar → Permissions → Location → Allow, then try again.'
+        : 'Allow location access for this site in your browser settings and try again.'));
     } else {
       fail('No GPS fix',
         'Location access is fine, but your phone couldn’t get a position fix. Near a window, outdoors, or after a few seconds in the open it usually works — tap Try again.');
