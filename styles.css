@@ -34,9 +34,16 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .pin{width:34px;height:34px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 4px 14px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.85)}
 .pin span{transform:rotate(45deg);font-size:15px}
 .cluster-badge{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.45);color:#fff;font-family:'Inter',system-ui,sans-serif;font-size:16px;font-weight:800}
-.pin-thumb{position:relative;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.45)}
-.pin-thumb .pin-emoji{font-size:20px}
-.pin-thumb img{position:absolute;inset:0;width:100% !important;height:100% !important;object-fit:cover}
+.pin-thumb{position:relative;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.45);transition:transform .25s ease}
+.pin-thumb .pin-emoji{font-size:20px;transition:opacity .2s ease}
+.pin-thumb img{position:absolute;inset:0;width:100% !important;height:100% !important;object-fit:cover;transition:opacity .2s ease}
+/* Zoom-dependent markers: dots when zoomed out, full poster pins up close.
+   Scaled around the centre so the map anchor stays correct. */
+.zoom-low .pin-thumb{transform:scale(.32)}
+.zoom-low .pin-thumb img,.zoom-low .pin-thumb .pin-emoji{opacity:0}
+.zoom-mid .pin-thumb{transform:scale(.68)}
+.zoom-mid .pin-thumb img{opacity:0}
+.zoom-high .pin-thumb{transform:scale(1)}
 .leaflet-popup-content-wrapper{background:var(--panel-2);color:var(--text);border-radius:12px}
 .leaflet-popup-tip{background:var(--panel-2)}
 .popup{width:230px}
