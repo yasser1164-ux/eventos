@@ -78,10 +78,17 @@ function buildMarkers() {
     .filter(m => m.distKm <= AR_MAX_KM)
     .sort((a, b) => b.distKm - a.distKm); // draw far ones first, near on top
   const H = window.innerHeight;
-  for (const m of markers) {
+  // Depth: presence falls off like real perspective (~1/distance), and is
+  // NORMALISED TO THE NEAREST ITEM — whatever is closest to the viewer
+  // renders at full strength, everything else fades relative to it. As the
+  // viewer moves (watchPosition rebuilds), the layering re-ranks around them.
+  const D0 = 1.2; // km — how quickly presence decays with distance
+  const weights = markers.map(m => 1 / (m.distKm + D0));
+  const wMax = Math.max(...weights, 1e-9);
+  markers.forEach((m, i) => {
     const el = document.createElement('button');
     el.className = 'ar-marker';
-    const proximity = 1 - Math.min(m.distKm / AR_MAX_KM, 1); // 0 far … 1 near
+    const depth = Math.pow(weights[i] / wMax, 0.8); // 1 nearest … →0 far
     const heat = m.ev.heat || 0;
     const distLabel = m.distKm < 1 ? `${Math.round(m.distKm * 1000)} m` : `${m.distKm.toFixed(1)} km`;
 
@@ -93,20 +100,20 @@ function buildMarkers() {
 
     const beam = document.createElement('span');
     beam.className = 'ar-beam';
-    const beamW = Math.round(7 + proximity * 16 + heat * 0.08);
-    const beamH = Math.round(H * 0.9 * (0.45 + proximity * 0.55));
+    const beamW = Math.round(6 + depth * 18 + heat * 0.06);
+    const beamH = Math.round(H * 0.9 * (0.25 + depth * 0.75));
     beam.style.width = `${beamW}px`;
     beam.style.height = `${beamH}px`;
     // base fades in from nothing (foreground cover), brightest low, thins out
     // into the sky
     beam.style.background = `linear-gradient(to top, ${c0}0) 0%, ${c0}${alpha.toFixed(2)}) 9%, ${c0}${(alpha * 0.85).toFixed(2)}) 32%, ${c1}${(alpha * 0.55).toFixed(2)}) 62%, rgba(0,0,0,0) 100%)`;
-    beam.style.boxShadow = `0 0 ${Math.round(14 + heat * 0.25 + proximity * 10)}px ${c0}${(0.28 + heat / 300).toFixed(2)})`;
+    beam.style.boxShadow = `0 0 ${Math.round(10 + heat * 0.2 + depth * 14)}px ${c0}${(0.28 + heat / 300).toFixed(2)})`;
     el.appendChild(beam);
 
     const dot = document.createElement('span');
     dot.className = 'ar-marker-dot';
     dot.innerHTML = `<span>${m.ev.emoji}</span>`;
-    const size = Math.round(20 + proximity * 18);
+    const size = Math.round(16 + depth * 22);
     dot.style.width = dot.style.height = `${size}px`;
     dot.style.fontSize = `${Math.round(size * 0.55)}px`;
     el.appendChild(dot);
@@ -116,7 +123,8 @@ function buildMarkers() {
     label.innerHTML = `${m.ev.title.length > 22 ? m.ev.title.slice(0, 21) + '…' : m.ev.title}<br>${distLabel}`;
     el.appendChild(label);
 
-    el.style.opacity = String(0.55 + proximity * 0.45);
+    // atmospheric fade: far beams become faint ghosts, not slightly-dimmer twins
+    el.style.opacity = (0.18 + depth * 0.82).toFixed(2);
     el.addEventListener('click', () => openCard(m.ev));
     layer.appendChild(el);
     m.el = el;
@@ -124,8 +132,8 @@ function buildMarkers() {
     // (perspective), tiny per-item jitter avoids exact stacking. Kept small —
     // km-distant items really sit at the horizon, and a big drop would keep
     // them on screen when the phone points at the ground.
-    m.dropFrac = 0.03 + Math.pow(proximity, 1.3) * 0.10 + (((m.ev.id * 37) % 5) - 2) * 0.006;
-  }
+    m.dropFrac = 0.03 + Math.pow(depth, 1.2) * 0.10 + (((m.ev.id * 37) % 5) - 2) * 0.006;
+  });
   // labels only on the three nearest beams — the rest stay clean columns
   markers.forEach((m, i) => {
     if (i < markers.length - 3) m.el.classList.add('ar-far');
