@@ -116,6 +116,15 @@ function initApp(ITEMS) {
   map.on('zoomend', updateZoomClass);
   updateZoomClass();
 
+  // User position (if allowed): powers popup distance/drive time and the
+  // Tonight list's nearest-first sorting. The map works fine without it.
+  let MAP_POS = null;
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      MAP_POS = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    }, () => {}, { timeout: 8000, maximumAge: 300000 });
+  }
+
   const markers = {};
   const entries = []; // { ev, marker, card, shown } — one per item, for filtering
 
@@ -134,15 +143,9 @@ function initApp(ITEMS) {
 
     const marker = L.marker([ev.lat, ev.lng], { icon });
     clusterGroup.addLayer(marker);
-    const cta = ev.type === 'place' ? 'Explore' : 'Get tickets';
-    marker.bindPopup(`
-      <div class="popup">
-        <img class="poster" src="${poster}" alt="${ev.title}" onerror="this.remove()">
-        <h3>${ev.title}</h3>
-        <div class="meta">${ev.venue} &middot; ${ev.time}</div>
-        <a href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${cta}</a>
-      </div>
-    `, {
+    // Content is a function so each open rebuilds it — the status line and
+    // distance/drive-time stay current as time passes and MAP_POS arrives.
+    marker.bindPopup(() => `<div class="popup">${detailCardHtml(ev, MAP_POS)}</div>`, {
       autoPanPadding: [24, 24],
       maxWidth: 230,
       // Cap popup height to the map area so it never overflows off-screen;
@@ -295,6 +298,64 @@ function initApp(ITEMS) {
   }
 
   applyFilter();
+
+  // ---- TONIGHT -------------------------------------------------------------
+  // A prominent toggle that answers "what can I do right now?": places open
+  // now plus events running today, nearest first, as swipeable cards over the
+  // map. "Surprise me" picks one good option nearby and flies to it.
+  const tonightBtn = document.getElementById('tonight-btn');
+  const tonightPanel = document.getElementById('tonight-panel');
+  const tonightScroll = document.getElementById('tonight-scroll');
+
+  function tonightList() {
+    const list = ITEMS.filter(ev => {
+      const k = itemStatus(ev).kind;
+      return k === 'open' || k === 'live';
+    });
+    if (MAP_POS) {
+      list.sort((a, b) => itemDistKm(MAP_POS, a) - itemDistKm(MAP_POS, b));
+    } else {
+      list.sort((a, b) => (b.heat || 0) - (a.heat || 0));
+    }
+    return list;
+  }
+
+  function flyToItem(ev) {
+    clusterGroup.zoomToShowLayer(markers[ev.id], () => markers[ev.id].openPopup());
+  }
+
+  function renderTonight() {
+    tonightScroll.textContent = '';
+    tonightList().forEach(ev => {
+      const st = itemStatus(ev);
+      const card = document.createElement('button');
+      card.className = 'tn-card';
+      const dist = MAP_POS ? `<span class="tn-dist">${itemDistKm(MAP_POS, ev).toFixed(1)} km</span>` : '';
+      card.innerHTML = `
+        <img src="${posterSrc(ev)}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="tn-name">${itemIcon(ev)} ${ev.title}</span>
+        <span class="tn-status status-${st.kind}">${st.short}</span>${dist}`;
+      card.addEventListener('click', () => flyToItem(ev));
+      tonightScroll.appendChild(card);
+    });
+  }
+
+  tonightBtn.addEventListener('click', () => {
+    const showing = !tonightPanel.hidden;
+    tonightPanel.hidden = showing;
+    tonightBtn.classList.toggle('active', !showing);
+    if (!showing) renderTonight();
+  });
+
+  document.getElementById('surprise-btn').addEventListener('click', () => {
+    // a good option: open/live now, hot, and (when we know) under 20 km away
+    let cands = tonightList().filter(ev => !MAP_POS || itemDistKm(MAP_POS, ev) <= 20);
+    if (!cands.length) cands = tonightList();
+    if (!cands.length) return;
+    cands.sort((a, b) => (b.heat || 0) - (a.heat || 0));
+    const pick = cands[Math.floor(Math.random() * Math.min(cands.length, 5))];
+    flyToItem(pick);
+  });
 
   // Log every CTA tap (sidebar cards and map popups) for referral stats
   document.addEventListener('click', (e) => {

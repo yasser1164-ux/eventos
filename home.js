@@ -80,12 +80,7 @@ const homeCardEl = document.getElementById('home-card');
 const homeCardBody = document.getElementById('home-card-body');
 
 function openHomeCard(ev) {
-  const cta = ev.type === 'place' ? 'Explore' : 'Get tickets';
-  homeCardBody.innerHTML = `
-    <img class="poster" src="${posterSrc(ev)}" alt="${ev.title}" onerror="this.remove()">
-    <h3>${itemIcon(ev)} ${ev.title}</h3>
-    <div class="meta">${ev.venue} &middot; ${ev.time}</div>
-    <a class="buy" href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${cta}</a>`;
+  homeCardBody.innerHTML = detailCardHtml(ev, homePos);
   homeCardEl.hidden = false;
 }
 document.getElementById('home-card-close').addEventListener('click', () => { homeCardEl.hidden = true; });
