@@ -6,53 +6,59 @@
 <title>Eventos — What's happening near you</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <header class="topbar">
+<body class="home-body">
+  <header class="home-head">
     <div class="brand">
       <span class="brand-dot"></span>
       <span class="brand-name">Eventos</span>
     </div>
-    <div class="tagline">What's happening near you</div>
+    <span class="home-city" id="home-city">Eastern Province</span>
   </header>
 
-  <main class="layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-head">
-        <h2>Happening near you</h2>
-        <p id="event-count">Loading events…</p>
-      </div>
-      <div class="filters" id="filters">
-        <button class="chip active" data-filter="all">All</button>
-        <button class="chip" data-filter="event">Events</button>
-        <button class="chip" data-filter="place">Places</button>
-      </div>
-      <div class="filters scroll" id="when-filters">
-        <button class="chip active" data-when="any">Any time</button>
-        <button class="chip" data-when="today">Today</button>
-        <button class="chip" data-when="weekend">This weekend</button>
-        <button class="chip" data-when="nextweekend">Next weekend</button>
-      </div>
-      <div class="filters scroll" id="cat-filters"></div>
-      <div class="event-list" id="event-list"></div>
-    </aside>
+  <main class="home-main">
+    <input class="home-search" id="home-search" type="search"
+           placeholder="Search events and places…" autocomplete="off" />
 
-    <div class="map-wrap">
-      <div id="map"></div>
-      <a class="ar-btn" href="ar.html" aria-label="Open AR view">AR</a>
+    <!-- search results (only while typing) -->
+    <section class="home-row" id="row-results" hidden>
+      <h2>Results</h2>
+      <div class="home-scroll" id="scroll-results"></div>
+      <p class="home-empty" id="results-empty" hidden>Nothing matches that.</p>
+    </section>
+
+    <section class="home-row" id="row-tonight" hidden>
+      <h2>Happening tonight</h2>
+      <div class="home-scroll" id="scroll-tonight"></div>
+    </section>
+
+    <section class="home-row" id="row-weekend" hidden>
+      <h2>This weekend</h2>
+      <div class="home-scroll" id="scroll-weekend"></div>
+    </section>
+
+    <section class="home-row" id="row-places" hidden>
+      <h2>Places to go anytime</h2>
+      <div class="home-scroll" id="scroll-places"></div>
+    </section>
+
+    <div class="home-actions">
+      <a class="home-action" href="map.html">🗺️ Open map</a>
+      <a class="home-action" href="ar.html">📸 AR view</a>
     </div>
   </main>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <!-- detail card (same content as the map popup) -->
+  <div class="ar-card" id="home-card" hidden>
+    <button class="ar-card-close" id="home-card-close">✕</button>
+    <div id="home-card-body"></div>
+  </div>
+
 <script src="config.js"></script>
 <script src="seed.js"></script>
 <script src="posters.js"></script>
 <script src="data.js"></script>
-<script src="app.js"></script>
+<script src="home.js"></script>
 </body>
 </html>
