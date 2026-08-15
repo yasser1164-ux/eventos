@@ -133,6 +133,23 @@ Coordinates are never typed by hand:
   OpenStreetMap are often Arabic — if a place won't match, try its Arabic
   name in the Supabase Table Editor search, or fix lat/lng by hand there.
 
+- **Importing events from listing sites**: `scripts/import-events.js` scans
+  public Eastern-Province listing pages (Platinumlist Dammam by default —
+  edit `SOURCES` at the top) for schema.org **JSON-LD Event data**, which
+  ticketing sites embed for search engines and which is far more stable than
+  scraping HTML. Each new event is mapped to the items schema (category/
+  emoji/poster template inferred from the title; the listing's poster image
+  is used as `poster_ref` when present), its venue is **geocoded via
+  Nominatim** (never hardcoded), and it's inserted with `id = max + 1`.
+  Safe to re-run: events already in the table (same title or ticket URL),
+  past events, events outside Dammam/Khobar/Dhahran, and venues Nominatim
+  can't find are skipped, each with a log line.
+
+  ```
+  SUPABASE_SERVICE_ROLE_KEY=<service key> node scripts/import-events.js
+  node scripts/import-events.js --dry-run   # preview only, no key needed
+  ```
+
 - **Submitting new places**: `submit.html` is the submission flow (currently
   an admin stub). The user types a name/address — never coordinates — the
   page geocodes it via Nominatim, drops a draggable pin on a map preview so
