@@ -175,17 +175,20 @@ popup. True per-building occlusion (hiding a beam an obstacle really
 blocks) would need 3D building data — a possible later step is
 OpenStreetMap building footprints + heights with a line-of-sight check.
 
-**Sky art (test)**: `SKY_ART` in `ar.js` anchors a virtual "drone show"
-(a heart of ~70 twinkling drone dots with a gentle 3D sway) at one real
-point in the sky — 350 m above the water off the Khobar corniche.
-Everyone who opens the link sees the *same* artwork from their own
-position: at its true bearing, sized by perspective (angular size =
-physical size ÷ distance — big up close, small far away, exaggerated by
-`boost` with a `minPx` floor so the test is findable on a phone screen),
-floating at the correct height above the tilt-tracked horizon. Beyond
-~19 km it disappears entirely, with a fade near the limit. While it's in
-range but out of frame, an edge chip ("🚁 Drone art 3.2 km →") points
-which way to turn. It sits over the sea so buildings rarely block the
+**Sea dragon (experimental scene — dragon.js)**: an original, code-drawn
+dragon silhouette (SVG — sinuous body, horned head, ember eye, scalloped
+bat wings that beat) endlessly patrols an elliptical loop over the sea
+off the Khobar corniche, ~110 m up, one lap every 4 minutes. Its position
+on the loop comes from the wall clock, so everyone who opens the link
+sees the SAME dragon at the same point of its flight, each from their own
+angle. Perspective is real: it sweeps close to the shore (big), heads out
+to sea (small), and beyond ~9 km can't be seen at all; apparent size is
+`boost`-exaggerated with a `minPx` floor so phones can enjoy it. It faces
+its direction of travel, climbs and dives along the lap, and rides the
+tilt-tracked horizon. When it's in range but out of frame, an edge chip
+("🐉 Dragon 2.1 km →", or "tilt up ↑") points the way. All artwork is
+original — styled after fantasy dragon silhouettes generally, copied from
+nothing. Tune everything in the `DRAGON` config block. It sits over the sea so buildings rarely block the
 sight line; per-building occlusion and indoor detection aren't possible
 in a mobile browser (no depth sensing) — a native ARKit app would be
 needed for that. Edit the `SKY_ART` constants to move or resize it.
