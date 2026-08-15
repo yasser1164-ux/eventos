@@ -34,6 +34,8 @@ let markers = [];        // { ev, el, bearing, distKm } — bearing/dist vs user
 let rafId = null;
 let manualMode = false;  // no compass: the user drags to look around
 let userDragged = false;
+let pitch = null;        // device tilt (beta), degrees — 90 = held upright
+let pitchSmooth = null;
 
 // ---- geometry -------------------------------------------------------------
 
@@ -61,6 +63,11 @@ function angleDiff(a, b) {
 }
 
 // ---- markers --------------------------------------------------------------
+// Midnight-Club style: each item is a vertical beam of light rising from its
+// real-world position on the skyline into the sky. Near/hot items get wide,
+// vivid beams; far ones are thin and hazy. The beam base fades out so
+// foreground buildings appear to swallow it, and only the upper glow shows
+// over the skyline — like the game.
 
 function buildMarkers() {
   layer.textContent = '';
@@ -68,29 +75,57 @@ function buildMarkers() {
     .map(ev => ({ ev, bearing: bearingDeg(userPos, ev), distKm: haversineKm(userPos, ev) }))
     .filter(m => m.distKm <= AR_MAX_KM)
     .sort((a, b) => b.distKm - a.distKm); // draw far ones first, near on top
+  const H = window.innerHeight;
   for (const m of markers) {
     const el = document.createElement('button');
     el.className = 'ar-marker';
+    const proximity = 1 - Math.min(m.distKm / AR_MAX_KM, 1); // 0 far … 1 near
+    const heat = m.ev.heat || 0;
     const distLabel = m.distKm < 1 ? `${Math.round(m.distKm * 1000)} m` : `${m.distKm.toFixed(1)} km`;
-    el.innerHTML = `<span class="ar-marker-dot"><span>${m.ev.emoji}</span></span>
-      <span class="ar-marker-label">${m.ev.title.length > 22 ? m.ev.title.slice(0, 21) + '…' : m.ev.title}<br>${distLabel}</span>`;
+
+    // beam colours: places = cool teal→violet, events = hot red→gold
+    const [c0, c1] = m.ev.type === 'place'
+      ? ['rgba(64,224,255,', 'rgba(108,92,231,']
+      : ['rgba(255,90,95,', 'rgba(255,179,71,'];
+    const alpha = 0.5 + heat / 100 * 0.35;
+
+    const beam = document.createElement('span');
+    beam.className = 'ar-beam';
+    const beamW = Math.round(7 + proximity * 16 + heat * 0.08);
+    const beamH = Math.round(H * 0.9 * (0.45 + proximity * 0.55));
+    beam.style.width = `${beamW}px`;
+    beam.style.height = `${beamH}px`;
+    // base fades in from nothing (foreground cover), brightest low, thins out
+    // into the sky
+    beam.style.background = `linear-gradient(to top, ${c0}0) 0%, ${c0}${alpha.toFixed(2)}) 9%, ${c0}${(alpha * 0.85).toFixed(2)}) 32%, ${c1}${(alpha * 0.55).toFixed(2)}) 62%, rgba(0,0,0,0) 100%)`;
+    beam.style.boxShadow = `0 0 ${Math.round(14 + heat * 0.25 + proximity * 10)}px ${c0}${(0.28 + heat / 300).toFixed(2)})`;
+    el.appendChild(beam);
+
+    const dot = document.createElement('span');
+    dot.className = 'ar-marker-dot';
+    dot.innerHTML = `<span>${m.ev.emoji}</span>`;
+    const size = Math.round(20 + proximity * 18);
+    dot.style.width = dot.style.height = `${size}px`;
+    dot.style.fontSize = `${Math.round(size * 0.55)}px`;
+    el.appendChild(dot);
+
+    const label = document.createElement('span');
+    label.className = 'ar-marker-label';
+    label.innerHTML = `${m.ev.title.length > 22 ? m.ev.title.slice(0, 21) + '…' : m.ev.title}<br>${distLabel}`;
+    el.appendChild(label);
+
+    el.style.opacity = String(0.55 + proximity * 0.45);
     el.addEventListener('click', () => openCard(m.ev));
     layer.appendChild(el);
     m.el = el;
-
-    // size & glow from heat + proximity
-    const proximity = 1 - Math.min(m.distKm / AR_MAX_KM, 1); // 0 far … 1 near
-    const size = Math.round(30 + m.ev.heat * 0.25 + proximity * 26);
-    const glow = Math.round(8 + m.ev.heat * 0.3 + proximity * 14);
-    const dot = el.querySelector('.ar-marker-dot');
-    dot.style.width = dot.style.height = `${size}px`;
-    dot.style.fontSize = `${Math.round(size * 0.52)}px`;
-    dot.style.boxShadow = `0 0 ${glow}px ${Math.round(glow / 2)}px rgba(255,90,95,${0.35 + m.ev.heat / 250})`;
-    el.style.opacity = String(0.65 + proximity * 0.35);
-    // stagger vertically: near items sit lower and bigger, tiny per-item
-    // offset avoids exact stacking for same-direction items
-    m.yFrac = 0.62 - 0.3 * (m.distKm / AR_MAX_KM) + (((m.ev.id * 37) % 5) - 2) * 0.015;
+    // how far below the horizon the beam base sits: near items drop lower
+    // (perspective), tiny per-item jitter avoids exact stacking
+    m.dropFrac = 0.04 + Math.pow(proximity, 1.3) * 0.18 + (((m.ev.id * 37) % 5) - 2) * 0.008;
   }
+  // labels only on the three nearest beams — the rest stay clean columns
+  markers.forEach((m, i) => {
+    if (i < markers.length - 3) m.el.classList.add('ar-far');
+  });
   // without a compass, start the view aimed at the nearest item so the user
   // sees something immediately (unless they've already dragged elsewhere)
   if (manualMode && !userDragged && markers.length) {
@@ -109,6 +144,14 @@ function renderFrame() {
   compassEl.textContent = `${Math.round(headingSmooth)}°`;
 
   const W = window.innerWidth, H = window.innerHeight;
+  // horizon follows the phone's tilt: pointing the camera up slides the
+  // skyline down, so beam bases stay pinned to the real horizon
+  let horizonY = H * 0.42;
+  if (pitch !== null) {
+    pitchSmooth = pitchSmooth === null ? pitch : pitchSmooth + (pitch - pitchSmooth) * 0.15;
+    horizonY = Math.min(H * 0.9, Math.max(H * 0.12,
+      H * 0.42 + (pitchSmooth - 90) * (W / AR_FOV) * 0.6));
+  }
   for (const m of markers) {
     const rel = angleDiff(headingSmooth, m.bearing); // - left … + right
     if (Math.abs(rel) > AR_FOV / 2 + 8) {
@@ -117,8 +160,8 @@ function renderFrame() {
     }
     m.el.style.display = '';
     const x = W * (0.5 + rel / AR_FOV);
-    const y = H * m.yFrac;
-    m.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -50%)`;
+    const y = horizonY + m.dropFrac * H; // beam base (bottom of the element)
+    m.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -100%)`;
   }
 }
 
@@ -160,6 +203,7 @@ let relOffset = 0;        // user-dragged correction added to the relative senso
 let lastRelAlpha = null;
 
 function onOrientation(e) {
+  if (typeof e.beta === 'number' && !isNaN(e.beta)) pitch = e.beta;
   if (manualMode) return; // the user is steering by hand — don't fight them
   if (typeof e.webkitCompassHeading === 'number' && !isNaN(e.webkitCompassHeading)) {
     heading = e.webkitCompassHeading;                 // iOS: already from north
