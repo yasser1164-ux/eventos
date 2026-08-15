@@ -108,9 +108,19 @@ function renderDragon(W, H, horizonY) {
   const distKm = haversineKm(userPos, pos);
   const angDeg = 2 * toDeg(Math.atan2(DRAGON.wingspanM / 2, distKm * 1000));
   const cue = DRAGON.cue;
-  if (angDeg < DRAGON.minAngDeg) { // honestly too far for anyone to see
+  if (angDeg < DRAGON.minAngDeg) {
+    // honestly too far for anyone to see — but say so instead of silently
+    // showing nothing, which reads as "broken"
     DRAGON.el.style.display = 'none';
-    cue.hidden = true;
+    if (distKm <= AR_MAX_KM) {
+      cue.textContent = `🐉 Dragon ${distKm.toFixed(1)} km away — too far to see`;
+      cue.style.left = '50%';
+      cue.style.right = 'auto';
+      cue.style.transform = 'translateX(-50%)';
+      cue.hidden = false;
+    } else {
+      cue.hidden = true;
+    }
     return;
   }
   const rel = angleDiff(headingSmooth, bearingDeg(userPos, pos));
