@@ -262,32 +262,53 @@ async function start() {
     window.addEventListener('deviceorientation', onOrientation);
   }
 
-  // 4. Location
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+  // 4. Location — a fresh GPS fix can take ages indoors or in a car, so:
+  // accept a recent cached position (AR works at km scale — a couple of
+  // minutes of drift doesn't matter), and on timeout/no-fix retry once,
+  // coarse and patient, before giving up. Only a real refusal fails fast.
+  const onFix = pos => {
+    if (locatingHint) { hintEl.hidden = true; locatingHint = false; }
+    userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    buildMarkers();
+    if (!markers.length) {
+      fail('Nothing nearby', `No events or places within ${AR_MAX_KM} km of you. The AR view shines in the Khobar–Dammam–Dhahran area.`);
+      return;
+    }
+    navigator.geolocation.watchPosition(p => {
+      userPos = { lat: p.coords.latitude, lng: p.coords.longitude };
       buildMarkers();
-      if (!markers.length) {
-        fail('Nothing nearby', `No events or places within ${AR_MAX_KM} km of you. The AR view shines in the Khobar–Dammam–Dhahran area.`);
-        return;
+    }, () => {}, { enableHighAccuracy: true, maximumAge: 10000 });
+    if (!rafId) renderFrame();
+    // Permission granted but no reading ever arrives (no magnetometer,
+    // desktop browser, …) — switch to drag-to-look instead of failing.
+    setTimeout(() => {
+      if (heading === null && !manualMode) {
+        enterManualMode('Your device is not reporting a compass heading.');
       }
-      navigator.geolocation.watchPosition(p => {
-        userPos = { lat: p.coords.latitude, lng: p.coords.longitude };
-        buildMarkers();
-      }, () => {}, { enableHighAccuracy: true, maximumAge: 10000 });
-      if (!rafId) renderFrame();
-      // Permission granted but no reading ever arrives (no magnetometer,
-      // desktop browser, …) — switch to drag-to-look instead of failing.
-      setTimeout(() => {
-        if (heading === null && !manualMode) {
-          enterManualMode('Your device is not reporting a compass heading.');
-        }
-      }, 4000);
-    },
-    () => fail('Location not available',
-      'AR needs your location to know where things are around you. Allow location access for this site and try again.'),
-    { enableHighAccuracy: true, timeout: 15000 }
-  );
+    }, 4000);
+  };
+  const locFail = err => {
+    if (locatingHint) { hintEl.hidden = true; locatingHint = false; }
+    if (err && err.code === 1) {
+      fail('Location access declined',
+        'AR needs your location to know where things are around you. Tap “aA” in the address bar → Website Settings → Location → Allow, and check Settings → Privacy & Security → Location Services → Safari Websites is “While Using”. Then try again.');
+    } else {
+      fail('No GPS fix',
+        'Location access is fine, but your phone couldn’t get a position fix. Near a window, outdoors, or after a few seconds in the open it usually works — tap Try again.');
+    }
+  };
+  let locatingHint = false;
+  compassEl.textContent = 'GPS…';
+  navigator.geolocation.getCurrentPosition(onFix, err => {
+    if (err && err.code === 1) { locFail(err); return; }
+    // no fix yet (timeout / unavailable) — one more try, coarse and patient
+    if (hintEl.hidden) {
+      showHint('Still getting a GPS fix — this can take a moment indoors or in a car.');
+      locatingHint = true;
+    }
+    navigator.geolocation.getCurrentPosition(onFix, locFail,
+      { enableHighAccuracy: false, timeout: 25000, maximumAge: 600000 });
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 120000 });
 }
 
 document.getElementById('ar-start-btn').addEventListener('click', start);

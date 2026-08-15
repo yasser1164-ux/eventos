@@ -173,7 +173,14 @@ triggered it is still "live", so `ar.js` fires
 handler — before awaiting the camera — and reads the answer afterwards.
 If Safari never shows the prompt (the global **Settings → Safari →
 Motion & Orientation Access** toggle is off) that is detected and named
-specifically. Camera or location refusals show a friendly message.
+specifically. Camera refusals show a friendly message.
+
+Location is fetched patiently: a recent cached fix is accepted (AR works
+at km scale), and a high-accuracy timeout triggers one coarse, patient
+retry — with a "still getting a GPS fix" hint — before giving up. A real
+refusal (permission denied) fails immediately with the exact iOS settings
+path; a device that simply can't get a fix (indoors, in a car) gets its
+own "No GPS fix — try again" message instead.
 
 No compass is not fatal: whether the permission was refused, the prompt
 was blocked, or the device simply has no magnetometer, AR switches to a
