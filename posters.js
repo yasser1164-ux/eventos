@@ -107,6 +107,67 @@ const POSTER_THEMES = {
   }
 };
 
+// Landmark places get their own hero artwork instead of an emoji — original
+// vector interpretations of the real buildings' shapes. Extra landmark themes
+// build on the place theme; posterSrc also picks them by title so existing
+// rows with poster_ref 'template:place' upgrade automatically.
+POSTER_THEMES.ithra = {
+  ...POSTER_THEMES.place,
+  tagline: 'Culture, art & ideas',
+  hero: () => `
+    <defs>
+      <linearGradient id="ith1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#dbe6f2"/><stop offset=".55" stop-color="#8fa3b8"/><stop offset="1" stop-color="#3f4f61"/>
+      </linearGradient>
+      <linearGradient id="ith2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#b7c6d8"/><stop offset="1" stop-color="#2f3c4c"/>
+      </linearGradient>
+      <linearGradient id="ith3" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#93a7bd"/><stop offset="1" stop-color="#26303e"/>
+      </linearGradient>
+    </defs>
+    <ellipse cx="300" cy="430" rx="250" ry="165" fill="url(#glow)" opacity=".7"/>
+    <ellipse cx="300" cy="580" rx="185" ry="13" fill="#000" opacity=".35"/>
+    <g stroke="#0a121e" stroke-width="3">
+      <rect x="268" y="240" width="76" height="290" rx="38" transform="rotate(3 306 385)" fill="url(#ith1)"/>
+      <rect x="180" y="330" width="92" height="200" rx="46" transform="rotate(-20 226 430)" fill="url(#ith2)"/>
+      <rect x="352" y="380" width="86" height="160" rx="43" transform="rotate(16 395 460)" fill="url(#ith2)"/>
+      <rect x="160" y="470" width="290" height="98" rx="49" fill="url(#ith3)"/>
+    </g>
+    <g stroke="#eaf2fa" fill="none" stroke-linecap="round">
+      <path d="M295 262 c22 60 24 168 8 256" stroke-width="4" opacity=".5"/>
+      <path d="M212 356 c-15 38 -18 96 -5 144" stroke-width="3" opacity=".35"/>
+      <path d="M200 506 h212" stroke-width="2.5" opacity=".3"/>
+    </g>`
+};
+POSTER_THEMES.watertower = {
+  ...POSTER_THEMES.place,
+  tagline: 'The icon of Khobar',
+  hero: () => `
+    <defs>
+      <linearGradient id="wts" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#5b6c80"/><stop offset=".5" stop-color="#e8f0f8"/><stop offset="1" stop-color="#5b6c80"/>
+      </linearGradient>
+      <linearGradient id="wtr" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f2f7fc"/><stop offset="1" stop-color="#7e8fa3"/>
+      </linearGradient>
+    </defs>
+    <ellipse cx="300" cy="420" rx="250" ry="165" fill="url(#glow)" opacity=".7"/>
+    <ellipse cx="300" cy="567" rx="125" ry="11" fill="#000" opacity=".35"/>
+    <g stroke="#0a121e" stroke-width="3">
+      <path d="M186 350 C242 386 282 400 288 450 L288 562 L312 562 L312 450 C318 400 358 386 414 350 Z" fill="url(#wts)"/>
+      <ellipse cx="300" cy="350" rx="118" ry="26" fill="url(#wtr)"/>
+      <ellipse cx="300" cy="344" rx="96" ry="17" fill="#101b2c"/>
+      <path d="M206 336 A 94 40 0 0 1 394 336 Z" fill="url(#wtr)"/>
+      <line x1="300" y1="268" x2="300" y2="294" stroke="#e8f0f8" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g fill="#9fdcff" opacity=".9">
+      <circle cx="230" cy="346" r="3.2"/><circle cx="248" cy="348" r="3.2"/><circle cx="266" cy="350" r="3.2"/>
+      <circle cx="284" cy="351" r="3.2"/><circle cx="302" cy="351" r="3.2"/><circle cx="320" cy="350" r="3.2"/>
+      <circle cx="338" cy="348" r="3.2"/><circle cx="356" cy="346" r="3.2"/>
+    </g>`
+};
+
 function posterEsc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
@@ -225,7 +286,7 @@ function placePosterSvg(theme, item) {
   ${theme.scene(theme)}
   <text x="300" y="122" text-anchor="middle" font-family="${BODY_FONT}" font-weight="800" font-size="52" letter-spacing="6" fill="${theme.bright}"${posterFit(name, 52, 540, 6)}>${posterEsc(name.toUpperCase())}</text>
   <text x="300" y="164" text-anchor="middle" font-family="${BODY_FONT}" font-weight="600" font-size="17" letter-spacing="4" fill="${theme.muted}"${posterFit(item.venue, 17, 500, 4)}>${posterEsc(item.venue.toUpperCase())}</text>
-  ${heroEmoji(item.emoji, 430)}
+  ${theme.hero ? theme.hero() : heroEmoji(item.emoji, 430)}
   <rect x="150" y="694" width="300" height="1.5" fill="${theme.muted}" opacity=".5"/>
   <text x="300" y="734" text-anchor="middle" font-family="${BODY_FONT}" font-weight="500" font-size="24" fill="${theme.bright}">${posterEsc(theme.tagline)}</text>
   <g fill="none" stroke="${theme.muted}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(${Math.round(300 - (city.length * 14) / 2 - 24)} 742)">
@@ -244,6 +305,13 @@ function posterSrc(item) {
   if (ref && !ref.startsWith('template:')) return ref;
   let key = ref.slice('template:'.length);
   if (!POSTER_THEMES[key]) key = item.type === 'place' ? 'place' : 'exhibition';
+  // landmark upgrade: known places get their custom artwork even while their
+  // database row still says template:place
+  if (key === 'place') {
+    const t = (item.title || '').toLowerCase();
+    if (t.includes('ithra')) key = 'ithra';
+    else if (t.includes('water tower')) key = 'watertower';
+  }
   const theme = POSTER_THEMES[key];
   const svg = theme.kind === 'place' ? placePosterSvg(theme, item) : eventPosterSvg(theme, item);
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
