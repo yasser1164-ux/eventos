@@ -298,6 +298,43 @@ function placePosterSvg(theme, item) {
 </svg>`;
 }
 
+// Which landmark (if any) an item is — drives both the poster artwork and
+// the custom mini icon, with no database change needed.
+function landmarkKey(item) {
+  const t = (item.title || '').toLowerCase();
+  if (t.includes('ithra')) return 'ithra';
+  if (t.includes('water tower')) return 'watertower';
+  return null;
+}
+
+// Tiny inline-SVG versions of the landmark artwork, used wherever an emoji
+// chip would normally appear (pins, AR dots, titles, home cards). They size
+// with the surrounding font via CSS (.lm-icon is 1em).
+const LANDMARK_MINI = {
+  ithra: `<g fill="#eef4fc" stroke="#232f42" stroke-width="1.2" stroke-linejoin="round">
+    <rect x="10.2" y="3" width="6" height="14" rx="3" transform="rotate(4 13.2 10)"/>
+    <rect x="4.2" y="8.5" width="6.6" height="11" rx="3.3" transform="rotate(-16 7.5 14)"/>
+    <rect x="16" y="11" width="5.6" height="8.5" rx="2.8" transform="rotate(12 18.8 15)"/>
+    <rect x="4" y="16.4" width="16.5" height="6" rx="3"/>
+  </g>`,
+  watertower: `<g fill="#eef4fc" stroke="#232f42" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M5.6 9.6 C9 11.6 10.6 12.6 10.9 15 L10.9 21.5 L13.1 21.5 L13.1 15 C13.4 12.6 15 11.6 18.4 9.6 Z"/>
+    <ellipse cx="12" cy="9.4" rx="7.4" ry="2.3"/>
+    <path d="M6.4 8.9 A5.8 2.9 0 0 1 17.6 8.9 Z"/>
+    <line x1="12" y1="4.2" x2="12" y2="6" stroke-linecap="round"/>
+  </g>`
+};
+
+// The item's small visual mark: a custom landmark icon when it has one,
+// otherwise its emoji. Returns an HTML string — safe to drop into templates.
+function itemIcon(item) {
+  const key = landmarkKey(item);
+  if (key && LANDMARK_MINI[key]) {
+    return `<svg class="lm-icon" viewBox="0 0 24 24" aria-hidden="true">${LANDMARK_MINI[key]}</svg>`;
+  }
+  return item.emoji;
+}
+
 // Returns an image src for the item's poster: the URL as-is, or a rendered
 // template as an SVG data URI.
 function posterSrc(item) {
@@ -308,9 +345,7 @@ function posterSrc(item) {
   // landmark upgrade: known places get their custom artwork even while their
   // database row still says template:place
   if (key === 'place') {
-    const t = (item.title || '').toLowerCase();
-    if (t.includes('ithra')) key = 'ithra';
-    else if (t.includes('water tower')) key = 'watertower';
+    key = landmarkKey(item) || key;
   }
   const theme = POSTER_THEMES[key];
   const svg = theme.kind === 'place' ? placePosterSvg(theme, item) : eventPosterSvg(theme, item);

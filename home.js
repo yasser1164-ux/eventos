@@ -51,7 +51,7 @@ function homeCard(ev) {
   el.innerHTML = `
     <img class="home-card-poster" src="${posterSrc(ev)}" alt="" loading="lazy"
          onerror="this.style.visibility='hidden'">
-    <span class="home-card-name">${ev.emoji} ${ev.title}</span>
+    <span class="home-card-name">${itemIcon(ev)} ${ev.title}</span>
     <span class="home-card-when">${when}</span>
     <span class="home-card-dist" data-lat="${ev.lat}" data-lng="${ev.lng}"></span>`;
   el.addEventListener('click', () => openHomeCard(ev));
@@ -83,7 +83,7 @@ function openHomeCard(ev) {
   const cta = ev.type === 'place' ? 'Explore' : 'Get tickets';
   homeCardBody.innerHTML = `
     <img class="poster" src="${posterSrc(ev)}" alt="${ev.title}" onerror="this.remove()">
-    <h3>${ev.emoji} ${ev.title}</h3>
+    <h3>${itemIcon(ev)} ${ev.title}</h3>
     <div class="meta">${ev.venue} &middot; ${ev.time}</div>
     <a class="buy" href="${trackedUrl(ev.ticketUrl)}" data-item="${ev.id}" target="_blank" rel="noopener">${cta}</a>`;
   homeCardEl.hidden = false;

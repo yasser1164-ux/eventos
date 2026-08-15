@@ -38,6 +38,7 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .pin-thumb{position:relative;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.45);transition:transform .25s ease}
 .pin-thumb .pin-emoji{font-size:20px;transition:opacity .2s ease}
 .pin-thumb img{position:absolute;inset:0;width:100% !important;height:100% !important;object-fit:cover;transition:opacity .2s ease}
+.lm-icon{width:1.08em;height:1.08em;display:inline-block;vertical-align:-.14em}
 /* Zoom-dependent markers: dots when zoomed out, full poster pins up close.
    Scaled around the centre so the map anchor stays correct. */
 .zoom-low .pin-thumb{transform:scale(.32)}
