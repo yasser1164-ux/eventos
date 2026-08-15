@@ -70,23 +70,43 @@ function initApp(ITEMS) {
     if (!inGrace()) e.layer.zoomToBounds({ padding: [24, 24] });
   });
 
+  // Density heat layer (Snapchat-style): nearby venues merge into one warm
+  // hub that fades outward. Fed with the currently visible items, weighted
+  // by their heat value; refreshed whenever the filters change.
+  const heatLayer = L.heatLayer([], {
+    radius: 42,
+    blur: 32,
+    minOpacity: 0.18,
+    maxZoom: 15,
+    gradient: { 0.25: '#3b2c7a', 0.45: '#6c5ce7', 0.65: '#ff5a5f', 0.85: '#ffb347', 1: '#ffe9b0' }
+  }).addTo(map);
+
+  function refreshHeat() {
+    heatLayer.setLatLngs(
+      entries
+        .filter(en => en.shown)
+        .map(en => [en.ev.lat, en.ev.lng, 0.35 + (en.ev.heat / 100) * 0.65])
+    );
+  }
+
+  // Zoom-dependent markers (Google Maps behaviour): small dots when zoomed
+  // out, growing into the full poster pins as the user zooms in. Sizing is
+  // done with a centred CSS scale, so marker anchors stay correct.
+  function updateZoomClass() {
+    const z = map.getZoom();
+    const el = map.getContainer();
+    el.classList.toggle('zoom-low', z < 11);
+    el.classList.toggle('zoom-mid', z >= 11 && z < 13);
+    el.classList.toggle('zoom-high', z >= 13);
+  }
+  map.on('zoomend', updateZoomClass);
+  updateZoomClass();
+
   const markers = {};
-  const entries = []; // { ev, marker, circle, card } — one per item, for filtering
+  const entries = []; // { ev, marker, card, shown } — one per item, for filtering
 
   ITEMS.forEach(ev => {
     const poster = posterSrc(ev);
-
-    // Heat glow — events only (it marks how busy an event is); places
-    // stay clean so dense areas don't turn into red blobs.
-    const circle = ev.type === 'event'
-      ? L.circle([ev.lat, ev.lng], {
-          radius: 150 + ev.heat * 6,
-          color: 'transparent',
-          fillColor: '#ff5a5f',
-          fillOpacity: 0.05 + (ev.heat / 100) * 0.16,
-          interactive: false // taps pass through to the map, not the glow
-        }).addTo(map)
-      : null;
 
     // Round poster thumbnail; if the image fails, it's removed and the
     // emoji (layered underneath on the gradient) shows instead.
@@ -128,7 +148,7 @@ function initApp(ITEMS) {
     });
 
     markers[ev.id] = marker;
-    entries.push({ ev, marker, circle, card: null });
+    entries.push({ ev, marker, card: null, shown: true });
   });
 
   // Zoom so every item (Khobar + Dammam + Dhahran) is visible at once
@@ -234,20 +254,21 @@ function initApp(ITEMS) {
 
   function applyFilter() {
     let nEvents = 0, nPlaces = 0;
-    entries.forEach(({ ev, marker, circle, card }) => {
+    entries.forEach(entry => {
+      const { ev, marker, card } = entry;
       const show = (activeFilter === 'all' || ev.type === activeFilter) &&
                    (activeCat === 'all' || ev.category === activeCat) &&
                    matchesWhen(ev);
+      entry.shown = show;
       card.style.display = show ? '' : 'none';
       if (show) {
         if (!clusterGroup.hasLayer(marker)) clusterGroup.addLayer(marker);
-        if (circle) circle.addTo(map);
         if (ev.type === 'place') nPlaces++; else nEvents++;
       } else {
         clusterGroup.removeLayer(marker);
-        if (circle) map.removeLayer(circle);
       }
     });
+    refreshHeat();
     const evLabel = `${nEvents} event${nEvents === 1 ? '' : 's'}`;
     const plLabel = `${nPlaces} place${nPlaces === 1 ? '' : 's'}`;
     if (activeFilter === 'event') {
