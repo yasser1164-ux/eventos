@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eventos — What's happening near you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span class="brand-name">Eventos</span>
+    </div>
+    <div class="tagline">What's happening near you</div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <h2>Happening near you</h2>
+        <p id="event-count">Loading events…</p>
+      </div>
+      <div class="filters" id="filters">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="event">Events</button>
+        <button class="chip" data-filter="place">Places</button>
+      </div>
+      <div class="filters scroll" id="when-filters">
+        <button class="chip active" data-when="any">Any time</button>
+        <button class="chip" data-when="today">Today</button>
+        <button class="chip" data-when="weekend">This weekend</button>
+        <button class="chip" data-when="nextweekend">Next weekend</button>
+      </div>
+      <div class="filters scroll" id="cat-filters"></div>
+      <div class="event-list" id="event-list"></div>
+    </aside>
+
+    <div class="map-wrap">
+      <div id="map"></div>
+      <a class="ar-btn" href="ar.html" aria-label="Open AR view">AR</a>
+    </div>
+  </main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="config.js"></script>
+<script src="seed.js"></script>
+<script src="posters.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
