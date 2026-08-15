@@ -73,6 +73,7 @@ function angleDiff(a, b) {
 function buildMarkers() {
   layer.textContent = '';
   layer.appendChild(DRAGON.el); // survives the wipe
+  layer.appendChild(SWARM.el);
   markers = items
     .map(ev => ({ ev, bearing: bearingDeg(userPos, ev), distKm: haversineKm(userPos, ev) }))
     .filter(m => m.distKm <= AR_MAX_KM)
@@ -178,6 +179,7 @@ function renderFrame() {
     m.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -100%)`;
   }
   renderDragon(W, H, horizonY);
+  renderSwarm(W, H, horizonY);
 }
 
 // ---- detail card (same content as the map popup) --------------------------
