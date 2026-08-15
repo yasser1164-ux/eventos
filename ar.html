@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Eventos — AR view</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="ar-body">
+  <video id="ar-video" autoplay muted playsinline></video>
+  <div id="ar-layer"></div>
+
+  <header class="ar-topbar">
+    <a class="ar-back" href="index.html">‹ Map</a>
+    <span class="ar-title">AR view</span>
+    <span class="ar-compass" id="ar-compass">—</span>
+  </header>
+
+  <!-- non-blocking notice, e.g. compass unavailable — tap to dismiss -->
+  <div class="ar-hint" id="ar-hint" hidden></div>
+
+  <!-- start overlay: camera + sensors need a user gesture on iOS -->
+  <div class="ar-overlay" id="ar-start">
+    <div class="ar-overlay-box">
+      <h2>Point your phone at the city</h2>
+      <p>See nearby events and places glowing in the direction they really are. Needs your camera, location and compass.</p>
+      <button class="btn" id="ar-start-btn">Start AR</button>
+      <p class="ar-small"><a href="index.html">Back to the map</a></p>
+    </div>
+  </div>
+
+  <!-- graceful failure overlay -->
+  <div class="ar-overlay" id="ar-fail" hidden>
+    <div class="ar-overlay-box">
+      <h2 id="ar-fail-title">Can't start AR</h2>
+      <p id="ar-fail-text"></p>
+      <button class="btn" id="ar-retry-btn">Try again</button>
+      <p class="ar-small"><a href="index.html">Back to the map</a></p>
+    </div>
+  </div>
+
+  <!-- detail card (same content as the map popup) -->
+  <div class="ar-card" id="ar-card" hidden>
+    <button class="ar-card-close" id="ar-card-close">✕</button>
+    <div id="ar-card-body"></div>
+  </div>
+
+<script src="config.js"></script>
+<script src="seed.js"></script>
+<script src="posters.js"></script>
+<script src="data.js"></script>
+<script src="ar.js"></script>
+</body>
+</html>
