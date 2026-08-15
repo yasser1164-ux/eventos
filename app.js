@@ -89,6 +89,20 @@ function initApp(ITEMS) {
     );
   }
 
+  // Leaflet.heat only repaints on moveend, so during a pinch-zoom or flyTo
+  // the canvas looked frozen on screen until the gesture ended. Repaint it
+  // on every frame of the gesture instead — drawing a few dozen points is
+  // cheap. Skip CSS-animated zooms (map._animatingZoom): the plugin's own
+  // zoomanim transform already carries the canvas through those.
+  let heatFrame = null;
+  map.on('zoom move', () => {
+    if (map._animatingZoom || heatFrame) return;
+    heatFrame = requestAnimationFrame(() => {
+      heatFrame = null;
+      heatLayer._reset();
+    });
+  });
+
   // Zoom-dependent markers (Google Maps behaviour): small dots when zoomed
   // out, growing into the full poster pins as the user zooms in. Sizing is
   // done with a centred CSS scale, so marker anchors stay correct.
