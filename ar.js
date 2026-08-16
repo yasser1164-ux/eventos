@@ -74,6 +74,7 @@ function buildMarkers() {
   layer.textContent = '';
   layer.appendChild(DRAGON.el); // survives the wipe
   layer.appendChild(SWARM.el);
+  layer.appendChild(RAZAN.el);
   markers = items
     .map(ev => ({ ev, bearing: bearingDeg(userPos, ev), distKm: haversineKm(userPos, ev) }))
     .filter(m => m.distKm <= AR_MAX_KM)
@@ -149,7 +150,7 @@ function buildMarkers() {
 
 function renderFrame() {
   rafId = requestAnimationFrame(renderFrame);
-  if (heading === null || !markers.length) return;
+  if (heading === null) return; // sky scenes render even with no items nearby
   // low-pass filter with wrap-around so the view doesn't jitter
   headingSmooth = headingSmooth === null
     ? heading
@@ -180,6 +181,7 @@ function renderFrame() {
   }
   renderDragon(W, H, horizonY);
   renderSwarm(W, H, horizonY);
+  renderRazan(W, H, horizonY);
 }
 
 // ---- detail card (same content as the map popup) --------------------------
@@ -366,9 +368,9 @@ async function start() {
     if (locatingHint) { hintEl.hidden = true; locatingHint = false; }
     userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
     buildMarkers();
-    if (!markers.length) {
-      fail('Nothing nearby', `No events or places within ${AR_MAX_KM} km of you. The AR view shines in the Khobar–Dammam–Dhahran area.`);
-      return;
+    if (!markers.length && hintEl.hidden) {
+      // not a dead end: the sky scenes (swarm, dragon, shows) still render
+      showHint(`No listed places within ${AR_MAX_KM} km — the map has every city. Enjoy the sky ✨`);
     }
     navigator.geolocation.watchPosition(p => {
       userPos = { lat: p.coords.latitude, lng: p.coords.longitude };
