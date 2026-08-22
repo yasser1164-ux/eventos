@@ -270,6 +270,9 @@ bid opens at once and is ranked on **landed cost**.
 Same rules as the map app: plain HTML/CSS/JS, no build step, Supabase for data,
 and a bundled sample board so nothing is ever an empty screen.
 
+**Bilingual**: the whole UI runs in English and Arabic (full RTL) — the toggle
+in the header remembers the choice; first visit follows the browser language.
+
 ## Why it exists
 
 Buying materials by phone means taking the first quote from the supplier who
@@ -287,6 +290,8 @@ the others would have said. Munaqasa turns that into a tender:
 ```
 bids/index.html   BOARD — every request, filtered by status/material/search,
                   with "Your activity" (what you posted, what you bid on) on top.
+bids/i18n.js      LANGUAGE — the en/ar dictionary, tr(), Arabic plural rules,
+                  and the toggle that flips dir=rtl and re-renders each page.
 bids/post.html    Buyer's form: line items, delivery site, bidding window.
 bids/tender.html  One request — three screens in one, decided by who you are
                   and what the clock says (sealed count · bid form · comparison).
@@ -301,7 +306,7 @@ bids/config.js    Supabase URL + anon key.
 supabase/tenders.sql  Tables, row level security, bid-count trigger, award RPC.
 ```
 
-Script order on every page: `config → core → store → seed → (list|post|tender)`.
+Script order on every page: `config → i18n → core → store → seed → (list|post|tender)`.
 
 ## The numbers
 
@@ -362,6 +367,26 @@ not because the server will hand it back. That means:
   you already deal with, not for a public procurement portal. Real accounts
   (Supabase Auth) are the upgrade path, and the schema is ready for it — swap
   `owner_key`/`bidder_key` for `auth.uid()`.
+
+## Language (i18n.js)
+
+Every UI string lives once in the `MZ_STR` dictionary and renders through
+`tr(key, vars)`; the toggle re-renders each page via `window.onLangChange`
+(the tender page snapshots and restores a half-typed bid form first). Details
+that are easy to get wrong and are handled deliberately:
+
+- **RTL** comes from `dir="rtl"` plus logical CSS properties
+  (`text-align:start/end`, `margin-inline-start`) — the layout mirrors itself.
+- **Arabic type**: IBM Plex Sans Arabic, and `letter-spacing: 0` under
+  `[dir=rtl]` — tracking breaks joined Arabic letterforms.
+- **Dates** use `ar-SA-u-ca-gregory-nu-latn`: Arabic month names but the
+  Gregorian calendar and Latin digits (plain `ar-SA` silently switches to the
+  Islamic calendar).
+- **Plurals** are real: عرض / عرضان / عروض / عرضًا by count, same for بند,
+  يوم, ساعة, دقيقة.
+- **User content is never translated** — titles, specs and notes appear as
+  typed. The materials/units catalog shows both languages; city names are
+  stored in English (stable in the database) and displayed per language.
 
 ## Local development
 

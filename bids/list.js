@@ -1,25 +1,26 @@
 // ---- THE BOARD --------------------------------------------------------------
 // Every request in one grid: what is open for bidding, what has closed and is
 // being compared, what has been awarded. Suppliers browse it; buyers find
-// their own requests at the top under "Your activity".
+// their own requests at the top under "Your activity". All text renders
+// through tr() (i18n.js), so the language toggle re-renders the whole board.
 
 let LIST_STATUS = 'all';
 let LIST_MAT = 'all';
 let LIST_Q = '';
 
 const STATUS_FILTERS = [
-  { key: 'all', label: 'Everything' },
-  { key: 'open', label: 'Open for bids' },
-  { key: 'closing', label: 'Closing today' },
-  { key: 'closed', label: 'Bids opened' },
-  { key: 'awarded', label: 'Awarded' }
+  { key: 'all', label: 'f.all' },
+  { key: 'open', label: 'f.open' },
+  { key: 'closing', label: 'f.closing' },
+  { key: 'closed', label: 'f.closed' },
+  { key: 'awarded', label: 'f.awarded' }
 ];
 
 function tenderCard(t) {
   const st = tenderStatus(t);
   const mats = [...new Set(t.items.map(i => i.material))].map(k => {
     const m = materialOf(k);
-    return `<span class="mtag">${m.emoji} ${esc(m.en)}</span>`;
+    return `<span class="mtag">${m.emoji} ${esc(matL(m))}</span>`;
   }).join('');
 
   // What the card says about bids depends on whether they are still sealed:
@@ -30,23 +31,24 @@ function tenderCard(t) {
     const won = MZ_BOARD.bids.find(b => b.id === t.awardedBidId);
     bidLine = won ? `<span class="bidcount">🏆 ${esc(won.supplierCompany || won.supplierName)}</span>` : '';
   } else if (isSealed(t)) {
-    const n = mzSealedCount(t);
-    bidLine = `<span class="bidcount">🔒 ${n} sealed bid${n === 1 ? '' : 's'}</span>`;
+    bidLine = `<span class="bidcount">🔒 ${sealedBidsWord(mzSealedCount(t))}</span>`;
   } else if (bids.length) {
     const best = scoreBids(t, bids).find(r => r.coverage.complete);
-    bidLine = `<span class="bidcount">${bids.length} bids${best ? ` · best ${money(best.totals.total)}` : ''}</span>`;
+    bidLine = `<span class="bidcount">${best
+      ? tr('card.best', { bids: bidsWord(bids.length), p: money(best.totals.total) })
+      : bidsWord(bids.length)}</span>`;
   } else {
-    bidLine = '<span class="bidcount">No bids received</span>';
+    bidLine = `<span class="bidcount">${tr('card.noBids')}</span>`;
   }
 
   const qty = t.items.map(i => `${qtyText(i.qty)} ${unitShort(i.unit)}`).join(' · ');
-  const mine = mzIsMine(t) ? '<span class="badge mine">YOURS</span>' : '';
+  const mine = mzIsMine(t) ? `<span class="badge mine">${tr('badge.yours')}</span>` : '';
 
   return `<a class="tcard" href="tender.html?id=${encodeURIComponent(t.id)}">
-    <div class="ref">${esc(t.ref)} · ${esc(t.city)}</div>
+    <div class="ref">${esc(t.ref)} · ${esc(cityLabel(t.city))}</div>
     <h3>${esc(t.title)}</h3>
     <div class="mats">${mats}</div>
-    <div class="meta">${esc(qty)}<br>Needed on site by ${fmtDate(t.neededBy)}</div>
+    <div class="meta">${esc(qty)}<br>${tr('card.neededBy', { d: fmtDate(t.neededBy) })}</div>
     <div class="foot">
       <span class="badge ${st.kind}">${esc(st.label)}</span>
       ${mine}
@@ -61,7 +63,7 @@ function matchesFilters(t) {
   if (LIST_MAT !== 'all' && !t.items.some(i => i.material === LIST_MAT)) return false;
   if (LIST_Q) {
     const hay = [
-      t.title, t.ref, t.city, t.site, t.notes,
+      t.title, t.ref, t.city, cityLabel(t.city), t.site, t.notes,
       ...t.items.map(i => `${materialOf(i.material).en} ${materialOf(i.material).ar} ${i.spec || ''}`)
     ].join(' ').toLowerCase();
     if (!hay.includes(LIST_Q)) return false;
@@ -71,14 +73,14 @@ function matchesFilters(t) {
 
 function renderChips() {
   document.getElementById('status-chips').innerHTML = STATUS_FILTERS.map(f =>
-    `<button class="chip ${LIST_STATUS === f.key ? 'active' : ''}" data-status="${f.key}">${esc(f.label)}</button>`
+    `<button class="chip ${LIST_STATUS === f.key ? 'active' : ''}" data-status="${f.key}">${esc(tr(f.label))}</button>`
   ).join('');
 
   // Only materials somebody is actually asking for get a chip.
   const present = MATERIALS.filter(m => MZ_BOARD.tenders.some(t => t.items.some(i => i.material === m.key)));
   document.getElementById('mat-chips').innerHTML =
-    `<button class="chip ${LIST_MAT === 'all' ? 'active' : ''}" data-mat="all">All materials</button>` +
-    present.map(m => `<button class="chip ${LIST_MAT === m.key ? 'active' : ''}" data-mat="${m.key}">${m.emoji} ${esc(m.en)}</button>`).join('');
+    `<button class="chip ${LIST_MAT === 'all' ? 'active' : ''}" data-mat="all">${tr('f.allmats')}</button>` +
+    present.map(m => `<button class="chip ${LIST_MAT === m.key ? 'active' : ''}" data-mat="${m.key}">${m.emoji} ${esc(matL(m))}</button>`).join('');
 }
 
 function renderBoard() {
@@ -86,7 +88,7 @@ function renderBoard() {
   document.getElementById('board-list').innerHTML = list.map(tenderCard).join('');
   document.getElementById('board-empty').hidden = list.length > 0;
   document.getElementById('board-count').textContent =
-    `${list.length} of ${MZ_BOARD.tenders.length}`;
+    tr('count.of', { a: list.length, b: MZ_BOARD.tenders.length });
 }
 
 function renderMine() {
@@ -98,7 +100,7 @@ function renderMine() {
   document.getElementById('mine').hidden = all.length === 0;
   if (!all.length) return;
   document.getElementById('mine-note').textContent =
-    `${mine.length} posted · ${bidOn.length} bid on`;
+    tr('mine.note', { a: mine.length, b: bidOn.length });
   document.getElementById('mine-board').innerHTML = all.map(tenderCard).join('');
 }
 
@@ -126,6 +128,8 @@ document.getElementById('q').addEventListener('input', e => {
   LIST_Q = e.target.value.trim().toLowerCase();
   renderBoard();
 });
+
+window.onLangChange = () => { if (MZ_BOARD.loaded) render(); };
 
 mzLoadBoard().then(render);
 

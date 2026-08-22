@@ -40,8 +40,8 @@ const UNITS = {
   bag:    { en: 'bag (50 kg)', ar: 'كيس',   short: 'bag' },
   tonne:  { en: 'tonne',       ar: 'طن',    short: 'tn' },
   pallet: { en: 'pallet',      ar: 'طبلية', short: 'plt' },
-  m3:     { en: 'cubic metre', ar: 'م٣',    short: 'm³' },
-  m2:     { en: 'square metre',ar: 'م٢',    short: 'm²' },
+  m3:     { en: 'cubic metre', ar: 'م³',    short: 'm³' },
+  m2:     { en: 'square metre',ar: 'م²',    short: 'm²' },
   lm:     { en: 'linear metre',ar: 'متر طولي', short: 'lm' },
   piece:  { en: 'piece',       ar: 'حبة',   short: 'pc' },
   sheet:  { en: 'sheet',       ar: 'لوح',   short: 'sheet' },
@@ -54,25 +54,40 @@ const UNITS = {
 
 const CITIES = ['Al Khobar', 'Dammam', 'Dhahran', 'Jubail', 'Qatif', 'Ras Tanura', 'Al Ahsa', 'Riyadh', 'Jeddah'];
 
-const PAYMENT_TERMS = [
-  { key: 'advance', label: 'Payment in advance' },
-  { key: 'delivery', label: 'Cash on delivery' },
-  { key: 'net30', label: 'Credit 30 days' },
-  { key: 'net60', label: 'Credit 60 days' },
-  { key: 'net90', label: 'Credit 90 days' }
-];
+// The stored value is always the English name (stable in the database);
+// the Arabic name is display only.
+const CITY_AR = {
+  'Al Khobar': 'الخبر', 'Dammam': 'الدمام', 'Dhahran': 'الظهران',
+  'Jubail': 'الجبيل', 'Qatif': 'القطيف', 'Ras Tanura': 'رأس تنورة',
+  'Al Ahsa': 'الأحساء', 'Riyadh': 'الرياض', 'Jeddah': 'جدة', 'Other': 'أخرى'
+};
+
+function cityLabel(c) {
+  return mzIsAr() && CITY_AR[c] ? CITY_AR[c] : c;
+}
+
+const PAYMENT_TERMS = ['advance', 'delivery', 'net30', 'net60', 'net90'];
 
 function materialOf(key) {
   return MATERIAL_BY_KEY[key] || MATERIAL_BY_KEY.other;
 }
 
 function unitShort(key) {
-  return (UNITS[key] || UNITS.lot).short;
+  const u = UNITS[key] || UNITS.lot;
+  return mzIsAr() ? u.ar : u.short;
 }
 
 function termsLabel(key) {
-  const t = PAYMENT_TERMS.find(p => p.key === key);
-  return t ? t.label : 'Cash on delivery';
+  return tr(PAYMENT_TERMS.includes(key) ? `terms.${key}` : 'terms.delivery');
+}
+
+// Material and unit names in the current language, with the other language as
+// the secondary line where both are shown.
+function matL(m)  { return mzIsAr() ? m.ar : m.en; }
+function matL2(m) { return mzIsAr() ? m.en : m.ar; }
+function unitLong(key) {
+  const u = UNITS[key] || UNITS.lot;
+  return mzIsAr() ? u.ar : u.en;
 }
 
 // ---- formatting -------------------------------------------------------------
@@ -87,38 +102,48 @@ function esc(s) {
 function money(n) {
   if (n == null || !isFinite(n)) return '—';
   const dp = Math.abs(n) >= 1000 || Number.isInteger(n) ? 0 : 2;
-  return `${n.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp })} ${CURRENCY}`;
+  const num = n.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  return `${num} ${mzIsAr() ? 'ر.س' : CURRENCY}`;
 }
 
 function qtyText(n) {
   return Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
 
+function mzLocale() {
+  return mzIsAr() ? 'ar-SA-u-ca-gregory-nu-latn' : 'en-GB';
+}
+
 function fmtDate(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
   if (isNaN(d)) return '—';
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return d.toLocaleDateString(mzLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function fmtDateTime(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
   if (isNaN(d)) return '—';
-  return `${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} · ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+  return `${d.toLocaleDateString(mzLocale(), { day: 'numeric', month: 'short' })} · ${d.toLocaleTimeString(mzLocale(), { hour: '2-digit', minute: '2-digit' })}`;
 }
 
 // "2d 4h left" — the pressure that makes suppliers actually answer.
 function countdown(iso) {
   const ms = new Date(iso) - new Date();
   if (isNaN(ms)) return '';
-  if (ms <= 0) return 'closed';
+  if (ms <= 0) return tr('cd.closed');
   const mins = Math.floor(ms / 60000);
   const days = Math.floor(mins / 1440);
   const hours = Math.floor((mins % 1440) / 60);
-  if (days >= 1) return `${days}d ${hours}h left`;
-  if (hours >= 1) return `${hours}h ${mins % 60}m left`;
-  return `${mins}m left`;
+  if (mzIsAr()) {
+    if (days >= 1) return tr('cd.dh', { d: dayWord(days), h: hourWord(hours) });
+    if (hours >= 1) return tr('cd.hm', { h: hourWord(hours), m: minWord(mins % 60) });
+    return tr('cd.m', { m: minWord(mins) });
+  }
+  if (days >= 1) return tr('cd.dh', { d: days, h: hours });
+  if (hours >= 1) return tr('cd.hm', { h: hours, m: mins % 60 });
+  return tr('cd.m', { m: mins });
 }
 
 // ---- tender status ----------------------------------------------------------
@@ -126,12 +151,12 @@ function countdown(iso) {
 // A tender closes on its own clock: after that, bids are opened and compared.
 
 function tenderStatus(t) {
-  if (t.awardedBidId) return { kind: 'awarded', label: 'AWARDED', short: 'Awarded' };
+  if (t.awardedBidId) return { kind: 'awarded', label: tr('status.awarded'), short: tr('f.awarded') };
   const ms = new Date(t.closesAt) - new Date();
-  if (isNaN(ms)) return { kind: 'open', label: 'OPEN', short: 'Open' };
-  if (ms <= 0) return { kind: 'closed', label: 'BIDS OPENED', short: 'Closed — comparing' };
-  if (ms < 24 * 3600 * 1000) return { kind: 'closing', label: `CLOSING · ${countdown(t.closesAt)}`, short: countdown(t.closesAt) };
-  return { kind: 'open', label: `OPEN · ${countdown(t.closesAt)}`, short: countdown(t.closesAt) };
+  if (isNaN(ms)) return { kind: 'open', label: tr('status.open'), short: tr('status.open') };
+  if (ms <= 0) return { kind: 'closed', label: tr('status.closed'), short: tr('status.short.closed') };
+  if (ms < 24 * 3600 * 1000) return { kind: 'closing', label: `${tr('status.closing')} · ${countdown(t.closesAt)}`, short: countdown(t.closesAt) };
+  return { kind: 'open', label: `${tr('status.open')} · ${countdown(t.closesAt)}`, short: countdown(t.closesAt) };
 }
 
 function isSealed(t) {

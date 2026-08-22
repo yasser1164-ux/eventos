@@ -2,13 +2,19 @@
 // The buyer's form. Line items are the whole point: a request priced line by
 // line can be awarded line by line, which is where the savings on the
 // comparison screen come from.
+//
+// Language: static labels carry data-i18n attributes (retranslated in place by
+// i18n.js when the toggle flips — typed values survive), and the selects show
+// both languages at once, so nothing here needs re-rendering on a toggle.
 
 const linesEl = document.getElementById('lines');
 const errEl = document.getElementById('post-err');
 
-// Cities the parent map covers first, then the rest of the country.
+// Cities the parent map covers first, then the rest of the country. The stored
+// value is the English name; the label shows both.
 document.getElementById('f-city').innerHTML =
-  CITIES.map(c => `<option>${esc(c)}</option>`).join('') + '<option>Other</option>';
+  [...CITIES, 'Other'].map(c =>
+    `<option value="${esc(c)}">${esc(c)} · ${esc(CITY_AR[c] || c)}</option>`).join('');
 
 // A material's own units come first — nobody buys cement by the square metre —
 // but the full list stays available for the odd job that needs it.
@@ -23,24 +29,24 @@ function unitOptions(materialKey, selected) {
 function lineHtml(i, line = {}) {
   const mat = line.material || 'cement';
   return `<div class="line" data-i="${i}">
-    ${i > 0 ? '<button type="button" class="rm" title="Remove this line">✕</button>' : ''}
+    ${i > 0 ? '<button type="button" class="rm" title="✕">✕</button>' : ''}
     <label class="field">
-      <span>Material</span>
+      <span data-i18n="p.mat">${tr('p.mat')}</span>
       <select class="l-mat">
         ${MATERIALS.map(m => `<option value="${m.key}" ${m.key === mat ? 'selected' : ''}>${m.emoji} ${esc(m.en)} · ${esc(m.ar)}</option>`).join('')}
       </select>
     </label>
     <label class="field">
-      <span>Specification <em>— grade, size, standard</em></span>
-      <input class="l-spec" maxlength="140" value="${esc(line.spec || '')}" placeholder="e.g. OPC Type I, 50 kg bags" />
+      <span data-i18n-html="p.spec">${tr('p.spec')}</span>
+      <input class="l-spec" maxlength="140" value="${esc(line.spec || '')}" data-i18n-ph="p.spec.ph" placeholder="${esc(tr('p.spec.ph'))}" />
     </label>
     <div class="qty-row">
       <label class="field">
-        <span>Quantity</span>
+        <span data-i18n="p.qty">${tr('p.qty')}</span>
         <input class="l-qty" type="number" min="0" step="any" inputmode="decimal" value="${line.qty != null ? esc(line.qty) : ''}" placeholder="400" />
       </label>
       <label class="field">
-        <span>Unit</span>
+        <span data-i18n="p.unit">${tr('p.unit')}</span>
         <select class="l-unit">${unitOptions(mat, line.unit)}</select>
       </label>
     </div>
@@ -125,14 +131,14 @@ document.getElementById('post-form').addEventListener('submit', async e => {
   const closesRaw = document.getElementById('f-closes').value;
   const closesAt = closesRaw ? new Date(closesRaw) : null;
 
-  if (!title) return fail('Give the request a title so suppliers know what they are bidding on.');
-  if (!items.length) return fail('Add at least one material with a quantity above zero.');
-  if (!closesAt || isNaN(closesAt)) return fail('Set a closing time for the bids.');
-  if (closesAt <= new Date()) return fail('The closing time has already passed — pick a time in the future.');
+  if (!title) return fail(tr('p.err.title'));
+  if (!items.length) return fail(tr('p.err.lines'));
+  if (!closesAt || isNaN(closesAt)) return fail(tr('p.err.closes'));
+  if (closesAt <= new Date()) return fail(tr('p.err.past'));
 
   const btn = document.getElementById('post-submit');
   btn.disabled = true;
-  btn.textContent = 'Posting…';
+  btn.textContent = tr('p.posting');
 
   mzSaveMe({
     name: document.getElementById('f-name').value.trim(),
