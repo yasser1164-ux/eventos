@@ -9,6 +9,9 @@ events with poster pins, plus good places to visit. Plain HTML/CSS/JS +
 (auto-deploys from `main` via GitHub Pages — the `Deploy to GitHub Pages`
 action runs on every merge to `main`; live in ~1 minute)
 
+This repo also holds a second app: **[Munaqasa](#munaqasa-bids--bidding-for-construction-materials)**
+(`/bids`) — sealed bidding for construction materials. Same stack, same deploy.
+
 ## Architecture
 
 Data, logic and UI are separated:
@@ -253,3 +256,121 @@ python3 -m http.server 8000
 
 Without Supabase keys in `config.js` you'll see the seed data — which is the
 same content, so everything is testable offline.
+
+---
+
+# Munaqasa (`/bids`) — bidding for construction materials
+
+A second, self-contained app in this repo: مناقصة — a buyer posts what a site
+needs, suppliers bid against each other sealed, and at the closing time every
+bid opens at once and is ranked on **landed cost**.
+
+**Live:** https://yasser1164-ux.github.io/eventos/bids/
+
+Same rules as the map app: plain HTML/CSS/JS, no build step, Supabase for data,
+and a bundled sample board so nothing is ever an empty screen.
+
+## Why it exists
+
+Buying materials by phone means taking the first quote from the supplier who
+answered, comparing unit prices that aren't comparable, and never knowing what
+the others would have said. Munaqasa turns that into a tender:
+
+1. **Post** — materials, quantities, specification, the date it must be on site.
+2. **Sealed bids** — one link to the supplier WhatsApp group. Nobody sees
+   anybody else's price, so nobody shades a number by a riyal.
+3. **Compare and award** — at the closing time everything opens together,
+   ranked on landed cost, with a line-by-line split award underneath.
+
+## Architecture
+
+```
+bids/index.html   BOARD — every request, filtered by status/material/search,
+                  with "Your activity" (what you posted, what you bid on) on top.
+bids/post.html    Buyer's form: line items, delivery site, bidding window.
+bids/tender.html  One request — three screens in one, decided by who you are
+                  and what the clock says (sealed count · bid form · comparison).
+bids/core.js      Materials catalog (bilingual), units, cities, formatting, and
+                  the bid maths: landed cost, coverage, value score, split award.
+bids/store.js     DATA layer: Supabase REST + a localStorage mirror, plus the
+                  device-key identity. Enforces sealing on the client.
+bids/seed.js      Sample board — six requests at every stage of the cycle.
+bids/list.js      Board logic.  bids/post.js  Form logic.  bids/tender.js  Detail.
+bids/styles.css   All styling, mobile at 760px.
+bids/config.js    Supabase URL + anon key.
+supabase/tenders.sql  Tables, row level security, bid-count trigger, award RPC.
+```
+
+Script order on every page: `config → core → store → seed → (list|post|tender)`.
+
+## The numbers
+
+Everything is compared on **landed cost**, never on unit price:
+
+```
+landed = Σ(quantity × unit price) + delivery − discount + 15% VAT
+```
+
+- **Partial bids** are normal (a sand yard won't quote your rebar). They're
+  never ranked against complete bids — a smaller total for a smaller scope is
+  meaningless — but they compete line by line in the split award.
+- **Value score** balances price against lead time, relative to the best bid on
+  each axis; the slider moves it between 50% and 100% price. The cheapest bid
+  is often not the one that keeps the crew working, and the ranking says so.
+- **Split award** takes the cheapest supplier per line, then charges every
+  chosen supplier's delivery once and checks the split still wins. Volume
+  discounts quoted on a full package aren't counted toward a split order.
+- **Market check** is the median unit price actually bid for that material and
+  unit across the board — real bids only, and only once at least three exist.
+  Nothing on this page is an invented benchmark.
+
+## Setup (one time)
+
+Paste `supabase/tenders.sql` into **Supabase → SQL Editor** and run it. That
+creates `tenders` and `bids`, the security policies, the bid-count trigger and
+the award function. `bids/config.js` already points at the same project as the
+events map.
+
+Until that runs — and any time Supabase is unreachable — the app works entirely
+on the device: requests, bids and awards are mirrored to localStorage, so the
+whole flow is demoable offline. The one thing that can't work offline is
+sharing: a link only opens for someone else once the database exists.
+
+## What's enforced where
+
+The anon key is public, so nothing important is left to the browser:
+
+| Rule | Enforced by |
+|------|-------------|
+| Bids are invisible until the tender's closing time | RLS policy on `bids` (select only when `closes_at <= now()`) |
+| No bids after the close | RLS policy on `bids` (insert) |
+| A tender needs a title, ≥1 line and a future close | RLS policy on `tenders` (insert) |
+| The buyer knows *how many* bids, never what they say | `bid_count`, kept by a trigger |
+| Only the buyer awards, only after the close, only once | `award_tender()`, a `security definer` function that checks the key server-side |
+
+Nothing can update or delete a row with the public key.
+
+## Identity — and its limits
+
+No accounts. A random key in `localStorage` proves "I posted this" and "this is
+my bid". A supplier sees their own sealed bid because their browser kept a copy,
+not because the server will hand it back. That means:
+
+- clearing site data, or switching device, loses the ability to award a request
+  you posted — keep the link;
+- it is proof of *possession*, not identity: good enough for a supplier group
+  you already deal with, not for a public procurement portal. Real accounts
+  (Supabase Auth) are the upgrade path, and the schema is ready for it — swap
+  `owner_key`/`bidder_key` for `auth.uid()`.
+
+## Local development
+
+```
+python3 -m http.server 8000
+# then open http://localhost:8000/bids/
+```
+
+Without a database you get the sample board and everything stays on the device.
+To start clean, clear `munaqasa.*` from localStorage. The sample board retires
+itself the moment a real request exists — except a sample you bid on, which
+stays so your own bid still points somewhere.

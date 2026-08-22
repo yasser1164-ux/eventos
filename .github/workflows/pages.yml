@@ -24,7 +24,8 @@ jobs:
       - uses: actions/checkout@v4
       # cache busting: stamp the commit into every local script/css reference
       # so phones fetch new code after each deploy instead of reusing cached JS
-      - run: sed -i "s/__BUILD__/${GITHUB_SHA::8}/g" *.html
+      # (every page, including the ones in subfolders like bids/)
+      - run: find . -name '*.html' -not -path './.git/*' -exec sed -i "s/__BUILD__/${GITHUB_SHA::8}/g" {} +
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
