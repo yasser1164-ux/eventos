@@ -116,6 +116,11 @@ drop trigger if exists bids_bump_count on public.bids;
 create trigger bids_bump_count after insert on public.bids
   for each row execute function public.bump_bid_count();
 
+-- A trigger function must never be callable directly through /rest/v1/rpc.
+revoke all on function public.bump_bid_count() from public;
+revoke all on function public.bump_bid_count() from anon;
+revoke all on function public.bump_bid_count() from authenticated;
+
 -- ---- awarding --------------------------------------------------------------
 -- The one write that has to be protected. The buyer's device key never leaves
 -- their browser except in this call, and the function refuses everything else:
