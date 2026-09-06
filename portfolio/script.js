@@ -121,5 +121,23 @@ if (rotatorWord && !prefersReduced) {
   }, 2600);
 }
 
+// ---------- Theme toggle ----------
+// No stored choice means the page follows the visitor's system preference,
+// which the CSS handles on its own. Clicking sets an explicit override.
+const themeToggle = document.getElementById('themeToggle');
+const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+function effectiveTheme() {
+  const set = document.documentElement.getAttribute('data-theme');
+  if (set === 'light' || set === 'dark') return set;
+  return darkQuery.matches ? 'dark' : 'light';
+}
+
+themeToggle.addEventListener('click', () => {
+  const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+
 // ---------- Footer year ----------
 document.getElementById('year').textContent = new Date().getFullYear();
