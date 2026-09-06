@@ -99,97 +99,27 @@ const barObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.4 });
 bars.forEach(el => barObserver.observe(el));
 
-// ---------- Typewriter ----------
-const typewriter = document.getElementById('typewriter');
+// ---------- Hero phrase rotator (crossfade, not a typewriter) ----------
+const rotatorWord = document.querySelector('.rotator-word');
 const phrases = [
-  'a $20B project portfolio.',
-  'capital project delivery.',
-  'technical assurance at scale.',
-  'engineering trust.'
+  'a $20B project portfolio',
+  'capital project delivery',
+  'technical assurance at scale',
+  'engineering trust'
 ];
-let phraseIdx = 0, charIdx = 0, deleting = false;
+let phraseIdx = 0;
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function typeLoop() {
-  const current = phrases[phraseIdx];
-  if (!deleting) {
-    charIdx++;
-    typewriter.textContent = current.slice(0, charIdx);
-    if (charIdx === current.length) {
-      deleting = true;
-      setTimeout(typeLoop, 1500);
-      return;
-    }
-  } else {
-    charIdx--;
-    typewriter.textContent = current.slice(0, charIdx);
-    if (charIdx === 0) {
-      deleting = false;
+if (rotatorWord && !prefersReduced) {
+  setInterval(() => {
+    rotatorWord.classList.add('fade');
+    setTimeout(() => {
       phraseIdx = (phraseIdx + 1) % phrases.length;
-    }
-  }
-  setTimeout(typeLoop, deleting ? 35 : 65);
+      rotatorWord.textContent = phrases[phraseIdx];
+      rotatorWord.classList.remove('fade');
+    }, 400);
+  }, 2600);
 }
-typeLoop();
 
 // ---------- Footer year ----------
 document.getElementById('year').textContent = new Date().getFullYear();
-
-// ---------- Hero canvas: blueprint node network ----------
-(function heroCanvas() {
-  const canvas = document.getElementById('hero-canvas');
-  const ctx = canvas.getContext('2d');
-  const hero = canvas.closest('.hero');
-  let w, h, nodes;
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function resize() {
-    w = canvas.width = hero.offsetWidth;
-    h = canvas.height = hero.offsetHeight;
-    const count = Math.min(60, Math.floor((w * h) / 22000));
-    nodes = Array.from({ length: count }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      r: Math.random() * 1.6 + 0.8
-    }));
-  }
-
-  function step() {
-    ctx.clearRect(0, 0, w, h);
-    nodes.forEach(n => {
-      n.x += n.vx;
-      n.y += n.vy;
-      if (n.x < 0 || n.x > w) n.vx *= -1;
-      if (n.y < 0 || n.y > h) n.vy *= -1;
-    });
-
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const a = nodes[i], b = nodes[j];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 140) {
-          ctx.strokeStyle = `rgba(77, 214, 196, ${0.14 * (1 - dist / 140)})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
-        }
-      }
-    }
-    nodes.forEach(n => {
-      ctx.fillStyle = 'rgba(255, 181, 71, 0.55)';
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    if (!prefersReduced) requestAnimationFrame(step);
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
-  step();
-})();
