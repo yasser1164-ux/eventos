@@ -71,13 +71,14 @@ const counterObserver = new IntersectionObserver((entries) => {
     if (!entry.isIntersecting) return;
     const el = entry.target;
     const target = parseInt(el.dataset.count, 10);
+    const prefix = el.dataset.prefix || '';
     const suffix = el.dataset.suffix || '';
     const duration = 1400;
     const start = performance.now();
     function tick(now) {
       const p = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(eased * target) + suffix;
+      el.textContent = prefix + Math.round(eased * target) + suffix;
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -101,9 +102,9 @@ bars.forEach(el => barObserver.observe(el));
 // ---------- Typewriter ----------
 const typewriter = document.getElementById('typewriter');
 const phrases = [
-  'capital projects.',
-  'offshore facilities.',
-  'project delivery.',
+  'a $20B project portfolio.',
+  'capital project delivery.',
+  'technical assurance at scale.',
   'engineering trust.'
 ];
 let phraseIdx = 0, charIdx = 0, deleting = false;
