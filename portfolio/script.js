@@ -102,7 +102,7 @@ bars.forEach(el => barObserver.observe(el));
 // ---------- Hero phrase rotator (crossfade, not a typewriter) ----------
 const rotatorWord = document.querySelector('.rotator-word');
 const phrases = [
-  'a $20B project portfolio',
+  'a $5B project portfolio',
   'capital project delivery',
   'technical assurance at scale',
   'engineering trust'
@@ -119,6 +119,86 @@ if (rotatorWord && !prefersReduced) {
       rotatorWord.classList.remove('fade');
     }, 400);
   }, 2600);
+}
+
+// ---------- Drawing sheets ----------
+// Hovering a labelled block in a schematic explains that part of the mechanism
+// and highlights the lines it connects to.
+document.querySelectorAll('.dwg-figure').forEach(fig => {
+  const readout = fig.querySelector('.dwg-readout');
+  if (!readout) return;
+  const svg = fig.querySelector('svg');
+  const base = readout.dataset.base || readout.textContent;
+
+  fig.querySelectorAll('[data-detail]').forEach(node => {
+    const show = () => {
+      readout.textContent = node.dataset.detail;
+      if (node.dataset.focus) svg.setAttribute('data-focus', node.dataset.focus);
+    };
+    const reset = () => {
+      readout.textContent = base;
+      svg.removeAttribute('data-focus');
+    };
+    node.addEventListener('mouseenter', show);
+    node.addEventListener('mouseleave', reset);
+  });
+});
+
+// DWG-02 — reveal the review markups, and pair each delta with its comment
+const mkToggle = document.getElementById('mkToggle');
+if (mkToggle) {
+  const fig = document.getElementById('fig-pid');
+  const list = document.getElementById('mkList');
+
+  mkToggle.addEventListener('click', () => {
+    const on = fig.classList.toggle('show-markup');
+    mkToggle.setAttribute('aria-pressed', on);
+    mkToggle.textContent = on ? 'Hide review markups' : 'Show review markups';
+    list.hidden = !on;
+    if (!on) {
+      fig.querySelectorAll('.mk-delta').forEach(d => d.classList.remove('is-active'));
+      list.querySelectorAll('li').forEach(li => li.classList.remove('is-active'));
+    }
+  });
+
+  const pair = (id, on) => {
+    const delta = fig.querySelector(`.mk-delta[data-mk="${id}"]`);
+    const item = list.querySelector(`li[data-mk="${id}"]`);
+    if (delta) delta.classList.toggle('is-active', on);
+    if (item) item.classList.toggle('is-active', on);
+  };
+  fig.querySelectorAll('.mk-delta').forEach(delta => {
+    delta.addEventListener('mouseenter', () => pair(delta.dataset.mk, true));
+    delta.addEventListener('mouseleave', () => pair(delta.dataset.mk, false));
+  });
+  list.querySelectorAll('li').forEach(item => {
+    item.addEventListener('mouseenter', () => pair(item.dataset.mk, true));
+    item.addEventListener('mouseleave', () => pair(item.dataset.mk, false));
+  });
+}
+
+// DWG-04 — pressurise the discharge manifold
+const testBtn = document.getElementById('testBtn');
+if (testBtn) {
+  const fig = document.getElementById('fig-pump');
+  const readout = fig.querySelector('.dwg-readout');
+  let timer;
+
+  testBtn.addEventListener('click', () => {
+    const on = fig.classList.toggle('is-testing');
+    testBtn.classList.toggle('is-on', on);
+    testBtn.textContent = on ? 'Reset' : 'Run hydrotest';
+    clearTimeout(timer);
+
+    if (on) {
+      readout.textContent = 'Pressurising discharge manifold to 1.5 × design…';
+      timer = setTimeout(() => {
+        readout.textContent = 'Pressure held — PASS on the 1st attempt. No leaks at the manifold joints.';
+      }, 1900);
+    } else {
+      readout.textContent = readout.dataset.base;
+    }
+  });
 }
 
 // ---------- Theme toggle ----------
