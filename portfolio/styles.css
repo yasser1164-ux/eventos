@@ -858,7 +858,7 @@ figure.dwg figcaption {
 /* ---------- Credentials ---------- */
 .credentials-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -870,9 +870,45 @@ figure.dwg figcaption {
   transition: background 0.25s;
 }
 .cred-card:hover { background: var(--surface-2); }
-.cred-badge { color: var(--accent); font-size: 1.7rem; display: block; margin-bottom: 18px; }
+.cred-badge { color: var(--accent); display: block; margin-bottom: 18px; }
 .cred-card h3 { font-size: 1.02rem; margin-bottom: 10px; font-weight: 500; }
 .cred-card p { color: var(--text-faint); font-size: 0.83rem; }
+
+/* credential seals — original marks in the site's own hand, not issuer logos */
+/* two classes so it outranks the `.cred-badge svg` 1em icon sizing above */
+.cred-badge .seal { width: 74px; height: 74px; display: block; margin: 0 auto; color: var(--accent); }
+.seal-ring { fill: none; stroke: currentColor; stroke-width: 1.2; opacity: 0.55; }
+.seal-ring-inner { fill: none; stroke: currentColor; stroke-width: 0.8; opacity: 0.3; }
+.seal-tick { stroke: currentColor; stroke-width: 1.2; opacity: 0.5; fill: none; }
+.seal-abbr { font-family: var(--serif); font-size: 17px; font-weight: 500; fill: currentColor; }
+.seal-issuer {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  fill: var(--text-faint);
+}
+
+.training { margin-top: 40px; }
+.training-title {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 18px;
+}
+.training-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.training-list li {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.training-list li:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ---------- Contact ---------- */
 .contact-section { padding-bottom: 60px; }
@@ -949,7 +985,7 @@ figure.dwg figcaption {
 @media (max-width: 900px) {
   .expertise-grid { grid-template-columns: repeat(2, 1fr); }
   .project-grid { grid-template-columns: 1fr; }
-  .credentials-grid { grid-template-columns: 1fr; }
+  /* auto-fit already collapses the credential seals cleanly */
 }
 
 @media (max-width: 720px) {
