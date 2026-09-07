@@ -121,6 +121,16 @@ if (rotatorWord && !prefersReduced) {
   }, 2600);
 }
 
+// ---------- Portrait ----------
+// Until img/yasir.jpg is added, fall back to the monogram instead of a broken image.
+const portraitImg = document.getElementById('portraitImg');
+if (portraitImg) {
+  const frame = document.getElementById('portraitFrame');
+  const markMissing = () => frame.classList.add('no-photo');
+  portraitImg.addEventListener('error', markMissing);
+  if (portraitImg.complete && portraitImg.naturalWidth === 0) markMissing();
+}
+
 // ---------- Drawing sheets ----------
 // Hovering a labelled block in a schematic explains that part of the mechanism
 // and highlights the lines it connects to.
