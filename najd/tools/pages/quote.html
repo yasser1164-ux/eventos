@@ -1,0 +1,135 @@
+<!--META
+{
+  "title": "اطلب عرض سعر — نجد الشرق الأوسط للتجارة",
+  "desc": "أرسل طلب عرض سعر لمواد البناء أو الإمدادات الصناعية أو المعدات الكهربائية أو مستلزمات السلامة، ويصلك الرد خلال يوم عمل واحد."
+}
+-->
+
+<section class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="مسار التنقل">
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a><span class="sep">/</span><span data-i18n="cta.quote">اطلب عرض سعر</span>
+    </nav>
+    <h1 data-i18n="rfq.h1">طلب عرض سعر</h1>
+    <p data-i18n="rfq.lead">املأ ما تعرفه الآن — لا يلزم أن تكون القائمة نهائية. نرد خلال يوم عمل واحد للأصناف المتوفرة.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="split" style="align-items:start">
+      <!-- form -->
+      <div class="reveal">
+        <form id="quote-form" novalidate>
+          <h2 class="sec-title" style="font-size:24px;margin-bottom:20px" data-i18n="rfq.form.title">بيانات الطلب</h2>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="q-name" ><span data-i18n="form.name">الاسم</span> <span class="req">*</span></label>
+              <input id="q-name" name="name" type="text" required placeholder="الاسم الكامل" data-i18n-ph="form.namePh">
+              <span class="err-msg"></span>
+            </div>
+            <div class="field">
+              <label for="q-company" ><span data-i18n="form.company">جهة العمل</label>
+              <input id="q-company" name="company" type="text" placeholder="اسم الشركة أو المؤسسة" data-i18n-ph="form.companyPh">
+              <span class="err-msg"></span>
+            </div>
+            <div class="field">
+              <label for="q-email" data-i18n="form.email">البريد الإلكتروني</span> <span class="req">*</span></label>
+              <input id="q-email" name="email" type="email" required dir="ltr" placeholder="name@company.com">
+              <span class="err-msg"></span>
+            </div>
+            <div class="field">
+              <label for="q-phone" ><span data-i18n="form.phone">رقم الجوال</span> <span class="req">*</span></label>
+              <input id="q-phone" name="phone" type="tel" required dir="ltr" placeholder="+966 5X XXX XXXX" data-i18n-ph="form.phonePh">
+              <span class="err-msg"></span>
+            </div>
+            <div class="field">
+              <label for="quote-service" ><span data-i18n="form.service">القسم المطلوب</label>
+              <select id="quote-service" name="service">
+                <option value="building" data-i18n="svc.building">مواد البناء والإنشاء</option>
+                <option value="industrial" data-i18n="svc.industrial">إمدادات صناعية وقطع غيار</option>
+                <option value="electrical" data-i18n="svc.electrical">معدات كهربائية وطاقة</option>
+                <option value="safety" data-i18n="svc.safety">السلامة ومعدات الوقاية</option>
+                <option value="trade" data-i18n="svc.trade">استيراد وتخليص جمركي</option>
+                <option value="logistics" data-i18n="svc.logistics">خدمات لوجستية وتخزين</option>
+                <option value="other" data-i18n="form.other">أخرى / غير محدد</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="q-city" data-i18n="form.city">مدينة التسليم</label>
+              <input id="q-city" name="city" type="text" placeholder="الرياض" data-i18n-ph="form.cityPh">
+              <span class="err-msg"></span>
+            </div>
+            <div class="field">
+              <label for="q-deadline" data-i18n="form.deadline">الموعد المطلوب للتسليم</label>
+              <input id="q-deadline" name="deadline" type="date">
+              <span class="err-msg"></span>
+            </div>
+            <div class="field">
+              <label for="q-qty" data-i18n="form.scale">حجم الطلب التقريبي</label>
+              <select id="q-qty" name="scale">
+                <option value="small" data-i18n="form.scale.s">طلب صغير / عيّنة</option>
+                <option value="medium" data-i18n="form.scale.m">طلب متوسط لمشروع قائم</option>
+                <option value="large" data-i18n="form.scale.l">توريد مشروع كامل</option>
+                <option value="annual" data-i18n="form.scale.a">عقد توريد سنوي</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="q-details" data-i18n="form.details">تفاصيل الأصناف المطلوبة</span> <span class="req">*</span></label>
+              <textarea id="q-details" name="details" required data-min="10"
+                        placeholder="اكتب الأصناف والكميات والمواصفات، أو الصق قائمة من ملف الإكسل."
+                        data-i18n-ph="form.detailsPh"></textarea>
+              <span class="hint" data-i18n="form.detailsHint">لديك ملف أو مخطط؟ أرسل الطلب أولًا، ثم أرفق الملف في ردّك على رسالة التأكيد.</span>
+              <span class="err-msg"></span>
+            </div>
+            <div class="field full">
+              <label class="check-inline">
+                <input type="checkbox" name="consent" required>
+                <span data-i18n="form.consent">أوافق على أن يتم التواصل معي بخصوص هذا الطلب.</span>
+              </label>
+              <span class="err-msg"></span>
+            </div>
+          </div>
+
+          <input type="text" name="company_website" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+            <button class="btn btn-primary btn-lg" type="submit" data-i18n="rfq.submit">إرسال طلب التسعير</button>
+            <a class="btn btn-ghost btn-lg" href="#" data-site-href="wa" target="_blank" rel="noopener" data-i18n="cta.whatsapp">واتساب</a>
+          </div>
+          <p class="form-note" data-i18n="form.note">نستخدم بياناتك للرد على طلبك فقط، ولا نشاركها مع أي جهة أخرى.</p>
+          <div class="form-status" role="status"></div>
+        </form>
+      </div>
+
+      <!-- selected items -->
+      <aside class="reveal">
+        <div class="card" style="padding:26px">
+          <h3 style="font-size:19px;margin-bottom:6px" data-i18n="rfq.list.title">الأصناف المختارة من الكتالوج</h3>
+          <p class="muted" style="font-size:14.5px" data-i18n="rfq.list.sub">تُرسل هذه القائمة مع طلبك تلقائيًا.</p>
+
+          <div id="rfq-list" class="rfq-list"></div>
+
+          <div id="rfq-empty" class="empty-state" style="padding:26px 10px" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7 21 7v10l-9 4.3L3 17V7z"/><path d="M3 7l9 4.3L21 7M12 11.3V21"/></svg>
+            <p style="margin:0 0 6px"><strong data-i18n="rfq.empty.t">لم تختر أصنافًا بعد</strong></p>
+            <p style="font-size:14.5px" data-i18n="rfq.empty.d">يمكنك الكتابة في خانة التفاصيل مباشرة، أو تصفّح الكتالوج واختيار ما تحتاجه.</p>
+            <a class="btn btn-ghost btn-sm" href="products.html" data-i18n="cta.browse">تصفّح الكتالوج</a>
+          </div>
+
+          <button id="rfq-clear" class="btn btn-ghost btn-sm" type="button" hidden data-i18n="rfq.clear">إفراغ القائمة</button>
+        </div>
+
+        <div class="card" style="padding:26px;margin-top:20px">
+          <h3 style="font-size:18px;margin-bottom:14px" data-i18n="rfq.next.title">ماذا يحدث بعد الإرسال؟</h3>
+          <ol class="steps" style="margin:0">
+            <li class="step" style="padding-bottom:22px"><h3 style="font-size:16px" data-i18n="rfq.next.1t">تأكيد الاستلام</h3><p style="font-size:14.5px" data-i18n="rfq.next.1d">يصلك رقم مرجع للطلب مباشرة.</p></li>
+            <li class="step" style="padding-bottom:22px"><h3 style="font-size:16px" data-i18n="rfq.next.2t">دراسة الطلب</h3><p style="font-size:14.5px" data-i18n="rfq.next.2d">نراجع المواصفات ونسأل عن أي نقطة غير واضحة.</p></li>
+            <li class="step" style="padding-bottom:0"><h3 style="font-size:16px" data-i18n="rfq.next.3t">وصول العرض</h3><p style="font-size:14.5px" data-i18n="rfq.next.3d">عرض مكتوب بالسعر والمهلة وشروط التسليم.</p></li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
