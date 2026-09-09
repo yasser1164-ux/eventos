@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yasser1164-ux.github.io/eventos/najd/sitemap.xml

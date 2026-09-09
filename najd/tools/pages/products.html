@@ -1,0 +1,80 @@
+<!--META
+{
+  "title": "المنتجات والكتالوج — نجد الشرق الأوسط للتجارة",
+  "desc": "كتالوج الأصناف: مواد البناء، الإمدادات الصناعية، الكابلات واللوحات الكهربائية، معدات السلامة ومواد التغليف. أضف ما تحتاجه إلى طلب التسعير.",
+  "scripts": ["catalog.js"]
+}
+-->
+
+<section class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="مسار التنقل">
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a><span class="sep">/</span><span data-i18n="nav.products">المنتجات</span>
+    </nav>
+    <h1 data-i18n="prod.h1">الكتالوج</h1>
+    <p data-i18n="prod.lead">اختر ما تحتاجه وأضفه إلى طلب التسعير، ثم أرسل القائمة كاملة بضغطة واحدة. الأسعار تُحدَّد حسب الكمية والمواصفة وموعد التسليم.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="catalog-layout">
+      <aside>
+        <div class="filters">
+          <div id="filters"></div>
+        </div>
+      </aside>
+
+      <div>
+        <div class="catalog-bar">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <label class="sr-only" for="catalog-search" data-i18n="prod.searchLabel">ابحث في الكتالوج</label>
+            <input id="catalog-search" type="search" placeholder="ابحث باسم الصنف أو رقمه…" data-i18n-ph="prod.searchPh">
+          </div>
+          <div class="field" style="min-width:190px">
+            <label class="sr-only" for="catalog-sort" data-i18n="prod.sortLabel">الترتيب</label>
+            <select id="catalog-sort">
+              <option value="default" data-i18n="prod.sort.default">الترتيب الافتراضي</option>
+              <option value="az" data-i18n="prod.sort.az">الاسم: أ – ي</option>
+              <option value="za" data-i18n="prod.sort.za">الاسم: ي – أ</option>
+              <option value="stock" data-i18n="prod.sort.stock">المتوفر بالمستودع أولًا</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="muted" style="font-size:14.5px;margin-bottom:18px">
+          <span id="result-count">0</span> <span data-i18n="prod.count">صنفًا</span>
+        </p>
+
+        <div class="prod-grid" id="prod-grid"></div>
+
+        <noscript>
+          <p class="muted" data-i18n="prod.noscript">الكتالوج التفاعلي يحتاج جافاسكربت. يمكنك مراسلتنا بقائمة الأصناف مباشرة وسنرد عليك بعرض سعر.</p>
+        </noscript>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow" data-i18n="prod.note.eyebrow">ملاحظة</span>
+      <h2 class="sec-title" data-i18n="prod.note.title">الكتالوج جزء مما نورّده</h2>
+      <p class="sec-lead" data-i18n="prod.note.lead">
+        ما تراه هنا هو الأصناف الأكثر طلبًا. إن كان لديك صنف بمواصفة خاصة أو رقم قطعة محدد،
+        أرسله لنا وسنبحث عنه في شبكة مصادرنا.
+      </p>
+    </div>
+    <div class="center">
+      <a class="btn btn-primary btn-lg" href="quote.html" data-i18n="prod.note.cta">أرسل قائمة أصنافك</a>
+    </div>
+  </div>
+</section>
+
+<button class="cart-fab" type="button" hidden onclick="location.href='quote.html'">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+  <span data-i18n="prod.fab">طلب التسعير</span>
+  <span class="cc">0</span>
+</button>
