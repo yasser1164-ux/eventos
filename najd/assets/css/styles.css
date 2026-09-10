@@ -792,3 +792,90 @@ html[dir="rtl"] .prod-cat{letter-spacing:0;text-transform:none}
   .header,.topbar,.footer,.wa-fab,.cart-fab,.to-top,.drawer{display:none!important}
   body{color:#000;background:#fff}
 }
+
+/* ---------- 12. Artwork, coverage map, compliance strip, quick view ------ */
+/* a scene band across the top of a service card */
+.card.has-art{padding:0 0 clamp(22px,2.6vw,30px)}
+.card-art{aspect-ratio:16/6;overflow:hidden;background:var(--bg-3);
+  border-radius:var(--r-lg) var(--r-lg) 0 0}
+.card-art svg,.card-art img{width:100%;height:100%;object-fit:cover;display:block}
+.card.has-art .card-icon{margin-top:-30px;position:relative;z-index:2;box-shadow:var(--sh-2);background:var(--surface)}
+.card.has-art>*:not(.card-art){margin-inline:clamp(22px,2.6vw,30px)}
+.card.has-art::after{inset-block-start:auto;inset-block-end:0}
+
+/* photographs swapped in for the drawn scenes keep the same crop */
+.frame img,.prod-art img,.sector-art img,.proj-art img,.rr-art img{
+  width:100%;height:100%;object-fit:cover;display:block
+}
+.prod-art{background:var(--bg-2)}
+
+/* coverage map */
+.map-wrap{position:relative;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-xl);padding:clamp(14px,2.4vw,26px);overflow:hidden}
+.section--dark .map-wrap{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+.mp{width:100%;height:auto;display:block;overflow:visible}
+.mp-land{fill:var(--bg-3);stroke:none}
+.section--dark .mp-land{fill:rgba(255,255,255,.06)}
+.mp-edge{fill:none;stroke:var(--red-500);stroke-width:2.5;stroke-linejoin:round;
+  stroke-dasharray:4200;stroke-dashoffset:4200;animation:draw 2.6s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.mp-line{fill:none;stroke:var(--gold-500);stroke-width:1.6;opacity:.55;stroke-dasharray:6 7;
+  animation:dash 22s linear infinite;animation-delay:var(--d)}
+@keyframes dash{to{stroke-dashoffset:-260}}
+.mp-dot{fill:var(--red-500)}
+.mp-city.is-hub .mp-dot{fill:var(--gold-500);stroke:var(--red-500);stroke-width:3}
+.mp-pulse{fill:var(--gold-500);opacity:.22;animation:mppulse 3s ease-out infinite;animation-delay:var(--d)}
+@keyframes mppulse{0%{transform-box:fill-box;transform-origin:center;transform:scale(.4);opacity:.4}
+  70%,100%{transform-box:fill-box;transform-origin:center;transform:scale(1.15);opacity:0}}
+.mp-label{fill:var(--ink-2);font-size:17px;font-weight:700;font-family:var(--f-sans)}
+.section--dark .mp-label{fill:#DCE3EB}
+.mp-city.is-hub .mp-label{fill:var(--red-500);font-size:19px}
+.section--dark .mp-city.is-hub .mp-label{fill:var(--gold-400)}
+.map-legend{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;margin-top:18px;font-size:14px;color:var(--muted)}
+.map-legend span{display:flex;align-items:center;gap:8px}
+.map-legend i{width:12px;height:12px;border-radius:50%;background:var(--red-500);display:block}
+.map-legend i.hub{background:var(--gold-500);border:2px solid var(--red-500)}
+@media (prefers-reduced-motion:reduce){
+  .mp-edge{animation:none;stroke-dashoffset:0}.mp-line,.mp-pulse{animation:none}
+}
+
+/* compliance / credentials strip */
+.cred{display:flex;gap:16px;align-items:center;padding:18px 20px;border:1px solid var(--line);
+  border-radius:var(--r-md);background:var(--surface);transition:border-color var(--t-fast),transform var(--t-fast)}
+.cred:hover{border-color:var(--gold-500);transform:translateY(-3px)}
+.cred-ico{width:44px;height:44px;border-radius:var(--r-sm);flex:none;display:grid;place-items:center;
+  background:var(--gold-050);color:var(--gold-700)}
+.cred-ico svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7}
+.cred b{display:block;font-size:15.5px;margin-bottom:2px}
+.cred span{font-size:13.5px;color:var(--muted)}
+
+/* product quick view */
+.qv{position:fixed;inset:0;z-index:160;display:grid;place-items:center;padding:20px;visibility:hidden}
+.qv.is-open{visibility:visible}
+.qv-veil{position:absolute;inset:0;background:rgba(8,10,12,.6);opacity:0;transition:opacity var(--t);backdrop-filter:blur(3px)}
+.qv.is-open .qv-veil{opacity:1}
+.qv-panel{position:relative;width:min(880px,100%);max-height:88vh;overflow:auto;background:var(--surface);
+  border-radius:var(--r-xl);box-shadow:var(--sh-3);display:grid;grid-template-columns:1fr 1fr;
+  transform:translateY(18px) scale(.98);opacity:0;transition:all var(--t-slow)}
+.qv.is-open .qv-panel{transform:none;opacity:1}
+.qv-art{background:var(--bg-3);min-height:280px}
+.qv-art svg,.qv-art img{width:100%;height:100%;object-fit:cover;display:block}
+.qv-body{padding:clamp(22px,3vw,32px)}
+.qv-body h3{font-size:22px;margin:8px 0 10px}
+.qv-close{position:absolute;inset-block-start:12px;inset-inline-end:12px;width:38px;height:38px;border-radius:50%;
+  border:0;background:var(--surface);box-shadow:var(--sh-2);cursor:pointer;display:grid;place-items:center;color:var(--ink)}
+.qv-close svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.qv-specs{display:grid;gap:9px;margin:16px 0 20px}
+.qv-specs li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink-2)}
+.qv-specs li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-500);margin-top:9px;flex:none}
+.qv-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+@media (max-width:720px){.qv-panel{grid-template-columns:1fr}.qv-art{min-height:190px}}
+
+/* map labels are drawn in viewBox units — on a phone only the hubs stay
+   readable, so the rest keep their dots and drop their labels */
+@media (max-width:760px){
+  .mp-label{font-size:30px}
+  .mp-city:not(.is-hub) .mp-label{display:none}
+  .mp-city.is-hub .mp-label{font-size:34px}
+  .map-legend{font-size:13px;gap:14px}
+}

@@ -51,18 +51,19 @@
 
     /* decorative frames: <div class="frame" data-art="story"> */
     var ART = {
-      intro:    { p: "red",   g: "building" },
-      process:  { p: "mix",   g: "box" },
-      story:    { p: "ink",   g: "globe" },
-      timeline: { p: "gold",  g: "chart" },
-      projects: { p: "steel", g: "truck" }
+      intro:    { scene: "warehouse", p: "ink" },
+      process:  { scene: "logistics", p: "steel" },
+      story:    { scene: "site",      p: "red" },
+      timeline: { scene: "office",    p: "ink" },
+      projects: { scene: "warehouse", p: "steel" },
+      trade:    { scene: "port",      p: "mix" }
     };
     $$("[data-art]").forEach(function (el) {
       if (el.querySelector("svg[data-generated]")) return;
-      var k = el.dataset.art, cfg = ART[k] || { p: "red", g: "box" };
-      var html = w.MEDIA.art({ seed: k, palette: cfg.p, glyph: w.MEDIA.icon(cfg.g), w: 900, h: 900 })
-                  .replace("<svg ", "<svg data-generated ");
+      var k = el.dataset.art, cfg = ART[k] || ART.intro;
+      var html = w.SCENES.render(cfg.scene, { palette: cfg.p }).replace("<svg ", "<svg data-generated ");
       el.insertAdjacentHTML("afterbegin", html);
+      if (!el.dataset.photo) el.dataset.photo = cfg.scene;
     });
     var mapEl = $("[data-map-embed]");
     if (mapEl && S.mapEmbed) mapEl.setAttribute("src", S.mapEmbed);
@@ -175,7 +176,9 @@
   R.services = function (el) {
     var limit = +(el.dataset.limit || 0), list = w.DATA.services.slice(0, limit || undefined);
     el.innerHTML = list.map(function (s, i) {
-      return '<article class="card reveal" data-delay="' + (i * 70) + '">' +
+      return '<article class="card has-art reveal" data-delay="' + (i * 70) + '">' +
+        '<div class="card-art" data-photo="' + s.scene + '" data-photo-alt="' + esc(pick(s.t)) + '">' +
+          w.SCENES.render(s.scene, { palette: s.palette }) + "</div>" +
         '<div class="card-icon">' + ico(s.icon) + "</div>" +
         "<h3>" + esc(pick(s.t)) + "</h3>" +
         "<p>" + esc(pick(s.d)) + "</p>" +
@@ -189,7 +192,7 @@
 
   R.servicesDetail = function (el) {
     el.innerHTML = w.DATA.services.map(function (s, i) {
-      var art = w.MEDIA.art({ seed: s.id, palette: s.palette, glyph: w.MEDIA.icon(s.icon), w: 800, h: 620, label: pick(s.t) });
+      var art = w.SCENES.render(s.scene, { palette: s.palette, label: pick(s.t) });
       var flip = i % 2 === 1;
       return '<section class="section' + (flip ? " section--tint" : "") + '" id="' + s.id + '">' +
         '<div class="wrap"><div class="split">' +
@@ -202,16 +205,17 @@
             '<a class="btn btn-primary" href="quote.html?service=' + s.id + '">' +
               esc(t("ui.askQuote", "اطلب عرض سعر")) + ARROW + "</a>" +
           "</div>" +
-          '<div class="frame reveal" style="aspect-ratio:4/3' + (flip ? ";order:1" : "") + '">' + art + "</div>" +
+          '<div class="frame reveal" data-photo="' + s.scene + '" data-photo-alt="' + esc(pick(s.t)) + '" ' +
+            'style="aspect-ratio:4/3' + (flip ? ";order:1" : "") + '">' + art + "</div>" +
         "</div></div></section>";
     }).join("");
   };
 
   R.sectors = function (el) {
     el.innerHTML = w.DATA.sectors.map(function (s, i) {
-      var art = w.MEDIA.art({ seed: s.id, palette: s.palette, w: 600, h: 420 });
+      var art = w.SCENES.render(s.scene, { palette: s.palette });
       return '<article class="sector reveal" data-delay="' + (i * 60) + '">' +
-        '<div class="sector-art">' + art + "</div>" +
+        '<div class="sector-art" data-photo="' + s.scene + '">' + art + "</div>" +
         '<span class="s-ico">' + ico(s.icon) + "</span>" +
         "<h3>" + esc(pick(s.t)) + "</h3><p>" + esc(pick(s.d)) + "</p></article>";
     }).join("");
@@ -220,9 +224,9 @@
   R.projects = function (el) {
     var limit = +(el.dataset.limit || 0);
     el.innerHTML = w.DATA.projects.slice(0, limit || undefined).map(function (p, i) {
-      var art = w.MEDIA.art({ seed: p.id, palette: p.palette, glyph: w.MEDIA.icon(p.icon), w: 800, h: 500, label: pick(p.t) });
+      var art = w.SCENES.render(p.scene, { palette: p.palette, label: pick(p.t) });
       return '<article class="proj reveal" data-delay="' + (i * 70) + '">' +
-        '<div class="proj-art">' + art + "</div>" +
+        '<div class="proj-art" data-photo="' + p.id + '" data-photo-alt="' + esc(pick(p.t)) + '">' + art + "</div>" +
         '<div class="proj-body">' +
           '<div class="proj-meta">' +
             "<span>" + ico("clock") + esc(p.year) + "</span>" +
@@ -303,13 +307,21 @@
     var list = w.DATA.products.filter(function (p) { return p.featured; });
     el.innerHTML = list.map(function (p, i) {
       return '<article class="prod reveal" data-delay="' + (i * 60) + '">' +
-        '<div class="prod-art">' + w.MEDIA.art({ seed: p.id, palette: p.palette, glyph: w.MEDIA.icon(p.icon), w: 600, h: 450, label: pick(p.t) }) + "</div>" +
+        '<div class="prod-art" data-photo="' + p.id + '" data-photo-alt="' + esc(pick(p.t)) + '">' +
+          w.ITEMS.render(p.id, { label: pick(p.t) }) + "</div>" +
         '<div class="prod-body"><span class="prod-cat">' + esc(catName(p.cat)) + "</span>" +
         "<h3>" + esc(pick(p.t)) + "</h3><p>" + esc(pick(p.d)) + "</p>" +
         '<div class="prod-foot"><a class="link-arrow" href="products.html#' + p.id + '">' +
         esc(t("ui.details", "التفاصيل")) + ARROW + "</a></div></div></article>";
     }).join("");
   };
+
+  R.map = function (el) {
+    el.innerHTML = w.KSAMAP.render();
+  };
+
+  /* product quick view — opened from the catalogue and the home page */
+  R.quickview = function () {};
 
   function catName(id) {
     var c = w.DATA.categories.filter(function (x) { return x.id === id; })[0];
@@ -322,6 +334,7 @@
       if (fn) fn(el);
     });
     if (w.I18N) w.I18N.refresh();
+    if (w.MEDIA.photos) w.MEDIA.photos();
     initReveal();
     initCounters();
   }

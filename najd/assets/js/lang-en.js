@@ -452,6 +452,28 @@ window.I18N_EN = {
   "tr.7.1": "These terms are governed by the laws of the Kingdom of Saudi Arabia, and the Saudi courts have jurisdiction over any dispute arising from them.",
   "tr.disclaimer": "* This page is an initial draft for guidance; have it reviewed legally before the company's official launch.",
 
+  /* ---- coverage map, credentials, quick view (added in the visual pass) -- */
+  "home.map.eyebrow": "Coverage",
+  "home.map.title": "We deliver across the Kingdom",
+  "home.map.lead": "Based in Riyadh, reaching sites in the Eastern, Western and Southern regions through vetted transport partners \u2014 scheduled around what the site needs, not what suits the warehouse.",
+  "home.map.l1": "Main operating cities",
+  "home.map.l2": "Cities on our delivery schedule",
+  "home.map.l3": "Sites outside the cities: by prior arrangement",
+  "home.cred.eyebrow": "Compliance",
+  "home.cred.title": "You are dealing with a registered company whose paperwork is in order",
+  "home.cred.1t": "Valid commercial registration",
+  "home.cred.1d": "A company registered in the Kingdom",
+  "home.cred.2t": "E-invoicing",
+  "home.cred.2d": "Compliant with ZATCA requirements",
+  "home.cred.3t": "Conformity certificates",
+  "home.cred.3d": "SABER and certificates of origin on imports",
+  "home.cred.4t": "Qualified suppliers",
+  "home.cred.4d": "No source is approved before we check it",
+  "footer.profile": "Company profile (PDF)",
+  "about.profileBtn": "Download the company profile (PDF)",
+  "catalog.view": "Details",
+  "catalog.goQuote": "Go to the quote request",
+
   /* ---- 404 --------------------------------------------------------------- */
   "meta.title.404": "Page not found — Najd Middle East Trading",
   "meta.desc.404": "The page you asked for does not exist.",

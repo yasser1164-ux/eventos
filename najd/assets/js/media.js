@@ -104,5 +104,61 @@
     users:    '<circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 5.2a3.4 3.4 0 0 1 0 5.6M17.5 14.4A6.5 6.5 0 0 1 21.5 20"/>'
   };
 
-  w.MEDIA = { art: art, pattern: pattern, icon: function (n) { return ICONS[n] || ICONS.box; }, icons: ICONS };
+  /* ---- picture: a drawn scene / item, swappable for a real photograph ---
+     Render the drawing with data-photo="<name>" on its container, then
+     MEDIA.photos() looks for assets/img/photos/<name>.(jpg|png|webp) and, if
+     one exists, puts it in place of the drawing. Nothing breaks when the file
+     is absent, and no broken-image icon is ever shown. */
+  var PHOTO_DIR = "assets/img/photos/", manifest = null, pending = [];
+
+  /* The manifest lists the photographs that exist, so the page never asks the
+     server for a file that isn't there. Set SITE.photos.autodetect = true to
+     skip the list and probe for files directly instead. */
+  function loadManifest(done) {
+    if (manifest) return done(manifest);
+    pending.push(done);
+    if (pending.length > 1) return;
+    var auto = w.SITE && w.SITE.photos && w.SITE.photos.autodetect;
+    if (auto) { manifest = { "*": true }; return flush(); }
+    fetch(PHOTO_DIR + "manifest.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (j) { manifest = normalise(j); flush(); })
+      .catch(function () { manifest = {}; flush(); });
+  }
+  function normalise(j) {
+    var out = {};
+    if (Array.isArray(j)) j.forEach(function (f) { out[String(f).replace(/\.[a-z0-9]+$/i, "")] = f; });
+    else Object.keys(j || {}).forEach(function (k) { out[k] = j[k]; });
+    return out;
+  }
+  function flush() {
+    var q = pending.slice(); pending = [];
+    q.forEach(function (fn) { fn(manifest); });
+  }
+
+  function photos(root) {
+    var nodes = (root || document).querySelectorAll("[data-photo]");
+    if (!nodes.length) return;
+    loadManifest(function (list) {
+      Array.prototype.forEach.call(nodes, function (el) {
+        if (el.dataset.photoDone) return;
+        var name = el.dataset.photo, file = list[name];
+        if (!file && !list["*"]) return;               /* no photo — keep the drawing */
+        el.dataset.photoDone = "1";
+        var exts = file ? [file] : ["jpg", "jpeg", "png", "webp"].map(function (e) { return name + "." + e; }),
+            i = 0;
+        (function tryNext() {
+          if (i >= exts.length) return;
+          var url = PHOTO_DIR + exts[i++], img = new Image();
+          img.onload = function () {
+            el.innerHTML = '<img src="' + url + '" alt="' + (el.dataset.photoAlt || "") + '" loading="lazy">';
+          };
+          img.onerror = tryNext;
+          img.src = url;
+        })();
+      });
+    });
+  }
+
+  w.MEDIA = { art: art, photos: photos, pattern: pattern, icon: function (n) { return ICONS[n] || ICONS.box; }, icons: ICONS };
 })(window);
