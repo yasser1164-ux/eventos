@@ -9,6 +9,16 @@ events with poster pins, plus good places to visit. Plain HTML/CSS/JS +
 (auto-deploys from `main` via GitHub Pages — the `Deploy to GitHub Pages`
 action runs on every merge to `main`; live in ~1 minute)
 
+## Also in this repository
+
+`najd/` — the website for **نجد الشرق الأوسط للتجارة (Najd Middle East Trading
+Co.)**, a bilingual company site that is separate from Eventos in every way
+except the repository it happens to live in. It has its own pages, styling and
+scripts under `najd/`, shares no code with the app above, and is published at
+https://yasser1164-ux.github.io/eventos/najd/ — see `najd/README.md` for its
+setup and pre-launch checklist. It can be moved to its own repository or a
+custom domain by copying the folder as-is.
+
 ## Architecture
 
 Data, logic and UI are separated:

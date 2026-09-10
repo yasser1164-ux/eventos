@@ -1,0 +1,15 @@
+{
+  "name": "شركة نجد الشرق الأوسط للتجارة",
+  "short_name": "نجد الشرق الأوسط",
+  "description": "توريد مواد البناء والإمدادات الصناعية والمعدات الكهربائية ومستلزمات السلامة في المملكة العربية السعودية.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#C8102E",
+  "icons": [
+    { "src": "assets/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
