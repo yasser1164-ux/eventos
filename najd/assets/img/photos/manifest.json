@@ -1,0 +1,8 @@
+{
+  "_readme": "ضع صورك في هذا المجلد ثم أضف اسم الملف هنا مقابل اسم الموضع. Add your photos to this folder, then list the file name against the slot it should fill. Example: \"warehouse\": \"warehouse.jpg\"",
+
+  "_slots_scenes": "site · warehouse · logistics · port · plant · power · safety · office · trade",
+  "_slots_products": "P-1001 … P-5002 (رقم الصنف كما في الكتالوج)",
+
+  "_example": "warehouse.jpg"
+}

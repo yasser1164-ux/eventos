@@ -53,8 +53,8 @@
   function card(p) {
     var inList = w.CART.has(p.id);
     return '<article class="prod" id="' + p.id + '">' +
-      '<div class="prod-art">' +
-        w.MEDIA.art({ seed: p.id, palette: p.palette, glyph: w.MEDIA.icon(p.icon), w: 600, h: 450, label: pick(p.t) }) +
+      '<div class="prod-art" data-photo="' + p.id + '" data-photo-alt="' + esc(pick(p.t)) + '">' +
+        w.ITEMS.render(p.id, { label: pick(p.t) }) +
         '<span class="tag' + (p.av === "stock" ? "" : " tag-red") + '">' + esc(avName(p.av)) + "</span>" +
       "</div>" +
       '<div class="prod-body">' +
@@ -69,6 +69,8 @@
           '<button class="btn btn-sm ' + (inList ? "btn-ghost" : "btn-primary") + '" data-add="' + esc(p.id) + '">' +
             (inList ? esc(t("catalog.added", "أُضيف للطلب")) : esc(t("catalog.add", "أضف لطلب التسعير"))) +
           "</button>" +
+          '<button class="btn btn-sm btn-ghost" data-view="' + esc(p.id) + '">' +
+            esc(t("catalog.view", "تفاصيل")) + "</button>" +
         "</div>" +
       "</div></article>";
   }
@@ -89,12 +91,16 @@
     var cnt = $("#result-count");
     if (cnt) cnt.textContent = list.length;
 
+    if (w.MEDIA.photos) w.MEDIA.photos(grid);
     $$("[data-add]", grid).forEach(function (b) {
       b.addEventListener("click", function () {
         w.CART.add(b.dataset.add, 1);
         b.className = "btn btn-sm btn-ghost";
         b.textContent = t("catalog.added", "أُضيف للطلب");
       });
+    });
+    $$("[data-view]", grid).forEach(function (b) {
+      b.addEventListener("click", function () { w.QUICKVIEW.open(b.dataset.view); });
     });
     var reset = $("[data-reset]", grid);
     if (reset) reset.addEventListener("click", clearAll);
@@ -172,4 +178,69 @@
 
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", boot, { once: true });
   else boot();
+})(window, document);
+
+/* =========================================================================
+   QUICK VIEW — the full detail of one catalogue item without leaving the
+   page: bigger artwork, the whole specification list, and add-to-quote.
+   ========================================================================= */
+(function (w, d) {
+  "use strict";
+  var $ = w.UI.$, $$ = w.UI.$$, esc = w.UI.esc, pick = w.UI.pick, t = w.UI.t, current = null;
+
+  function avName(id) {
+    var a = w.DATA.availability.filter(function (x) { return x.id === id; })[0];
+    return a ? pick(a.t) : id;
+  }
+
+  function open(id) {
+    var p = w.DATA.products.filter(function (x) { return x.id === id; })[0],
+        box = $("#quickview");
+    if (!p || !box) return;
+    current = p;
+
+    var art = $("#qv-art");
+    art.innerHTML = w.ITEMS.render(p.id, { label: pick(p.t) });
+    art.dataset.photo = p.id; delete art.dataset.photoDone;
+    if (w.MEDIA.photos) w.MEDIA.photos(art.parentNode);
+
+    $("#qv-body").innerHTML =
+      '<span class="prod-cat">' + esc(w.UI.catName(p.cat)) + "</span>" +
+      '<h3 id="qv-title">' + esc(pick(p.t)) + "</h3>" +
+      '<p class="muted">' + esc(pick(p.d)) + "</p>" +
+      '<div class="qv-meta"><span class="tag' + (p.av === "stock" ? "" : " tag-red") + '">' + esc(avName(p.av)) + "</span>" +
+        '<span class="tag" dir="ltr">' + esc(p.id) + "</span>" +
+        '<span class="tag">' + esc(t("catalog.unit", "الوحدة")) + ": " + esc(pick(p.unit)) + "</span></div>" +
+      '<ul class="qv-specs">' + pick(p.specs).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+        '<button class="btn btn-primary" data-qv-add>' + esc(t("catalog.add", "أضف لطلب التسعير")) + "</button>" +
+        '<a class="btn btn-ghost" href="quote.html">' + esc(t("catalog.goQuote", "إتمام طلب التسعير")) + "</a>" +
+      "</div>";
+
+    $("[data-qv-add]", box).addEventListener("click", function (e) {
+      w.CART.add(p.id, 1);
+      e.target.className = "btn btn-ghost";
+      e.target.textContent = t("catalog.added", "أُضيف للطلب");
+      if (w.CATALOG) w.CATALOG.render();
+    });
+
+    box.classList.add("is-open");
+    d.body.style.overflow = "hidden";
+    $(".qv-close", box).focus();
+  }
+
+  function close() {
+    var box = $("#quickview");
+    if (!box) return;
+    box.classList.remove("is-open");
+    d.body.style.overflow = "";
+    current = null;
+  }
+
+  d.addEventListener("click", function (e) {
+    if (e.target.closest("[data-qv-close]")) close();
+  });
+  d.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+  w.QUICKVIEW = { open: open, close: close };
 })(window, document);

@@ -29,7 +29,7 @@
       var p = productById(i.id);
       if (!p) return "";
       return '<div class="rfq-row" data-row="' + esc(p.id) + '">' +
-        '<div class="rr-art">' + w.MEDIA.art({ seed: p.id, palette: p.palette, glyph: w.MEDIA.icon(p.icon), w: 120, h: 120 }) + "</div>" +
+        '<div class="rr-art" data-photo="' + p.id + '">' + w.ITEMS.render(p.id) + "</div>" +
         '<div class="rr-main"><h4>' + esc(pick(p.t)) + "</h4>" +
           '<div class="rr-sub"><span dir="ltr">' + esc(p.id) + "</span> · " + esc(w.UI.catName(p.cat)) + "</div></div>" +
         '<div class="qty"><button type="button" data-dec aria-label="-">−</button>' +
@@ -41,6 +41,7 @@
         "</button></div>";
     }).join("");
 
+    if (w.MEDIA.photos) w.MEDIA.photos(host);
     $$("[data-row]", host).forEach(function (row) {
       var id = row.dataset.row, input = $("[data-qty]", row);
       $("[data-inc]", row).addEventListener("click", function () {

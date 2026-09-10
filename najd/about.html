@@ -287,6 +287,10 @@
           <div class="ct-card"><div><h3 data-i18n="about.comp.cr">السجل التجاري</h3><p dir="ltr" data-site="cr">1010XXXXXX</p></div></div>
           <div class="ct-card"><div><h3 data-i18n="about.comp.vat">الرقم الضريبي</h3><p dir="ltr" data-site="vat">3000XXXXXXXXXX3</p></div></div>
         </div>
+        <a class="btn btn-ghost" href="assets/najd-company-profile.pdf" download style="margin-top:20px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M4 20h16"/></svg>
+          <span data-i18n="about.profileBtn">حمّل الملف التعريفي (PDF)</span>
+        </a>
         <p class="muted" style="font-size:13.5px;margin-top:14px" data-i18n="about.comp.note">
           * الأرقام أعلاه أرقام توضيحية تُستبدل بالأرقام الرسمية عند اكتمال التسجيل.
         </p>
@@ -353,6 +357,7 @@
           <li><a href="projects.html" data-i18n="nav.projects">أعمالنا</a></li>
           <li><a href="careers.html" data-i18n="nav.careers">الوظائف</a></li>
           <li><a href="contact.html" data-i18n="nav.contact">تواصل معنا</a></li>
+          <li><a href="assets/najd-company-profile.pdf" download data-i18n="footer.profile">الملف التعريفي (PDF)</a></li>
         </ul>
       </div>
 
@@ -408,6 +413,18 @@
   </div>
 </footer>
 
+<!-- product quick view -->
+<div class="qv" id="quickview" role="dialog" aria-modal="true" aria-labelledby="qv-title">
+  <div class="qv-veil" data-qv-close></div>
+  <div class="qv-panel">
+    <button class="qv-close" type="button" data-qv-close aria-label="إغلاق" data-i18n-aria="a11y.close">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="qv-art" id="qv-art"></div>
+    <div class="qv-body" id="qv-body"></div>
+  </div>
+</div>
+
 <button class="to-top" type="button" aria-label="العودة إلى الأعلى" data-i18n-aria="a11y.top">
   <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
@@ -420,6 +437,9 @@
 <script src="assets/js/lang-en.js?v=__BUILD__"></script>
 <script src="assets/js/i18n.js?v=__BUILD__"></script>
 <script src="assets/js/media.js?v=__BUILD__"></script>
+<script src="assets/js/scenes.js?v=__BUILD__"></script>
+<script src="assets/js/items.js?v=__BUILD__"></script>
+<script src="assets/js/map.js?v=__BUILD__"></script>
 <script src="assets/js/data.js?v=__BUILD__"></script>
 <script src="assets/js/cart.js?v=__BUILD__"></script>
 <script src="assets/js/ui.js?v=__BUILD__"></script>
