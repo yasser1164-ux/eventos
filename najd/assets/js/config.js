@@ -44,6 +44,12 @@ window.SITE = {
     supabaseTable: "inquiries"
   },
 
+  /* --- photographs ------------------------------------------------------
+     Drawn illustrations are used until you add real photos. See
+     assets/img/photos/README.md. autodetect:true looks for the files
+     directly instead of reading manifest.json.                            */
+  photos: { autodetect: false },
+
   /* --- misc ------------------------------------------------------------ */
   mapEmbed: "https://www.openstreetmap.org/export/embed.html?bbox=46.70%2C24.64%2C46.76%2C24.70&layer=mapnik&marker=24.67%2C46.73",
   mapLink:  "https://www.openstreetmap.org/?mlat=24.67&mlon=46.73#map=14/24.67/46.73",

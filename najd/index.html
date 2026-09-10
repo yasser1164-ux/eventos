@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=dae642a2">
+<link rel="stylesheet" href="assets/css/styles.css?v=ba23d4d1">
 
 <script>
   /* apply the saved theme before first paint so the page never flashes */
@@ -227,6 +227,34 @@
   </div>
 </section>
 
+<!-- ============ COMPLIANCE ============ -->
+<section class="section" style="padding-block:clamp(34px,5vw,56px)">
+  <div class="wrap">
+    <div class="sec-head center" style="margin-bottom:26px">
+      <span class="eyebrow" data-i18n="home.cred.eyebrow">الالتزام</span>
+      <h2 class="sec-title" style="font-size:clamp(22px,3vw,30px)" data-i18n="home.cred.title">تتعامل مع شركة نظامية، وأوراقها مرتبة</h2>
+    </div>
+    <div class="grid g-4">
+      <div class="cred reveal">
+        <span class="cred-ico"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
+        <div><b data-i18n="home.cred.1t">سجل تجاري ساري</b><span data-i18n="home.cred.1d">شركة مسجّلة في المملكة</span></div>
+      </div>
+      <div class="cred reveal" data-delay="60">
+        <span class="cred-ico"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span>
+        <div><b data-i18n="home.cred.2t">فوترة إلكترونية</b><span data-i18n="home.cred.2d">متوافقة مع متطلبات «زاتكا»</span></div>
+      </div>
+      <div class="cred reveal" data-delay="120">
+        <span class="cred-ico"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20 6v6c0 5-3.4 8.4-8 9.5-4.6-1.1-8-4.5-8-9.5V6z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg></span>
+        <div><b data-i18n="home.cred.3t">شهادات مطابقة</b><span data-i18n="home.cred.3d">سابر وشهادات المنشأ للمستورد</span></div>
+      </div>
+      <div class="cred reveal" data-delay="180">
+        <span class="cred-ico"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7 21 7v10l-9 4.3L3 17V7z"/><path d="M3 7l9 4.3L21 7M12 11.3V21"/></svg></span>
+        <div><b data-i18n="home.cred.4t">موردون مؤهّلون</b><span data-i18n="home.cred.4d">لا نعتمد مصدرًا قبل التحقق منه</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ INTRO ============ -->
 <section class="section">
   <div class="wrap">
@@ -323,6 +351,27 @@
       <p class="sec-lead" data-i18n="home.sec.lead">لكل قطاع مواصفاته ومستنداته ودورته الزمنية، ونجهّز عرضنا على هذا الأساس.</p>
     </div>
     <div class="grid g-3" data-render="sectors"></div>
+  </div>
+</section>
+
+<!-- ============ COVERAGE MAP ============ -->
+<section class="section section--dark" style="position:relative;overflow:hidden">
+  <div class="hero-pattern" aria-hidden="true" style="opacity:.06"></div>
+  <div class="wrap" style="position:relative">
+    <div class="sec-head center">
+      <span class="eyebrow" data-i18n="home.map.eyebrow">التغطية</span>
+      <h2 class="sec-title" style="color:#fff" data-i18n="home.map.title">نُسلّم في كل مناطق المملكة</h2>
+      <p class="sec-lead" data-i18n="home.map.lead">
+        مقرنا في الرياض، ونصل إلى مواقع العمل في الشرقية والغربية والجنوب عبر شركاء نقل معتمدين،
+        بجدولة تسليم تتبع حاجة الموقع لا حاجة المستودع.
+      </p>
+    </div>
+    <div class="map-wrap reveal" data-render="map"></div>
+    <div class="map-legend">
+      <span><i class="hub"></i><span data-i18n="home.map.l1">مدن التشغيل الرئيسية</span></span>
+      <span><i></i><span data-i18n="home.map.l2">مدن نصل إليها بالجدولة</span></span>
+      <span data-i18n="home.map.l3">مواقع خارج المدن: بالتنسيق المسبق</span>
+    </div>
   </div>
 </section>
 
@@ -441,6 +490,7 @@
           <li><a href="projects.html" data-i18n="nav.projects">أعمالنا</a></li>
           <li><a href="careers.html" data-i18n="nav.careers">الوظائف</a></li>
           <li><a href="contact.html" data-i18n="nav.contact">تواصل معنا</a></li>
+          <li><a href="assets/najd-company-profile.pdf" download data-i18n="footer.profile">الملف التعريفي (PDF)</a></li>
         </ul>
       </div>
 
@@ -496,6 +546,18 @@
   </div>
 </footer>
 
+<!-- product quick view -->
+<div class="qv" id="quickview" role="dialog" aria-modal="true" aria-labelledby="qv-title">
+  <div class="qv-veil" data-qv-close></div>
+  <div class="qv-panel">
+    <button class="qv-close" type="button" data-qv-close aria-label="إغلاق" data-i18n-aria="a11y.close">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="qv-art" id="qv-art"></div>
+    <div class="qv-body" id="qv-body"></div>
+  </div>
+</div>
+
 <button class="to-top" type="button" aria-label="العودة إلى الأعلى" data-i18n-aria="a11y.top">
   <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
@@ -504,15 +566,18 @@
   <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.1s-.8 1-.9 1.2c-.2.2-.3.2-.6.1a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6c.1-.2.2-.3.3-.5v-.5c0-.2-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1 1 7.2 3.9z"/></svg>
 </a>
 
-<script src="assets/js/config.js?v=dae642a2"></script>
-<script src="assets/js/lang-en.js?v=dae642a2"></script>
-<script src="assets/js/i18n.js?v=dae642a2"></script>
-<script src="assets/js/media.js?v=dae642a2"></script>
-<script src="assets/js/data.js?v=dae642a2"></script>
-<script src="assets/js/cart.js?v=dae642a2"></script>
-<script src="assets/js/ui.js?v=dae642a2"></script>
-<script src="assets/js/forms.js?v=dae642a2"></script>
-<script src="assets/js/pages.js?v=dae642a2"></script>
+<script src="assets/js/config.js?v=ba23d4d1"></script>
+<script src="assets/js/lang-en.js?v=ba23d4d1"></script>
+<script src="assets/js/i18n.js?v=ba23d4d1"></script>
+<script src="assets/js/media.js?v=ba23d4d1"></script>
+<script src="assets/js/scenes.js?v=ba23d4d1"></script>
+<script src="assets/js/items.js?v=ba23d4d1"></script>
+<script src="assets/js/map.js?v=ba23d4d1"></script>
+<script src="assets/js/data.js?v=ba23d4d1"></script>
+<script src="assets/js/cart.js?v=ba23d4d1"></script>
+<script src="assets/js/ui.js?v=ba23d4d1"></script>
+<script src="assets/js/forms.js?v=ba23d4d1"></script>
+<script src="assets/js/pages.js?v=ba23d4d1"></script>
 
 </body>
 </html>

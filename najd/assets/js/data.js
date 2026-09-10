@@ -10,42 +10,42 @@ window.DATA = (function () {
 
   /* ---- 1. Divisions / services --------------------------------------- */
   var services = [
-    { id:"building", icon:"building", palette:"red",
+    { id:"building", scene:"site", icon:"building", palette:"red",
       t:{ar:"مواد البناء والإنشاء", en:"Building & Construction Materials"},
       d:{ar:"توريد مواد البناء للمشاريع السكنية والتجارية والصناعية، من الحديد والأسمنت إلى التشطيبات والعزل، بكميات المشاريع وبجداول تسليم ملتزمة.",
          en:"Project-scale supply of construction materials — rebar, cement, insulation and finishes — delivered on committed schedules."},
       items:{ar:["حديد التسليح والمقاطع الإنشائية","الأسمنت والخرسانة الجاهزة والإضافات","مواد العزل المائي والحراري","الأدوات الصحية والسباكة","التشطيبات والأرضيات"],
              en:["Rebar & structural steel sections","Cement, ready-mix and admixtures","Waterproofing & thermal insulation","Sanitary ware & plumbing","Finishes and flooring"]} },
 
-    { id:"industrial", icon:"gear", palette:"steel",
+    { id:"industrial", scene:"plant", icon:"gear", palette:"steel",
       t:{ar:"الإمدادات الصناعية وقطع الغيار", en:"Industrial Supplies & Spare Parts"},
       d:{ar:"قطع غيار ومستهلكات المصانع والورش: مضخات وصمامات ومحامل وأدوات، مع بدائل معتمدة عند نفاد الأصلي لتقليل زمن التوقف.",
          en:"Plant and workshop spares — pumps, valves, bearings and tooling — with approved alternates when the original is out of stock, so downtime stays short."},
       items:{ar:["المضخات والصمامات والوصلات","المحامل وأنظمة الحركة","الأدوات اليدوية والكهربائية","مستهلكات اللحام والقطع","زيوت ومواد التشحيم"],
              en:["Pumps, valves and fittings","Bearings & power transmission","Hand and power tools","Welding & cutting consumables","Lubricants and oils"]} },
 
-    { id:"electrical", icon:"bolt", palette:"gold",
+    { id:"electrical", scene:"power", icon:"bolt", palette:"gold",
       t:{ar:"المعدات الكهربائية والطاقة", en:"Electrical & Power Equipment"},
       d:{ar:"كل ما يتصل بالتوزيع الكهربائي داخل المنشآت: كابلات ولوحات ومولدات وأنظمة إنارة، بمواصفات تطابق كود البناء السعودي.",
          en:"Everything on the distribution side — cable, panels, gensets and lighting — specified to the Saudi Building Code."},
       items:{ar:["الكابلات والموصلات","لوحات التوزيع والقواطع","المولدات وأنظمة عدم الانقطاع","الإنارة الصناعية والتجارية","أنظمة الطاقة الشمسية"],
              en:["Cable & connectors","Distribution boards and breakers","Generators and UPS systems","Industrial & commercial lighting","Solar power systems"]} },
 
-    { id:"safety", icon:"helmet", palette:"red",
+    { id:"safety", scene:"safety", icon:"helmet", palette:"red",
       t:{ar:"السلامة ومعدات الوقاية", en:"Safety & Personal Protection"},
       d:{ar:"معدات وقاية شخصية ومستلزمات السلامة بالمواقع، من الخوذ والأحذية إلى أنظمة الحماية من السقوط ومكافحة الحريق.",
          en:"PPE and site safety equipment, from helmets and boots to fall-arrest systems and fire protection."},
       items:{ar:["الخوذ والنظارات وواقيات السمع","الأحذية وملابس العمل","أنظمة الحماية من السقوط","طفايات ومعدات مكافحة الحريق","لوحات وإشارات السلامة"],
              en:["Helmets, eyewear and hearing protection","Safety footwear and workwear","Fall-arrest systems","Fire extinguishers & equipment","Safety signage"]} },
 
-    { id:"trade", icon:"ship", palette:"mix",
+    { id:"trade", scene:"port", icon:"ship", palette:"mix",
       t:{ar:"الاستيراد والتصدير والتخليص", en:"Import, Export & Customs Clearance"},
       d:{ar:"إدارة دورة الاستيراد كاملة: مصادر التوريد، الشحن، الشهادات، فسح الجمارك وشهادات المطابقة (سابر) حتى وصول البضاعة لمستودعك.",
          en:"The full import cycle — sourcing, shipping, certification, customs release and SABER conformity — up to the door of your warehouse."},
       items:{ar:["البحث عن المصادر والتفاوض","الشحن البحري والجوي والبري","شهادات المطابقة والفسح الجمركي","التأمين على الشحنات","التوريد بالإنابة"],
              en:["Sourcing and negotiation","Sea, air and land freight","Conformity certificates & customs release","Cargo insurance","Procurement on your behalf"]} },
 
-    { id:"logistics", icon:"truck", palette:"ink",
+    { id:"logistics", scene:"warehouse", icon:"truck", palette:"ink",
       t:{ar:"الخدمات اللوجستية والتخزين", en:"Logistics & Warehousing"},
       d:{ar:"تخزين وتوزيع للمشاريع طويلة الأمد، مع جرد دوري وتسليم مجدول إلى المواقع في كل مناطق المملكة.",
          en:"Storage and distribution for long-running projects, with cycle counts and scheduled site deliveries across the Kingdom."},
@@ -55,22 +55,22 @@ window.DATA = (function () {
 
   /* ---- 2. Sectors we serve ------------------------------------------- */
   var sectors = [
-    { id:"construction", icon:"building", palette:"red",
+    { id:"construction", scene:"site", icon:"building", palette:"red",
       t:{ar:"المقاولات والإنشاءات", en:"Construction & Contracting"},
       d:{ar:"توريد متواصل يواكب جدول المشروع", en:"Continuous supply that tracks the programme"} },
-    { id:"oilgas", icon:"oil", palette:"ink",
+    { id:"oilgas", scene:"plant", icon:"oil", palette:"ink",
       t:{ar:"النفط والغاز والبتروكيماويات", en:"Oil, Gas & Petrochemicals"},
       d:{ar:"مواد ومستلزمات بمواصفات دقيقة", en:"Tightly specified materials and consumables"} },
-    { id:"manufacturing", icon:"factory", palette:"steel",
+    { id:"manufacturing", scene:"warehouse", icon:"factory", palette:"steel",
       t:{ar:"الصناعة والتصنيع", en:"Industry & Manufacturing"},
       d:{ar:"قطع غيار تقلل زمن توقف الخطوط", en:"Spares that cut line downtime"} },
-    { id:"utilities", icon:"grid", palette:"gold",
+    { id:"utilities", scene:"power", icon:"grid", palette:"gold",
       t:{ar:"المرافق والطاقة", en:"Utilities & Power"},
       d:{ar:"معدات توزيع ومواد شبكات", en:"Distribution equipment and network materials"} },
-    { id:"government", icon:"gov", palette:"mix",
+    { id:"government", scene:"office", icon:"gov", palette:"mix",
       t:{ar:"القطاع الحكومي والمشاريع العامة", en:"Government & Public Projects"},
       d:{ar:"توريد متوافق مع أنظمة المنافسات", en:"Supply aligned with public tender rules"} },
-    { id:"retail", icon:"shop", palette:"red",
+    { id:"retail", scene:"logistics", icon:"shop", palette:"red",
       t:{ar:"التجزئة والتوزيع", en:"Retail & Distribution"},
       d:{ar:"كميات الجملة وسلاسل الإمداد", en:"Wholesale volumes and supply chains"} }
   ];
@@ -184,7 +184,7 @@ window.DATA = (function () {
 
   /* ---- 4. Case studies (illustrative) --------------------------------- */
   var projects = [
-    { id:"PR-01", palette:"red", icon:"building", year:"2025",
+    { id:"PR-01", scene:"site", palette:"red", icon:"building", year:"2025",
       t:{ar:"توريد مواد إنشائية لمجمع سكني — الرياض", en:"Construction materials for a residential compound — Riyadh"},
       client:{ar:"مقاول رئيسي (اسم محفوظ)", en:"Main contractor (name withheld)"},
       sector:{ar:"المقاولات", en:"Contracting"},
@@ -192,7 +192,7 @@ window.DATA = (function () {
          en:"A 14-month supply programme for rebar, cement and insulation, with weekly deliveries tied to the concrete pour schedule."},
       kpis:[{n:"14",l:{ar:"شهر توريد", en:"months of supply"}},{n:"98%",l:{ar:"التزام بالمواعيد", en:"on-time delivery"}},{n:"0",l:{ar:"حوادث سلامة", en:"safety incidents"}}] },
 
-    { id:"PR-02", palette:"steel", icon:"factory", year:"2025",
+    { id:"PR-02", scene:"plant", palette:"steel", icon:"factory", year:"2025",
       t:{ar:"قطع غيار وتقليل زمن التوقف — مصنع بالدمام", en:"Spares and downtime reduction — Dammam plant"},
       client:{ar:"مصنع مواد بناء", en:"Building-materials manufacturer"},
       sector:{ar:"الصناعة", en:"Manufacturing"},
@@ -200,7 +200,7 @@ window.DATA = (function () {
          en:"A managed safety stock of critical spares held on our side, released within 24 hours instead of waiting on an import cycle."},
       kpis:[{n:"24h",l:{ar:"زمن التوريد", en:"lead time"}},{n:"37",l:{ar:"صنفًا حرجًا", en:"critical items"}},{n:"-40%",l:{ar:"زمن التوقف", en:"downtime"}}] },
 
-    { id:"PR-03", palette:"gold", icon:"bolt", year:"2026",
+    { id:"PR-03", scene:"power", palette:"gold", icon:"bolt", year:"2026",
       t:{ar:"لوحات وكابلات لمشروع مرافق — المنطقة الشرقية", en:"Panels and cable for a utilities project — Eastern Province"},
       client:{ar:"مقاول كهروميكانيكي", en:"Electromechanical contractor"},
       sector:{ar:"المرافق والطاقة", en:"Utilities"},
@@ -208,7 +208,7 @@ window.DATA = (function () {
          en:"Distribution boards assembled to the single-line diagram, with cable released in batches following site progress."},
       kpis:[{n:"22",l:{ar:"لوحة توزيع", en:"boards"}},{n:"18km",l:{ar:"كابلات", en:"of cable"}},{n:"100%",l:{ar:"اجتياز الاختبار", en:"passed testing"}}] },
 
-    { id:"PR-04", palette:"mix", icon:"ship", year:"2026",
+    { id:"PR-04", scene:"port", palette:"mix", icon:"ship", year:"2026",
       t:{ar:"استيراد وتخليص شحنة معدات — ميناء جدة", en:"Equipment import and clearance — Jeddah port"},
       client:{ar:"شركة صناعية", en:"Industrial company"},
       sector:{ar:"الاستيراد", en:"Import"},
