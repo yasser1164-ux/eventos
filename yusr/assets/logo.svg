@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" width="220" height="64" role="img" aria-label="يسر — Yusr">
+  <title>يسر — Yusr</title>
+  <g fill="none" stroke="#4A3728" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 32 32 12l22 20"/>
+    <path d="M17 34v14a3 3 0 0 0 3 3h24a3 3 0 0 0 3-3V34" opacity=".45"/>
+  </g>
+  <text x="70" y="44" fill="#4A3728" font-size="34" font-weight="600"
+        font-family="'IBM Plex Sans Arabic','Noto Sans Arabic','Segoe UI',system-ui,sans-serif">يسر</text>
+</svg>

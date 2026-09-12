@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Yusr">
+  <rect width="64" height="64" rx="14" fill="#E9DCC9"/>
+  <g fill="none" stroke="#4A3728" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 32 32 15l19 17"/>
+    <path d="M19 34v13a3 3 0 0 0 3 3h20a3 3 0 0 0 3-3V34" opacity=".5"/>
+  </g>
+</svg>

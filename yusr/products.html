@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المنتجات | يسر</title>
+<meta name="description" content="تصفّح أمثلة الأثاث والخزائن والمطابخ والأبواب التي ننفذها على المقاس، مع أسعار البداية ومدة التنفيذ.">
+<meta name="theme-color" content="#4A3728">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="يسر | Yusr">
+<meta property="og:url" content="https://yasser1164-ux.github.io/eventos/yusr/products.html">
+<!-- TODO: confirm — replace with a real 1200x630 og.png share image -->
+<meta property="og:image" content="https://yasser1164-ux.github.io/eventos/yusr/assets/logo.svg">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://yasser1164-ux.github.io/eventos/yusr/products.html">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="products">
+<div id="header-slot"></div>
+
+<main id="main">
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section__head">
+        <h1 data-i18n="products.title"></h1>
+        <p data-i18n="products.lead"></p>
+      </div>
+
+      <div class="catalog__tools">
+        <p class="search">
+          <label class="visually-hidden" for="catalog-search" data-i18n="products.searchLabel"></label>
+          <input type="search" id="catalog-search" autocomplete="off"
+                 data-i18n-attr="placeholder:products.searchPh">
+        </p>
+
+        <div class="catalog__filters" id="catalog-filters" role="group"
+             data-i18n-attr="aria-label:products.filterLabel"></div>
+
+        <p class="catalog__count" id="catalog-count" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="grid grid--3" id="catalog-grid">
+        <p class="muted" data-i18n="common.loading"></p>
+      </div>
+
+      <div class="notice" id="catalog-empty" hidden>
+        <p data-i18n="products.empty"></p>
+        <p><a class="btn btn--primary btn--sm" href="custom.html"><span data-i18n="products.emptyCta"></span></a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="footer-slot"></div>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/products.js"></script>
+</body>
+</html>

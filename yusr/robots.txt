@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /eventos/yusr/
+Disallow: /eventos/yusr/product.html
+
+Sitemap: https://yasser1164-ux.github.io/eventos/yusr/sitemap.xml

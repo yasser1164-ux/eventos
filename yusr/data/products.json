@@ -1,0 +1,543 @@
+[
+  {
+    "id": "sofa-l-01",
+    "category": "furniture",
+    "name": { "ar": "كنب زاوية قماش", "en": "L-shaped fabric sofa" },
+    "short": { "ar": "زاوية مريحة بقماش يتحمل الاستخدام اليومي.", "en": "A roomy corner sofa in hard-wearing fabric." },
+    "description": {
+      "ar": "كنب زاوية بهيكل خشب زان مجفف وإسفنج عالي الكثافة يحافظ على شكله بعد سنوات. القماش الكتاني قابل للفك والغسل، ونقدر نغيّر اتجاه الزاوية يمين أو يسار حسب باب المجلس. نصنعه بطول يناسب جدارك بالسنتيمتر، ونضيف طاولة جانبية مدمجة إذا حبيت.",
+      "en": "A corner sofa on a kiln-dried beech frame with high-density foam that holds its shape for years. The linen cover is removable and washable, and the corner can face left or right depending on your room. We build it to the exact length of your wall and can add a built-in side table."
+    },
+    "priceFrom": 2900,
+    "priceTo": 4800,
+    "images": [
+      "https://picsum.photos/seed/yusr-sofa-1/1000/750",
+      "https://picsum.photos/seed/yusr-sofa-2/1000/750",
+      "https://picsum.photos/seed/yusr-sofa-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "280 × 180 × 85 سم", "en": "280 × 180 × 85 cm" },
+      "material": { "ar": "خشب زان + قماش كتان", "en": "Beech wood + linen fabric" },
+      "colors": [
+        { "ar": "بيج", "en": "Beige" },
+        { "ar": "رمادي", "en": "Grey" },
+        { "ar": "زيتي", "en": "Olive" }
+      ],
+      "leadTimeDays": 12,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "240 سم", "en": "240 cm" },
+        { "ar": "280 سم", "en": "280 cm" },
+        { "ar": "320 سم", "en": "320 cm" }
+      ],
+      "color": [
+        { "ar": "بيج", "en": "Beige" },
+        { "ar": "رمادي", "en": "Grey" },
+        { "ar": "زيتي", "en": "Olive" }
+      ],
+      "material": [
+        { "ar": "كتان", "en": "Linen" },
+        { "ar": "مخمل", "en": "Velvet" },
+        { "ar": "جلد صناعي", "en": "Faux leather" }
+      ]
+    },
+    "featured": true
+  },
+  {
+    "id": "bed-uph-01",
+    "category": "furniture",
+    "name": { "ar": "سرير مبطن بمسند عالي", "en": "Upholstered bed with tall headboard" },
+    "short": { "ar": "مسند مبطن يريح الظهر عند القراءة.", "en": "A padded headboard that supports your back." },
+    "description": {
+      "ar": "سرير بهيكل خشبي مقوّى ومسند مبطن بارتفاع 120 سم، مناسب لمن يقرأ أو يشاهد قبل النوم. القاعدة تتحمل حتى 300 كجم وفيها فتحات تهوية للمرتبة. نضيف درجًا سفليًا للتخزين عند الطلب، وهو خيار عملي للغرف الصغيرة.",
+      "en": "A reinforced wooden bed frame with a 120 cm padded headboard, made for people who read or watch before sleeping. The base takes up to 300 kg and is ventilated for the mattress. A storage drawer can be added underneath — a practical option in smaller rooms."
+    },
+    "priceFrom": 1800,
+    "priceTo": 3400,
+    "images": [
+      "https://picsum.photos/seed/yusr-bed-1/1000/750",
+      "https://picsum.photos/seed/yusr-bed-2/1000/750",
+      "https://picsum.photos/seed/yusr-bed-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "200 × 180 × 120 سم", "en": "200 × 180 × 120 cm" },
+      "material": { "ar": "خشب صنوبر + قماش مخمل", "en": "Pine wood + velvet fabric" },
+      "colors": [
+        { "ar": "بيج", "en": "Beige" },
+        { "ar": "كحلي", "en": "Navy" },
+        { "ar": "بني فاتح", "en": "Light brown" }
+      ],
+      "leadTimeDays": 10,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "مفرد 120 سم", "en": "Single 120 cm" },
+        { "ar": "مزدوج 160 سم", "en": "Double 160 cm" },
+        { "ar": "كينج 180 سم", "en": "King 180 cm" }
+      ],
+      "color": [
+        { "ar": "بيج", "en": "Beige" },
+        { "ar": "كحلي", "en": "Navy" },
+        { "ar": "بني فاتح", "en": "Light brown" }
+      ],
+      "material": [
+        { "ar": "مخمل", "en": "Velvet" },
+        { "ar": "كتان", "en": "Linen" }
+      ]
+    },
+    "featured": true
+  },
+  {
+    "id": "majlis-floor-01",
+    "category": "furniture",
+    "name": { "ar": "مجلس عربي أرضي", "en": "Arabic floor majlis" },
+    "short": { "ar": "جلسة أرضية كاملة بمساند ومخدات.", "en": "A full floor seating set with backs and cushions." },
+    "description": {
+      "ar": "مجلس أرضي متكامل: فرشات بسماكة 12 سم، مساند ظهر ثابتة، ومخدات جانبية. نفصّله على شكل حرف U أو L حسب مقاس الغرفة، ونستخدم قماشًا يتحمل التنظيف المتكرر لأنه المكان الأكثر استخدامًا في البيت.",
+      "en": "A complete floor majlis: 12 cm mattresses, fixed back rests and side cushions. We shape it as a U or an L to match the room, and use fabric that takes repeated cleaning — this is the busiest seat in the house."
+    },
+    "priceFrom": 4500,
+    "priceTo": 9500,
+    "images": [
+      "https://picsum.photos/seed/yusr-majlis-1/1000/750",
+      "https://picsum.photos/seed/yusr-majlis-2/1000/750",
+      "https://picsum.photos/seed/yusr-majlis-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "حسب الغرفة — من 6 إلى 14 متر طولي", "en": "Room-dependent — 6 to 14 linear metres" },
+      "material": { "ar": "إسفنج عالي الكثافة + قماش مقاوم للبقع", "en": "High-density foam + stain-resistant fabric" },
+      "colors": [
+        { "ar": "بيج", "en": "Beige" },
+        { "ar": "عنابي", "en": "Burgundy" },
+        { "ar": "رمادي", "en": "Grey" }
+      ],
+      "leadTimeDays": 15,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "6 متر طولي", "en": "6 linear metres" },
+        { "ar": "10 متر طولي", "en": "10 linear metres" },
+        { "ar": "14 متر طولي", "en": "14 linear metres" }
+      ],
+      "color": [
+        { "ar": "بيج", "en": "Beige" },
+        { "ar": "عنابي", "en": "Burgundy" },
+        { "ar": "رمادي", "en": "Grey" }
+      ],
+      "material": [
+        { "ar": "قماش مقاوم للبقع", "en": "Stain-resistant fabric" },
+        { "ar": "مخمل", "en": "Velvet" }
+      ]
+    },
+    "featured": true
+  },
+  {
+    "id": "table-dining-01",
+    "category": "furniture",
+    "name": { "ar": "طاولة طعام خشب صلب", "en": "Solid wood dining table" },
+    "short": { "ar": "سطح خشب صلب بقاعدة معدنية ثابتة.", "en": "A solid wood top on a steady metal base." },
+    "description": {
+      "ar": "طاولة طعام بسطح خشب صلب بسماكة 4 سم وقاعدة حديد مطلي بالبودرة. التشطيب زيتي يبرز عروق الخشب ويسهل ترميمه لو انخدش. نصنعها بطول من 140 إلى 260 سم حسب عدد الكراسي اللي تحتاجها.",
+      "en": "A dining table with a 40 mm solid wood top on a powder-coated steel base. The oil finish shows the grain and makes scratches easy to repair. We build it from 140 to 260 cm long, depending on how many chairs you need."
+    },
+    "priceFrom": 2200,
+    "priceTo": 4200,
+    "images": [
+      "https://picsum.photos/seed/yusr-table-1/1000/750",
+      "https://picsum.photos/seed/yusr-table-2/1000/750",
+      "https://picsum.photos/seed/yusr-table-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "200 × 95 × 76 سم", "en": "200 × 95 × 76 cm" },
+      "material": { "ar": "خشب سنديان + قاعدة حديد", "en": "Oak wood + steel base" },
+      "colors": [
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "طبيعي", "en": "Natural" }
+      ],
+      "leadTimeDays": 14,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "140 سم (4 أشخاص)", "en": "140 cm (seats 4)" },
+        { "ar": "200 سم (6 أشخاص)", "en": "200 cm (seats 6)" },
+        { "ar": "260 سم (8 أشخاص)", "en": "260 cm (seats 8)" }
+      ],
+      "color": [
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "طبيعي", "en": "Natural" }
+      ],
+      "material": [
+        { "ar": "خشب سنديان", "en": "Oak" },
+        { "ar": "خشب زان", "en": "Beech" }
+      ]
+    },
+    "featured": false
+  },
+  {
+    "id": "wardrobe-slide-01",
+    "category": "wardrobes",
+    "name": { "ar": "خزانة ملابس بأبواب سحب", "en": "Sliding-door wardrobe" },
+    "short": { "ar": "أبواب سحب توفر مساحة أمام الخزانة.", "en": "Sliding doors that free up the space in front." },
+    "description": {
+      "ar": "خزانة من الأرض إلى السقف بأبواب سحب هادئة على مجرى ألماني. التقسيم الداخلي يتغيّر حسب حاجتك: أرفف، علاقات، أدراج، ومكان للشنط فوق. مناسبة للغرف الضيقة لأن الأبواب ما تحتاج مساحة فتح.",
+      "en": "A floor-to-ceiling wardrobe with quiet sliding doors on German runners. The interior layout follows your needs: shelves, hanging rails, drawers and a bag shelf on top. Ideal for narrow rooms, since the doors need no swing space."
+    },
+    "priceFrom": 3200,
+    "priceTo": 7000,
+    "images": [
+      "https://picsum.photos/seed/yusr-wardrobe-1/1000/750",
+      "https://picsum.photos/seed/yusr-wardrobe-2/1000/750",
+      "https://picsum.photos/seed/yusr-wardrobe-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "240 × 60 × 270 سم", "en": "240 × 60 × 270 cm" },
+      "material": { "ar": "خشب MDF مقاوم للرطوبة + قشرة ميلامين", "en": "Moisture-resistant MDF + melamine finish" },
+      "colors": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "رمادي", "en": "Grey" }
+      ],
+      "leadTimeDays": 15,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "180 سم عرض", "en": "180 cm wide" },
+        { "ar": "240 سم عرض", "en": "240 cm wide" },
+        { "ar": "300 سم عرض", "en": "300 cm wide" }
+      ],
+      "color": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "رمادي", "en": "Grey" }
+      ],
+      "material": [
+        { "ar": "ميلامين", "en": "Melamine" },
+        { "ar": "قشرة خشب طبيعي", "en": "Natural wood veneer" }
+      ]
+    },
+    "featured": true
+  },
+  {
+    "id": "walkin-closet-01",
+    "category": "wardrobes",
+    "name": { "ar": "غرفة ملابس مفتوحة", "en": "Open walk-in closet" },
+    "short": { "ar": "وحدات مفتوحة بإضاءة مدمجة.", "en": "Open units with integrated lighting." },
+    "description": {
+      "ar": "غرفة ملابس بوحدات مفتوحة على طول الجدران، مع إضاءة LED مدمجة في الأرفف وعلاقات بارتفاعين. نقسّم المساحة بين الملابس الطويلة والقصيرة والأدراج، ونضيف جزيرة وسطية لو المساحة تسمح.",
+      "en": "A walk-in closet with open units along the walls, LED lighting built into the shelves, and hanging rails at two heights. We split the space between long and short hanging, plus drawers, and add a central island where the room allows."
+    },
+    "priceFrom": 5500,
+    "priceTo": 12000,
+    "images": [
+      "https://picsum.photos/seed/yusr-walkin-1/1000/750",
+      "https://picsum.photos/seed/yusr-walkin-2/1000/750",
+      "https://picsum.photos/seed/yusr-walkin-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "حسب الغرفة — من 8 إلى 20 متر طولي", "en": "Room-dependent — 8 to 20 linear metres" },
+      "material": { "ar": "ألواح MDF + ألمنيوم للعلاقات", "en": "MDF panels + aluminium rails" },
+      "colors": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "رمادي فاتح", "en": "Light grey" }
+      ],
+      "leadTimeDays": 18,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "8 متر طولي", "en": "8 linear metres" },
+        { "ar": "14 متر طولي", "en": "14 linear metres" },
+        { "ar": "20 متر طولي", "en": "20 linear metres" }
+      ],
+      "color": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "رمادي فاتح", "en": "Light grey" }
+      ],
+      "material": [
+        { "ar": "ميلامين", "en": "Melamine" },
+        { "ar": "قشرة خشب طبيعي", "en": "Natural wood veneer" }
+      ]
+    },
+    "featured": false
+  },
+  {
+    "id": "kitchen-alum-01",
+    "category": "kitchens",
+    "name": { "ar": "مطبخ ألمنيوم", "en": "Aluminium kitchen" },
+    "short": { "ar": "خيار عملي يقاوم الرطوبة والحرارة.", "en": "A practical choice against heat and humidity." },
+    "description": {
+      "ar": "مطبخ ألمنيوم بهيكل كامل مقاوم للرطوبة والحشرات، مناسب للمطابخ التي تُستخدم يوميًا وبكثرة. الأبواب بطلاء حراري لا يتقشر، والمفصلات بمكابس هيدروليكية. السعر يشمل الوحدات العلوية والسفلية بدون سطح الرخام.",
+      "en": "A fully aluminium kitchen that resists humidity and insects — built for kitchens used hard, every day. The doors carry a baked finish that does not peel, and the hinges are soft-close. The price covers upper and lower units, excluding the countertop."
+    },
+    "priceFrom": 7000,
+    "priceTo": 16000,
+    "images": [
+      "https://picsum.photos/seed/yusr-kitchen-alum-1/1000/750",
+      "https://picsum.photos/seed/yusr-kitchen-alum-2/1000/750",
+      "https://picsum.photos/seed/yusr-kitchen-alum-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "حسب المطبخ — من 4 إلى 12 متر طولي", "en": "Kitchen-dependent — 4 to 12 linear metres" },
+      "material": { "ar": "ألمنيوم بطلاء حراري", "en": "Aluminium with baked coating" },
+      "colors": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "رمادي", "en": "Grey" },
+        { "ar": "خشبي", "en": "Wood-effect" }
+      ],
+      "leadTimeDays": 20,
+      "warrantyYears": 3
+    },
+    "options": {
+      "size": [
+        { "ar": "4 متر طولي", "en": "4 linear metres" },
+        { "ar": "8 متر طولي", "en": "8 linear metres" },
+        { "ar": "12 متر طولي", "en": "12 linear metres" }
+      ],
+      "color": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "رمادي", "en": "Grey" },
+        { "ar": "خشبي", "en": "Wood-effect" }
+      ],
+      "material": [
+        { "ar": "ألمنيوم عادي", "en": "Standard aluminium" },
+        { "ar": "ألمنيوم مقاوم للخدش", "en": "Scratch-resistant aluminium" }
+      ]
+    },
+    "featured": true
+  },
+  {
+    "id": "kitchen-wood-01",
+    "category": "kitchens",
+    "name": { "ar": "مطبخ خشب بقشرة طبيعية", "en": "Wood veneer kitchen" },
+    "short": { "ar": "دفء الخشب مع تشطيب مقاوم للماء.", "en": "The warmth of wood with a water-resistant finish." },
+    "description": {
+      "ar": "مطبخ بهيكل MDF مقاوم للرطوبة وأبواب بقشرة خشب طبيعي وتشطيب بولي يوريثان. يعطي دفئًا لا تعطيه الأبواب اللامعة، ويتحمل البخار والتنظيف اليومي. نضيف جزيرة أو طاولة إفطار حسب مساحة المطبخ.",
+      "en": "A kitchen on a moisture-resistant MDF carcass with natural wood veneer doors and a polyurethane finish. It brings a warmth that gloss doors do not, and stands up to steam and daily cleaning. An island or breakfast bar can be added if the space allows."
+    },
+    "priceFrom": 9500,
+    "priceTo": 22000,
+    "images": [
+      "https://picsum.photos/seed/yusr-kitchen-wood-1/1000/750",
+      "https://picsum.photos/seed/yusr-kitchen-wood-2/1000/750",
+      "https://picsum.photos/seed/yusr-kitchen-wood-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "حسب المطبخ — من 4 إلى 12 متر طولي", "en": "Kitchen-dependent — 4 to 12 linear metres" },
+      "material": { "ar": "MDF مقاوم للرطوبة + قشرة خشب طبيعي", "en": "Moisture-resistant MDF + natural wood veneer" },
+      "colors": [
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "رمادي دخاني", "en": "Smoked grey" }
+      ],
+      "leadTimeDays": 21,
+      "warrantyYears": 3
+    },
+    "options": {
+      "size": [
+        { "ar": "4 متر طولي", "en": "4 linear metres" },
+        { "ar": "8 متر طولي", "en": "8 linear metres" },
+        { "ar": "12 متر طولي", "en": "12 linear metres" }
+      ],
+      "color": [
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "رمادي دخاني", "en": "Smoked grey" }
+      ],
+      "material": [
+        { "ar": "قشرة خشب طبيعي", "en": "Natural wood veneer" },
+        { "ar": "خشب صلب", "en": "Solid wood" }
+      ]
+    },
+    "featured": false
+  },
+  {
+    "id": "door-interior-01",
+    "category": "doors",
+    "name": { "ar": "باب داخلي خشب صلب", "en": "Solid wood interior door" },
+    "short": { "ar": "باب ثقيل يعزل الصوت بين الغرف.", "en": "A heavy door that keeps rooms quiet." },
+    "description": {
+      "ar": "باب داخلي بخشب صلب وحشوة خلوية تعطي ثقلًا وعزلًا للصوت. يشمل السعر الحلق والبرواز والمفصلات والمقبض والتركيب. التشطيح والدهان يتم في الورشة لا في البيت، فالنتيجة أنظف وأسرع.",
+      "en": "An interior door in solid wood with a honeycomb core that gives it weight and sound insulation. The price includes the frame, architrave, hinges, handle and installation. Sanding and finishing happen in the workshop, not in your home — cleaner and faster."
+    },
+    "priceFrom": 850,
+    "priceTo": 1600,
+    "images": [
+      "https://picsum.photos/seed/yusr-door-int-1/1000/750",
+      "https://picsum.photos/seed/yusr-door-int-2/1000/750",
+      "https://picsum.photos/seed/yusr-door-int-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "90 × 4.5 × 210 سم", "en": "90 × 4.5 × 210 cm" },
+      "material": { "ar": "خشب صلب + حشوة خلوية", "en": "Solid wood + honeycomb core" },
+      "colors": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "جوزي", "en": "Walnut" }
+      ],
+      "leadTimeDays": 8,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "80 × 210 سم", "en": "80 × 210 cm" },
+        { "ar": "90 × 210 سم", "en": "90 × 210 cm" },
+        { "ar": "100 × 220 سم", "en": "100 × 220 cm" }
+      ],
+      "color": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "بلوط فاتح", "en": "Light oak" },
+        { "ar": "جوزي", "en": "Walnut" }
+      ],
+      "material": [
+        { "ar": "خشب صلب", "en": "Solid wood" },
+        { "ar": "MDF مدهون", "en": "Painted MDF" }
+      ]
+    },
+    "featured": false
+  },
+  {
+    "id": "door-entry-01",
+    "category": "doors",
+    "name": { "ar": "باب مدخل مصفح", "en": "Armoured entrance door" },
+    "short": { "ar": "أمان وعزل حراري لباب البيت.", "en": "Security and thermal insulation for your entrance." },
+    "description": {
+      "ar": "باب مدخل بهيكل فولاذي مصفح وعزل داخلي يقلل دخول الحرارة والغبار. قفل متعدد النقاط وعين سحرية، ويمكن إضافة قفل ذكي. الوجه الخارجي بقشرة خشب أو دهان حراري يتحمل شمس الصيف.",
+      "en": "An entrance door on an armoured steel frame with internal insulation that cuts heat and dust. Multi-point lock and peephole, with a smart lock available. The outer face comes in wood veneer or a baked finish that survives summer sun."
+    },
+    "priceFrom": 2400,
+    "priceTo": 4500,
+    "images": [
+      "https://picsum.photos/seed/yusr-door-entry-1/1000/750",
+      "https://picsum.photos/seed/yusr-door-entry-2/1000/750",
+      "https://picsum.photos/seed/yusr-door-entry-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "100 × 7 × 220 سم", "en": "100 × 7 × 220 cm" },
+      "material": { "ar": "فولاذ مصفح + عزل داخلي", "en": "Armoured steel + internal insulation" },
+      "colors": [
+        { "ar": "بني داكن", "en": "Dark brown" },
+        { "ar": "رمادي", "en": "Grey" },
+        { "ar": "جوزي", "en": "Walnut" }
+      ],
+      "leadTimeDays": 14,
+      "warrantyYears": 3
+    },
+    "options": {
+      "size": [
+        { "ar": "90 × 210 سم", "en": "90 × 210 cm" },
+        { "ar": "100 × 220 سم", "en": "100 × 220 cm" },
+        { "ar": "120 × 240 سم", "en": "120 × 240 cm" }
+      ],
+      "color": [
+        { "ar": "بني داكن", "en": "Dark brown" },
+        { "ar": "رمادي", "en": "Grey" },
+        { "ar": "جوزي", "en": "Walnut" }
+      ],
+      "material": [
+        { "ar": "قفل عادي", "en": "Standard lock" },
+        { "ar": "قفل ذكي", "en": "Smart lock" }
+      ]
+    },
+    "featured": true
+  },
+  {
+    "id": "shelf-wall-01",
+    "category": "essentials",
+    "name": { "ar": "رف جداري خشب", "en": "Wooden wall shelf" },
+    "short": { "ar": "رف معلق بدون حوامل ظاهرة.", "en": "A floating shelf with no visible brackets." },
+    "description": {
+      "ar": "رف خشب صلب بتثبيت مخفي يعطي شكلًا نظيفًا على الجدار. يتحمل حتى 15 كجم بالتثبيت الصحيح، ويصلح للكتب أو النباتات أو القهوة. يأتي مع مسامير مناسبة لجدران الطوب والخرسانة.",
+      "en": "A solid wood shelf with concealed fixings for a clean wall line. It holds up to 15 kg when fitted correctly — books, plants or your coffee setup. Supplied with fixings suited to brick and concrete walls."
+    },
+    "priceFrom": 320,
+    "priceTo": 780,
+    "images": [
+      "https://picsum.photos/seed/yusr-shelf-1/1000/750",
+      "https://picsum.photos/seed/yusr-shelf-2/1000/750",
+      "https://picsum.photos/seed/yusr-shelf-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "120 × 25 × 4 سم", "en": "120 × 25 × 4 cm" },
+      "material": { "ar": "خشب سنديان", "en": "Oak wood" },
+      "colors": [
+        { "ar": "طبيعي", "en": "Natural" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "أسود مطفي", "en": "Matte black" }
+      ],
+      "leadTimeDays": 7,
+      "warrantyYears": 1
+    },
+    "options": {
+      "size": [
+        { "ar": "60 سم", "en": "60 cm" },
+        { "ar": "90 سم", "en": "90 cm" },
+        { "ar": "120 سم", "en": "120 cm" }
+      ],
+      "color": [
+        { "ar": "طبيعي", "en": "Natural" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "أسود مطفي", "en": "Matte black" }
+      ],
+      "material": [
+        { "ar": "خشب سنديان", "en": "Oak" },
+        { "ar": "خشب صنوبر", "en": "Pine" }
+      ]
+    },
+    "featured": false
+  },
+  {
+    "id": "tv-unit-01",
+    "category": "essentials",
+    "name": { "ar": "طاولة تلفزيون معلقة", "en": "Floating TV unit" },
+    "short": { "ar": "تخفي الأسلاك وتسهّل تنظيف الأرضية.", "en": "Hides the cables, easier to clean under." },
+    "description": {
+      "ar": "وحدة تلفزيون معلقة على الجدار بأدراج مغلقة ومجرى داخلي للأسلاك. لأنها معلقة، تنظيف الأرضية تحتها أسهل والغرفة تبدو أوسع. نضبط الطول والارتفاع حسب مقاس شاشتك ومكان مخرج الكهرباء.",
+      "en": "A wall-mounted TV unit with closed drawers and an internal cable channel. Because it floats, the floor beneath stays easy to clean and the room reads larger. We set the length and height around your screen size and socket position."
+    },
+    "priceFrom": 1100,
+    "priceTo": 2300,
+    "images": [
+      "https://picsum.photos/seed/yusr-tv-1/1000/750",
+      "https://picsum.photos/seed/yusr-tv-2/1000/750",
+      "https://picsum.photos/seed/yusr-tv-3/1000/750"
+    ],
+    "specs": {
+      "dimensions": { "ar": "180 × 40 × 35 سم", "en": "180 × 40 × 35 cm" },
+      "material": { "ar": "MDF + قشرة ميلامين", "en": "MDF + melamine finish" },
+      "colors": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "رمادي", "en": "Grey" }
+      ],
+      "leadTimeDays": 9,
+      "warrantyYears": 2
+    },
+    "options": {
+      "size": [
+        { "ar": "140 سم", "en": "140 cm" },
+        { "ar": "180 سم", "en": "180 cm" },
+        { "ar": "220 سم", "en": "220 cm" }
+      ],
+      "color": [
+        { "ar": "أبيض", "en": "White" },
+        { "ar": "جوزي", "en": "Walnut" },
+        { "ar": "رمادي", "en": "Grey" }
+      ],
+      "material": [
+        { "ar": "ميلامين", "en": "Melamine" },
+        { "ar": "قشرة خشب طبيعي", "en": "Natural wood veneer" }
+      ]
+    },
+    "featured": false
+  }
+]
