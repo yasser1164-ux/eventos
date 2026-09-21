@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E9F72"/><stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <circle cx="1010" cy="120" r="230" fill="rgba(255,255,255,.06)"/>
+  <g transform="translate(90 170)" fill="#fff">
+    <text font-family="Tajawal,sans-serif" font-size="96" font-weight="900">قطع</text>
+    <text y="96" font-family="Tajawal,sans-serif" font-size="46" font-weight="700" fill="rgba(255,255,255,.92)">سوق قطع الغيار المستعملة في السعودية</text>
+    <text y="170" font-family="Tajawal,sans-serif" font-size="32" fill="rgba(255,255,255,.75)">ابحث بسيارتك · قارن الأسعار والحالة · أو اطلب القطعة ويجونك البائعين</text>
+    <text y="250" font-family="Inter,sans-serif" font-size="30" font-weight="700" letter-spacing="6" fill="rgba(255,255,255,.6)">QETAA</text>
+  </g>
+</svg>

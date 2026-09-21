@@ -1,0 +1,74 @@
+<!--META
+{
+  "title": "اطلب قطعة غيار — ونوصّل طلبك للتشاليح | قطع",
+  "desc": "ما لقيت القطعة؟ اكتب سيارتك والقطعة المطلوبة مرة وحدة، ونوصّل طلبك لكل التشاليح والمتاجر في مدينتك، وترجع لك عروض الأسعار.",
+  "scripts": ["pages/request.js"]
+}
+-->
+<div class="wrap section-tight">
+  <div style="max-width:760px;margin-inline:auto">
+    <span class="eyebrow" data-i18n="req.eyebrow">مجاناً · بدون تسجيل طويل</span>
+    <h1 data-i18n="req.h1">اطلب القطعة… وخلّ البائعين يجونك</h1>
+    <p class="muted" data-i18n="req.sub">
+      اكتب سيارتك والقطعة اللي تحتاجها، ويشوف طلبك كل تشليح ومحل مشترك في مدينتك.
+      العروض ترجع لك بالسعر والحالة والضمان، وتختار اللي يناسبك.
+    </p>
+
+    <div id="done" class="card pad note-green" hidden style="margin:20px 0">
+      <h2 data-i18n="req.done.t">تم استلام طلبك ✅</h2>
+      <p><span data-i18n="req.done.ref">رقم طلبك:</span> <b id="done-ref" class="num"></b></p>
+      <p id="done-count" class="muted"></p>
+      <a class="btn btn-primary" id="done-link" data-i18n="req.done.cta">تابع العروض على طلبك</a>
+      <a class="btn btn-ghost" href="search.html" data-i18n="req.done.browse">تصفح القطع المتوفرة</a>
+    </div>
+
+    <form class="card pad" id="req-form" style="margin-top:18px">
+      <h2 style="font-size:1.15rem" data-i18n="req.s1">١ · سيارتك</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.make">الماركة</label><select name="make"></select></div>
+        <div class="field"><label data-i18n="f.model">الموديل</label><select name="model"></select></div>
+        <div class="field"><label data-i18n="f.year">سنة الصنع</label><select name="year"></select></div>
+        <div class="field">
+          <label data-i18n="f.vin">رقم الهيكل VIN <span class="hint">(اختياري)</span></label>
+          <input name="vin" maxlength="17" placeholder="يساعد البائع يطابق القطعة بدقة" data-i18n-ph="f.vin.ph">
+        </div>
+      </div>
+
+      <h2 style="font-size:1.15rem;margin-top:22px" data-i18n="req.s2">٢ · القطعة المطلوبة</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.category">القسم</label><select name="category"></select></div>
+        <div class="field">
+          <label data-i18n="f.part">اسم القطعة</label>
+          <input name="part_name" list="part-options" placeholder="مثال: صدام أمامي" data-i18n-ph="f.part.ph">
+          <datalist id="part-options"></datalist>
+        </div>
+        <fieldset class="field span2" style="border:0;padding:0;margin:0">
+          <label data-i18n="f.condpref">الحالة المقبولة</label>
+          <div class="switch-row" id="cond-list"></div>
+        </fieldset>
+        <fieldset class="field span2" style="border:0;padding:0;margin:0">
+          <label data-i18n="f.urgency">متى تحتاجها؟</label>
+          <div class="switch-row" id="urgency-list"></div>
+        </fieldset>
+        <div class="field span2">
+          <label data-i18n="f.notes">تفاصيل تساعد البائع</label>
+          <textarea name="notes" rows="4" placeholder="مثال: أبي صدام أصلي أبيض ٠٤٠، وإذا فيه حساسات أفضل. السيارة في ورشة بحي النسيم." data-i18n-ph="f.notes.ph"></textarea>
+        </div>
+      </div>
+
+      <h2 style="font-size:1.15rem;margin-top:22px" data-i18n="req.s3">٣ · كيف نوصل لك العروض</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.city">المدينة</label><select name="city"></select></div>
+        <div class="field"><label data-i18n="f.name">الاسم</label><input name="name" placeholder="أبو فهد" data-i18n-ph="f.name.ph"></div>
+        <div class="field span2">
+          <label data-i18n="f.phone">رقم الجوال</label>
+          <input name="phone" type="tel" dir="ltr" placeholder="05xxxxxxxx">
+          <span class="hint" data-i18n="f.phone.hint">يظهر للبائعين المشتركين فقط، ولا يُنشر في الصفحة العامة.</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" type="submit" style="margin-top:10px" data-i18n="req.submit">أرسل الطلب للبائعين</button>
+      <p class="muted center" style="font-size:.84rem;margin-top:10px" data-i18n="req.free">الطلب مجاني، وما فيه أي التزام بالشراء.</p>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+{
+  "name": "قطع — سوق قطع الغيار المستعملة",
+  "short_name": "قطع",
+  "description": "ابحث عن قطع غيار سيارات مستعملة بسيارتك وسنتها، أو اطلب القطعة ويجيك البائعون بعروضهم.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#0E9F72",
+  "icons": [
+    { "src": "assets/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

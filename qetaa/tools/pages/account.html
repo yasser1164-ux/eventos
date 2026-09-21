@@ -1,0 +1,49 @@
+<!--META
+{
+  "title": "حسابي | قطع",
+  "desc": "المفضلة، طلباتك، إعلاناتك، ونشاطك على المنصة.",
+  "scripts": ["pages/account.js"]
+}
+-->
+<div class="wrap section-tight">
+  <div style="max-width:900px;margin-inline:auto">
+
+    <div id="signin">
+    <form class="card pad" id="signin-form" style="max-width:480px;margin-inline:auto">
+      <h1 style="font-size:1.4rem" data-i18n="acc.h1">ادخل حسابك</h1>
+      <p class="muted" data-i18n="acc.sub">بالاسم والجوال فقط. في النسخة التجريبية يُحفظ الحساب في هذا الجهاز — وعند تشغيل قاعدة البيانات يصير تسجيل دخول برمز يوصل جوالك.</p>
+      
+      <div class="field"><label data-i18n="f.name">الاسم</label><input name="name" required></div>
+      <div class="field"><label data-i18n="f.phone2">رقم الجوال</label><input name="phone" type="tel" dir="ltr" placeholder="05xxxxxxxx" required></div>
+      <div class="field"><label data-i18n="f.city">المدينة</label><select id="in-city" name="city"></select></div>
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <label data-i18n="acc.role">نوع الحساب</label>
+        <div class="switch-row">
+          <label><input type="radio" name="role" value="buyer" checked> <span data-i18n="acc.buyer">مشتري</span></label>
+          <label><input type="radio" name="role" value="seller"> <span data-i18n="acc.seller">بائع / تشليح</span></label>
+        </div>
+      </fieldset>
+      <button class="btn btn-primary btn-block" type="submit" data-i18n="acc.in">دخول</button>
+    </form>
+    </div>
+
+    <div id="panel" hidden>
+      <div class="card pad" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;gap:12px;align-items:center" id="who"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-primary btn-sm" href="sell.html" data-i18n="nav.sell">أضف قطعة</a>
+          <a class="btn btn-ghost btn-sm" href="request.html" data-i18n="nav.request">اطلب قطعة</a>
+          <button class="btn btn-ghost btn-sm" id="signout" type="button" data-i18n="acc.out">خروج</button>
+        </div>
+      </div>
+
+      <div class="tabs" id="tabs" style="margin-top:22px">
+        <button class="is-active" data-tab="saved" data-i18n="acc.tab1">المفضلة</button>
+        <button data-tab="requests" data-i18n="acc.tab2">طلباتي</button>
+        <button data-tab="listings" data-i18n="acc.tab3">إعلاناتي</button>
+        <button data-tab="activity" data-i18n="acc.tab4">نشاطي</button>
+      </div>
+      <div id="tab-body"></div>
+    </div>
+  </div>
+</div>
