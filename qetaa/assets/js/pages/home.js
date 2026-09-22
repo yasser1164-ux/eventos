@@ -3,22 +3,19 @@
   "use strict";
   var P = UI.params();
 
+  /* The homepage asks one thing: which car? Everything else (part name,
+     city, condition, price…) lives on the search page's filters, so the
+     first screen is three dropdowns and a button, not a form to fill out. */
   function searchBox() {
     var make = UI.$("#h-make"), model = UI.$("#h-model"), year = UI.$("#h-year"),
-        cat = UI.$("#h-cat"), city = UI.$("#h-city"), form = UI.$("#h-form");
+        form = UI.$("#h-form");
     UI.carChain(make, model, year, P);
-    UI.fillCategories(cat, P.category);
-    UI.fillCities(city, P.city || QETAA.defaultCity);
     if (form) form.addEventListener("submit", function (e) {
       e.preventDefault();
       var q = [];
       if (make.value)  q.push("make=" + make.value);
       if (model.value) q.push("model=" + model.value);
       if (year.value)  q.push("year=" + year.value);
-      if (cat.value)   q.push("category=" + cat.value);
-      if (city.value)  q.push("city=" + city.value);
-      var text = UI.$("#h-q").value.trim();
-      if (text) q.push("q=" + encodeURIComponent(text));
       location.href = "search.html" + (q.length ? "?" + q.join("&") : "");
     });
   }
@@ -42,9 +39,6 @@
   function rows() {
     DB.listings({ sort: "popular", limit: 8 }).then(function (r) {
       UI.listingGrid(UI.$("#featured"), r.items);
-    });
-    DB.listings({ sort: "newest", limit: 8 }).then(function (r) {
-      UI.listingGrid(UI.$("#latest"), r.items);
     });
   }
 
@@ -88,9 +82,6 @@
       set("#stat-parts", r[0].total);
       set("#stat-sellers", r[1].length);
       set("#stat-requests", r[2].length);
-      var cities = {};
-      r[1].forEach(function (s) { cities[s.city] = 1; });
-      set("#stat-cities", Object.keys(cities).length);
     });
   }
 
@@ -103,8 +94,6 @@
       var make = UI.$("#h-make"), model = UI.$("#h-model"), year = UI.$("#h-year");
       UI.fillMakes(make, make.value); UI.fillModels(make.value, model, model.value);
       UI.fillYears(make.value, model.value, year, year.value);
-      UI.fillCategories(UI.$("#h-cat"), UI.$("#h-cat").value);
-      UI.fillCities(UI.$("#h-city"), UI.$("#h-city").value);
       render();
     });
   });

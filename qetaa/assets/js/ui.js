@@ -192,16 +192,27 @@ window.UI = (function (w, d) {
     return out + "</span>" + esc(lang() === "en" ? c.en : c.ar) + "</span>";
   }
 
+  /* the compact one-word version, for a results grid where four cards'
+     worth of bar-meters would just be noise */
+  function condDot(cond) {
+    var c = typeof cond === "string" ? (TAX.find(TAX.conditions, cond) || TAX.conditions[1]) : cond;
+    return '<span class="cond-dot' + (c.bars <= 2 ? " warn" : "") + '"></span>' +
+      esc(lang() === "en" ? c.en : c.ar);
+  }
+
+  /* A results card answers three questions at a glance — what, does it fit,
+     how much — and nothing else competes with them. Everything a buyer
+     needs beyond that (warranty, OEM number, seller trust) lives one tap
+     away on the part page, not stacked as badges on every tile. */
   function listingCard(l) {
-    var fav = DB.isFav(l.id);
+    var fav = DB.isFav(l.id),
+        badge = l.featured ? '<span class="badge b-amber">' + t("مميّز", "Featured") + "</span>"
+              : l.warranty_days > 0 ? '<span class="badge b-green">' +
+                  t("بضمان", "Warranty") + "</span>" : "";
     return '<a class="pcard" href="part.html?id=' + encodeURIComponent(l.id) + '">' +
       '<div class="pcard-media">' +
         '<img loading="lazy" src="' + QART.photo(l, 0) + '" alt="' + esc(l.part_name) + '">' +
-        '<div class="media-badges">' +
-          (l.featured ? '<span class="badge b-amber">' + t("مميّز", "Featured") + "</span>" : "") +
-          (l.warranty_days > 0 ? '<span class="badge b-green">' +
-            t("ضمان " + l.warranty_days + " يوم", l.warranty_days + "-day warranty") + "</span>" : "") +
-        "</div>" +
+        (badge ? '<div class="media-badges">' + badge + "</div>" : "") +
         '<button class="fav' + (fav ? " is-on" : "") + '" data-id="' + l.id +
           '" type="button" aria-label="' + t("حفظ", "Save") + '">' +
           '<svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-9.4A4.1 4.1 0 0 1 12 7.8a4.1 4.1 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/></svg>' +
@@ -210,14 +221,10 @@ window.UI = (function (w, d) {
       '<div class="pcard-body">' +
         '<div class="pcard-title">' + esc(l.part_name) + "</div>" +
         '<div class="pcard-fit">' + esc(l.fits) + "</div>" +
-        condBars(l.condition) +
         '<div class="pcard-foot">' +
-          "<div>" + money(l.price) +
-            (l.price_old ? ' <span class="price-old num">' + l.price_old + "</span>" : "") +
-          "</div>" +
-          '<span class="pcard-seller">' + esc(l.city_label) +
-            (l.seller && l.seller.verified ? ' <span class="badge b-blue">' + t("موثّق", "Verified") + "</span>" : "") +
-          "</span>" +
+          "<span>" + money(l.price) +
+            (l.price_old ? ' <span class="price-old num">' + l.price_old + "</span>" : "") + "</span>" +
+          '<span class="pcard-meta">' + condDot(l.condition) + " · " + esc(l.city_label) + "</span>" +
         "</div>" +
       "</div>" +
     "</a>";
