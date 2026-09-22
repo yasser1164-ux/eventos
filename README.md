@@ -19,6 +19,16 @@ https://yasser1164-ux.github.io/eventos/najd/ — see `najd/README.md` for its
 setup and pre-launch checklist. It can be moved to its own repository or a
 custom domain by copying the folder as-is.
 
+`qetaa/` — **قطع · Qetaa**, a bilingual marketplace for **used car spare
+parts** in Saudi Arabia: search by make/model/year, compare condition, price
+and warranty from scrapyards and parts shops, or post a part request and let
+sellers quote it. Like `najd/`, it is a separate product that only shares this
+repository: its own pages, styling and scripts under `qetaa/`, published at
+https://yasser1164-ux.github.io/eventos/qetaa/. It runs on bundled demo data
+with zero configuration and switches to a real Supabase backend by filling two
+keys — see `qetaa/README.md` for the business model, the launch plan and the
+setup steps.
+
 ## Architecture
 
 Data, logic and UI are separated:

@@ -1,0 +1,186 @@
+<!--META
+{
+  "title": "قطع — سوق قطع غيار السيارات المستعملة في السعودية",
+  "desc": "ابحث عن قطع غيار مستعملة بسيارتك وسنتها من التشاليح والمتاجر في الرياض وجدة والدمام والخبر. قارن الأسعار، شوف حالة القطعة والضمان، أو اطلب القطعة وخلّ البائعين يجونك بعروضهم.",
+  "scripts": ["pages/home.js"]
+}
+-->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="home.eyebrow">قطع غيار مستعملة · موثوقة · بسعر واضح</span>
+    <h1 data-i18n-html="home.h1">قطعة سيارتك موجودة —<br><em>خلّنا نوصلك لها اليوم</em></h1>
+    <p class="hero-sub" data-i18n="home.sub">
+      بدل ما تدور تشليح تشليح وتتصل على عشر أرقام: اختر سيارتك، شوف القطع المتوفرة بأسعارها
+      وحالتها، وكلّم البائع مباشرة. وإذا ما لقيت القطعة، اطلبها ونوصّل طلبك لكل البائعين.
+    </p>
+
+    <form class="searchbox" id="h-form">
+      <div class="searchbox-tabs" role="tablist">
+        <button type="button" class="is-active" data-i18n="home.tab.car">ابحث بسيارتك</button>
+        <button type="button" onclick="location.href='request.html'" data-i18n="home.tab.request">ما لقيتها؟ اطلبها</button>
+      </div>
+      <div class="search-grid">
+        <div class="field">
+          <label data-i18n="f.make">الماركة</label>
+          <select id="h-make"></select>
+        </div>
+        <div class="field">
+          <label data-i18n="f.model">الموديل</label>
+          <select id="h-model"></select>
+        </div>
+        <div class="field">
+          <label data-i18n="f.year">سنة الصنع</label>
+          <select id="h-year"></select>
+        </div>
+        <div class="field">
+          <label data-i18n="f.category">القسم</label>
+          <select id="h-cat"></select>
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit" data-i18n="home.search">ابحث</button>
+      </div>
+      <div class="search-grid" style="margin-top:10px">
+        <div class="field" style="grid-column:span 3">
+          <label data-i18n="f.q">اسم القطعة أو رقمها</label>
+          <input id="h-q" type="search" placeholder="مثال: صدام أمامي، أو &#8206;52119-06962" data-i18n-ph="f.q.ph">
+        </div>
+        <div class="field">
+          <label data-i18n="f.city">المدينة</label>
+          <select id="h-city"></select>
+        </div>
+      </div>
+      <div class="chips-row">
+        <a class="chip" href="search.html?category=body" data-i18n="chip.body">صدامات وأبواب</a>
+        <a class="chip" href="search.html?category=lighting" data-i18n="chip.light">شمعات</a>
+        <a class="chip" href="search.html?category=engine" data-i18n="chip.engine">مكاين</a>
+        <a class="chip" href="search.html?category=gearbox" data-i18n="chip.gear">قيرات</a>
+        <a class="chip" href="search.html?warranty=1" data-i18n="chip.warranty">بضمان فقط</a>
+        <a class="chip" href="search.html?verified=1" data-i18n="chip.verified">بائع موثّق</a>
+      </div>
+    </form>
+
+    <div class="hero-stats">
+      <div><b id="stat-parts">—</b><span data-i18n="home.stat.parts">قطعة معروضة</span></div>
+      <div><b id="stat-sellers">—</b><span data-i18n="home.stat.sellers">بائع وتشليح</span></div>
+      <div><b id="stat-cities">—</b><span data-i18n="home.stat.cities">مدينة</span></div>
+      <div><b id="stat-requests">—</b><span data-i18n="home.stat.requests">طلب مفتوح</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div class="grid grid-4">
+      <div class="card pad">
+        <h3 data-i18n="home.v1.t">السعر قبل ما تتحرك</h3>
+        <p class="muted" style="margin:0;font-size:.92rem" data-i18n="home.v1.b">كل قطعة معروضة بسعرها وحالتها وصورها — ما فيه "تعال شوفها وبعدين نتفاهم".</p>
+      </div>
+      <div class="card pad">
+        <h3 data-i18n="home.v2.t">حالة مكتوبة بوضوح</h3>
+        <p class="muted" style="margin:0;font-size:.92rem" data-i18n="home.v2.b">تصنيف من A إلى D يشرح حالة القطعة بدل كلمة "نظيفة" اللي ما تعني شي.</p>
+      </div>
+      <div class="card pad">
+        <h3 data-i18n="home.v3.t">ضمان استبدال</h3>
+        <p class="muted" style="margin:0;font-size:.92rem" data-i18n="home.v3.b">البائعون الموثّقون يعطون ضمان استبدال ١٤ يوم على القطع الميكانيكية.</p>
+      </div>
+      <div class="card pad">
+        <h3 data-i18n="home.v4.t">اطلب واستقبل العروض</h3>
+        <p class="muted" style="margin:0;font-size:.92rem" data-i18n="home.v4.b">ما لقيتها؟ اكتب طلبك مرة وحدة، والبائعون يرسلون لك أسعارهم.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="home.cats.t">تصفح حسب القسم</h2>
+        <p data-i18n="home.cats.b">من الصدامات للمكاين للكهرباء — كل قسم فيه قطع من تشاليح ومتاجر مختلفة.</p>
+      </div>
+      <a class="link-more" href="search.html" data-i18n="home.cats.all">كل القطع ←</a>
+    </div>
+    <div class="cats" id="cats"></div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div class="section-head">
+      <div><h2 data-i18n="home.featured.t">الأكثر طلباً هذا الأسبوع</h2></div>
+      <a class="link-more" href="search.html?sort=popular" data-i18n="home.more">عرض الكل ←</a>
+    </div>
+    <div class="plist" id="featured"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="home.req.t">طلبات مفتوحة الآن</h2>
+        <p data-i18n="home.req.b">ناس يدوّرون على قطع في هذه اللحظة. إذا عندك القطعة، قدّم عرضك وتواصل معهم مباشرة.</p>
+      </div>
+      <a class="link-more" href="requests.html" data-i18n="home.req.all">كل الطلبات ←</a>
+    </div>
+    <div class="grid grid-2" id="reqs"></div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <h2 data-i18n="home.how.t">كيف تشتري من قطع</h2>
+    <div class="steps" style="margin-top:20px">
+      <div class="step">
+        <h3 data-i18n="home.s1.t">حدّد سيارتك</h3>
+        <p data-i18n="home.s1.b">الماركة والموديل والسنة — نعرض لك القطع اللي تركّب على سيارتك فقط.</p>
+      </div>
+      <div class="step">
+        <h3 data-i18n="home.s2.t">قارن وتأكد</h3>
+        <p data-i18n="home.s2.b">شوف الحالة، الضمان، رقم القطعة (OEM)، وتقييم البائع قبل ما تكلّمه.</p>
+      </div>
+      <div class="step">
+        <h3 data-i18n="home.s3.t">كلّم البائع</h3>
+        <p data-i18n="home.s3.b">واتساب أو اتصال مباشر، مع رقم الإعلان جاهز في الرسالة.</p>
+      </div>
+      <div class="step">
+        <h3 data-i18n="home.s4.t">استلم وقيّم</h3>
+        <p data-i18n="home.s4.b">استلم القطعة أو اطلب توصيلها، وقيّم البائع عشان تساعد غيرك.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div class="section-head">
+      <div><h2 data-i18n="home.new.t">أحدث القطع المضافة</h2></div>
+      <a class="link-more" href="search.html" data-i18n="home.more">عرض الكل ←</a>
+    </div>
+    <div class="plist" id="latest"></div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div class="section-head">
+      <div><h2 data-i18n="home.sellers.t">تشاليح ومتاجر على المنصة</h2></div>
+      <a class="link-more" href="sellers.html" data-i18n="home.sellers.all">دليل البائعين ←</a>
+    </div>
+    <div class="grid grid-2" id="sellers"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <h2 data-i18n="home.cta.t">عندك تشليح أو محل قطع غيار؟</h2>
+        <p data-i18n="home.cta.b">اعرض مخزونك مجاناً، واستقبل طلبات المشترين في مدينتك. ما تدفع شي حتى تشوف نتيجة.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary btn-lg" href="sell.html" data-i18n="home.cta.b1">أضف أول قطعة</a>
+        <a class="btn btn-ghost btn-lg" href="pricing.html" data-i18n="home.cta.b2">شوف الباقات</a>
+      </div>
+    </div>
+  </div>
+</section>

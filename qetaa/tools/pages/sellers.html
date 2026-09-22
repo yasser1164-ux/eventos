@@ -1,0 +1,28 @@
+<!--META
+{
+  "title": "دليل التشاليح ومتاجر قطع الغيار | قطع",
+  "desc": "دليل التشاليح ومحلات قطع الغيار المستعملة في الرياض وجدة والدمام والخبر والقصيم، مع التقييمات والتخصصات وطرق التواصل.",
+  "scripts": ["pages/sellers.js"]
+}
+-->
+<div class="wrap section-tight">
+  <div class="section-head">
+    <div>
+      <h1 data-i18n="sellers.h1">التشاليح والمتاجر</h1>
+      <p data-i18n="sellers.sub">كل بائع هنا له صفحة فيها مخزونه وتقييمات المشترين — تعرف مع مين تتعامل قبل ما تتصل.</p>
+    </div>
+    <a class="btn btn-primary" href="sell.html" data-i18n="sellers.cta">سجّل محلك مجاناً</a>
+  </div>
+
+  <div class="card pad" style="margin-bottom:18px">
+    <div class="form-grid" style="gap:0 12px">
+      <div class="field"><label data-i18n="f.city">المدينة</label><select id="s-city"></select></div>
+      <div class="field"><label data-i18n="f.stype">نوع البائع</label><select id="s-type"></select></div>
+      <div class="field"><label data-i18n="f.specialty">التخصص (ماركة)</label><select id="s-make"></select></div>
+      <div class="field"><label data-i18n="f.q2">بحث</label><input id="s-q" type="search" placeholder="اسم المحل…" data-i18n-ph="f.q3.ph"></div>
+    </div>
+    <span class="muted num" id="s-count"></span>
+  </div>
+
+  <div class="grid grid-2" id="s-list"></div>
+</div>

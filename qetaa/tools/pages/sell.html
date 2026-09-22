@@ -1,0 +1,103 @@
+<!--META
+{
+  "title": "أضف قطعة للبيع — مجاناً | قطع",
+  "desc": "اعرض قطعة غيار مستعملة للبيع: صور، حالة، سنوات التوافق، سعر وضمان. النشر مجاني ويوصل لمشترين يدوّرون على نفس القطعة.",
+  "scripts": ["pages/sell.js"]
+}
+-->
+<div class="wrap section-tight">
+  <div style="max-width:820px;margin-inline:auto">
+    <span class="eyebrow" data-i18n="sell.eyebrow">النشر مجاني · أول ٥ قطع بدون اشتراك</span>
+    <h1 data-i18n="sell.h1">أضف قطعة للبيع</h1>
+    <p class="muted" data-i18n="sell.sub">
+      كل ما كانت بياناتك أدق، كل ما قلّت المكالمات الفاضية وزادت البيعات.
+      اكتب سنوات التوافق ورقم القطعة إذا متوفر — هذي أكثر شي يسأل عنه المشتري.
+    </p>
+
+    <div id="done" class="card pad note-green" hidden style="margin:20px 0">
+      <h2 data-i18n="sell.done.t">تم نشر القطعة ✅</h2>
+      <p><span data-i18n="sell.done.ref">رقم الإعلان:</span> <b id="done-ref" class="num"></b></p>
+      <a class="btn btn-primary" id="done-link" data-i18n="sell.done.cta">شوف إعلانك</a>
+      <a class="btn btn-ghost" href="sell.html" data-i18n="sell.done.more">أضف قطعة ثانية</a>
+      <a class="btn btn-ghost" href="requests.html" data-i18n="sell.done.reqs">شوف الطلبات المفتوحة</a>
+    </div>
+
+    <form class="card pad" id="sell-form" style="margin-top:18px">
+      <h2 style="font-size:1.15rem" data-i18n="sell.s1">١ · القطعة تركّب على</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.make">الماركة</label><select name="make"></select></div>
+        <div class="field"><label data-i18n="f.model">الموديل</label><select name="model"></select></div>
+        <div class="field"><label data-i18n="f.yearfrom">من سنة</label><select name="year_from"></select></div>
+        <div class="field"><label data-i18n="f.yearto">إلى سنة</label><select name="year_to"></select></div>
+      </div>
+
+      <h2 style="font-size:1.15rem;margin-top:22px" data-i18n="sell.s2">٢ · تفاصيل القطعة</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.category">القسم</label><select name="category"></select></div>
+        <div class="field">
+          <label data-i18n="f.part">اسم القطعة</label>
+          <input name="part_name" list="part-options" placeholder="مثال: شمعة أمامية يمين" data-i18n-ph="f.part.ph2">
+          <datalist id="part-options"></datalist>
+        </div>
+        <div class="field">
+          <label data-i18n="f.oem">رقم القطعة OEM <span class="hint">(اختياري)</span></label>
+          <input name="oem" dir="ltr" placeholder="81145-60F60">
+        </div>
+        <div class="field"><label data-i18n="f.qty">الكمية المتوفرة</label><input name="qty" type="number" min="1" value="1"></div>
+        <fieldset class="field span2" style="border:0;padding:0;margin:0">
+          <label data-i18n="f.cond">حالة القطعة</label>
+          <div class="switch-row" id="cond-list"></div>
+        </fieldset>
+        <fieldset class="field span2" style="border:0;padding:0;margin:0">
+          <label data-i18n="f.origin">المصدر</label>
+          <div class="switch-row" id="origin-list"></div>
+        </fieldset>
+        <div class="field span2">
+          <label data-i18n="f.desc">وصف صادق للقطعة</label>
+          <textarea name="notes" rows="4" placeholder="اذكر أي خدش أو كسر أو تصليح سابق. الوصف الصادق يقلل الإرجاع ويرفع تقييمك." data-i18n-ph="f.desc.ph"></textarea>
+        </div>
+      </div>
+
+      <h2 style="font-size:1.15rem;margin-top:22px" data-i18n="sell.s3">٣ · الصور</h2>
+      <div class="upload" id="photo-drop">
+        <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        <div data-i18n="sell.photos">اضغط لاختيار صور القطعة (حتى ٦ صور)</div>
+        <small class="muted" data-i18n="sell.photos.hint">صوّر القطعة من كل الجهات، ومعها رقم القطعة إذا كان واضح.</small>
+      </div>
+      <input id="photo-input" type="file" accept="image/*" multiple hidden>
+      <div class="thumbs" id="thumbs"></div>
+
+      <h2 style="font-size:1.15rem;margin-top:22px" data-i18n="sell.s4">٤ · السعر والتسليم</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.price">السعر (ريال)</label><input name="price" type="number" min="1" placeholder="480"></div>
+        <div class="field">
+          <label data-i18n="f.warranty">ضمان الاستبدال (أيام)</label>
+          <input name="warranty_days" type="number" min="0" value="7">
+          <span class="hint" data-i18n="f.warranty.hint">الضمان يرفع فرصة البيع أكثر من أي شي ثاني.</span>
+        </div>
+        <fieldset class="field span2" style="border:0;padding:0;margin:0">
+          <label data-i18n="f.delivery">خيارات التسليم</label>
+          <div class="switch-row" id="delivery-list"></div>
+        </fieldset>
+      </div>
+
+      <h2 style="font-size:1.15rem;margin-top:22px" data-i18n="sell.s5">٥ · بياناتك</h2>
+      <div class="form-grid">
+        <div class="field"><label data-i18n="f.shop">اسم المحل أو اسمك</label><input name="seller_name" placeholder="تشليح السلي"></div>
+        <div class="field"><label data-i18n="f.phone2">جوال / واتساب</label><input name="seller_phone" type="tel" dir="ltr" placeholder="05xxxxxxxx"></div>
+        <div class="field"><label data-i18n="f.city">المدينة</label><select name="city"></select></div>
+        <fieldset class="field" style="border:0;padding:0;margin:0">
+          <label data-i18n="f.stype">نوع البائع</label>
+          <div class="switch-row" id="stype-list"></div>
+        </fieldset>
+      </div>
+
+      <label class="check" style="margin-top:10px">
+        <input type="checkbox" name="terms">
+        <span data-i18n="sell.terms">أتعهد أن القطعة بحوزتي، وأن الوصف والصور تخص القطعة نفسها، وألتزم بشروط النشر.</span>
+      </label>
+
+      <button class="btn btn-primary btn-lg btn-block" type="submit" style="margin-top:16px" data-i18n="sell.submit">انشر القطعة</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<!--META
+{
+  "title": "تصفح قطع الغيار المستعملة | قطع",
+  "desc": "ابحث في آلاف قطع الغيار المستعملة حسب الماركة والموديل والسنة والقسم والمدينة، مع فلاتر للحالة والضمان ونوع البائع.",
+  "scripts": ["pages/search.js"]
+}
+-->
+<div class="wrap">
+  <div class="results">
+    <aside class="filters" id="filters"></aside>
+
+    <div>
+      <div style="display:flex;gap:10px;margin-bottom:14px">
+        <input id="q" type="search" placeholder="ابحث باسم القطعة أو رقم OEM…" data-i18n-ph="search.ph">
+        <button class="btn btn-ghost filter-toggle" id="filter-toggle" type="button" data-i18n="search.filters">الفلاتر</button>
+      </div>
+
+      <div class="active-filters" id="pills" hidden></div>
+
+      <div class="results-head">
+        <span class="results-count" id="count">—</span>
+        <div class="sortbar">
+          <label class="lbl" for="sort" data-i18n="search.sort">ترتيب</label>
+          <select id="sort">
+            <option value="newest" data-i18n="sort.newest">الأحدث</option>
+            <option value="cheap" data-i18n="sort.cheap">الأرخص</option>
+            <option value="dear" data-i18n="sort.dear">الأغلى</option>
+            <option value="rating" data-i18n="sort.rating">تقييم البائع</option>
+            <option value="popular" data-i18n="sort.popular">الأكثر مشاهدة</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="note note-green" id="rfq-hint" hidden style="margin-bottom:14px">
+        <b data-i18n="search.hint.t">ما لقيت اللي تبي؟</b>
+        <span data-i18n="search.hint.b">اكتب طلبك مرة وحدة ويوصل لكل التشاليح والمتاجر في مدينتك — ويرجعون لك بأسعارهم.</span>
+        <a class="btn btn-primary btn-sm" href="request.html" style="margin-top:10px" data-i18n="search.hint.cta">اطلب القطعة</a>
+      </div>
+
+      <div class="plist" id="results-grid"></div>
+
+      <button class="btn btn-ghost btn-block" id="more" hidden style="margin-top:22px" data-i18n="search.more">عرض المزيد</button>
+    </div>
+  </div>
+</div>
