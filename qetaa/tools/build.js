@@ -14,13 +14,15 @@ const PAGES = path.join(__dirname, "pages");
 const SHELL = fs.readFileSync(path.join(__dirname, "shell.html"), "utf8");
 const BASE  = "https://yasser1164-ux.github.io/eventos/qetaa/"; // ← change on custom domain
 
+/* Kept short on purpose: the logo already goes home, and "Open requests" /
+   "Account" live in the tab bar (mobile) and the footer / header icon
+   (desktop) instead of competing for space here. Four items reads at a
+   glance; six didn't. */
 const NAV = [
-  { id: "index",    href: "index.html",    ar: "الرئيسية",        key: "nav.home" },
-  { id: "search",   href: "search.html",   ar: "تصفح القطع",      key: "nav.search" },
-  { id: "request",  href: "request.html",  ar: "اطلب قطعة",       key: "nav.request" },
-  { id: "requests", href: "requests.html", ar: "الطلبات المفتوحة", key: "nav.requests" },
-  { id: "sellers",  href: "sellers.html",  ar: "المتاجر",          key: "nav.sellers" },
-  { id: "pricing",  href: "pricing.html",  ar: "للتجار",           key: "nav.pricing" }
+  { id: "search",   href: "search.html",   ar: "تصفح القطع", key: "nav.search" },
+  { id: "request",  href: "request.html",  ar: "اطلب قطعة",  key: "nav.request" },
+  { id: "sellers",  href: "sellers.html",  ar: "المتاجر",     key: "nav.sellers" },
+  { id: "pricing",  href: "pricing.html",  ar: "للتجار",      key: "nav.pricing" }
 ];
 
 const navHtml = (cls, page) => NAV.map(n =>

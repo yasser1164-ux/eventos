@@ -119,6 +119,8 @@ window.I18N_EN = {
   "home.tab.car": "Search by your car",
   "home.tab.request": "Not listed? Request it",
   "home.search": "Search",
+  "home.or": "or",
+  "home.byname": "search by part name or number →",
   "chip.body": "Bumpers & doors",
   "chip.light": "Headlights",
   "chip.engine": "Engines",

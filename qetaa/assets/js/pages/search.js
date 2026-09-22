@@ -40,8 +40,21 @@
     }).join("");
   }
 
+  /* Everyone who lands on search wants the same first three things: which
+     car, which category, which city. Price, condition, origin, seller type
+     and delivery are real filters people do use — but not every visit, so
+     they live behind one "More filters" toggle instead of six always-open
+     groups fighting for attention. It opens itself if one of them is
+     already set from a link or a previous visit, so nothing is ever
+     hidden from someone who's using it. */
+  function advancedCount() {
+    return state.condition.length + state.origin.length + state.sellerType.length +
+      state.delivery.length + (state.priceMin ? 1 : 0) + (state.priceMax ? 1 : 0) +
+      (state.warranty ? 1 : 0) + (state.verified ? 1 : 0);
+  }
+
   function buildFilters() {
-    var el = UI.$("#filters");
+    var el = UI.$("#filters"), n = advancedCount();
     el.innerHTML =
       '<h3>' + UI.t("تصفية النتائج", "Filters") +
         '<button class="chip" id="clear-all" type="button">' + UI.t("مسح", "Clear") + "</button></h3>" +
@@ -50,21 +63,25 @@
       '<div class="field"><label>' + UI.t("سنة الصنع", "Year") + '</label><select id="f-year"></select></div>' +
       '<div class="field"><label>' + UI.t("القسم", "Category") + '</label><select id="f-cat"></select></div>' +
       '<div class="field"><label>' + UI.t("المدينة", "City") + '</label><select id="f-city"></select></div>' +
-      '<div class="fgroup"><b>' + UI.t("السعر (ريال)", "Price (SAR)") + "</b>" +
-        '<div style="display:flex;gap:8px">' +
-          '<input id="f-min" type="number" min="0" placeholder="' + UI.t("من", "min") + '" value="' + state.priceMin + '">' +
-          '<input id="f-max" type="number" min="0" placeholder="' + UI.t("إلى", "max") + '" value="' + state.priceMax + '">' +
-        "</div></div>" +
-      '<div class="fgroup"><b>' + UI.t("الحالة", "Condition") + "</b>" + checkGroup(TAX.conditions, "condition") + "</div>" +
-      '<div class="fgroup"><b>' + UI.t("المصدر", "Origin") + "</b>" + checkGroup(TAX.origins, "origin") + "</div>" +
-      '<div class="fgroup"><b>' + UI.t("نوع البائع", "Seller type") + "</b>" + checkGroup(TAX.sellerTypes, "sellerType") + "</div>" +
-      '<div class="fgroup"><b>' + UI.t("التوصيل", "Delivery") + "</b>" + checkGroup(TAX.delivery, "delivery") + "</div>" +
-      '<div class="fgroup">' +
-        '<label class="check"><input type="checkbox" id="f-warranty"' + (state.warranty ? " checked" : "") + "> " +
-          UI.t("بضمان فقط", "With warranty only") + "</label>" +
-        '<label class="check"><input type="checkbox" id="f-verified"' + (state.verified ? " checked" : "") + "> " +
-          UI.t("بائع موثّق فقط", "Verified sellers only") + "</label>" +
-      "</div>" +
+      '<details class="fmore"' + (n ? " open" : "") + '>' +
+        '<summary>' + UI.t("فلاتر إضافية", "More filters") +
+          (n ? ' <span class="badge b-green">' + n + "</span>" : "") + "</summary>" +
+        '<div class="fgroup" style="border-top:0;margin-top:2px"><b>' + UI.t("السعر (ريال)", "Price (SAR)") + "</b>" +
+          '<div style="display:flex;gap:8px">' +
+            '<input id="f-min" type="number" min="0" placeholder="' + UI.t("من", "min") + '" value="' + state.priceMin + '">' +
+            '<input id="f-max" type="number" min="0" placeholder="' + UI.t("إلى", "max") + '" value="' + state.priceMax + '">' +
+          "</div></div>" +
+        '<div class="fgroup"><b>' + UI.t("الحالة", "Condition") + "</b>" + checkGroup(TAX.conditions, "condition") + "</div>" +
+        '<div class="fgroup"><b>' + UI.t("المصدر", "Origin") + "</b>" + checkGroup(TAX.origins, "origin") + "</div>" +
+        '<div class="fgroup"><b>' + UI.t("نوع البائع", "Seller type") + "</b>" + checkGroup(TAX.sellerTypes, "sellerType") + "</div>" +
+        '<div class="fgroup"><b>' + UI.t("التوصيل", "Delivery") + "</b>" + checkGroup(TAX.delivery, "delivery") + "</div>" +
+        '<div class="fgroup">' +
+          '<label class="check"><input type="checkbox" id="f-warranty"' + (state.warranty ? " checked" : "") + "> " +
+            UI.t("بضمان فقط", "With warranty only") + "</label>" +
+          '<label class="check"><input type="checkbox" id="f-verified"' + (state.verified ? " checked" : "") + "> " +
+            UI.t("بائع موثّق فقط", "Verified sellers only") + "</label>" +
+        "</div>" +
+      "</details>" +
       '<button class="btn btn-primary btn-block" id="apply-mobile" style="margin-top:14px">' +
         UI.t("عرض النتائج", "Show results") + "</button>";
 

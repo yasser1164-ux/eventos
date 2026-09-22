@@ -135,19 +135,30 @@ html[dir="rtl"] .drawer-panel{--from:-100%}
 .hero h1{margin-bottom:12px}
 .hero h1 em{font-style:normal;color:var(--brand)}
 .hero-sub{font-size:1.08rem;color:var(--ink-2);max-width:56ch;margin-bottom:22px}
-.hero-stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px}
-.hero-stats div{display:flex;flex-direction:column}
-.hero-stats b{font-size:1.5rem;font-weight:900;font-family:var(--font-en)}
-.hero-stats span{font-size:.84rem;color:var(--ink-3)}
+/* one clear line of proof, not a stat dashboard */
+.hero-stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:18px;font-size:.9rem;color:var(--ink-3)}
+.hero-stats div{display:inline-flex;gap:5px;align-items:baseline}
+.hero-stats div:not(:last-child)::after{content:"·";margin-inline-start:8px;color:var(--ink-4)}
+.hero-stats b{font-weight:800;font-family:var(--font-en);color:var(--ink)}
 
-/* ---- search box -------------------------------------------------------- */
-.searchbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:16px}
-.searchbox-tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--surface-2);padding:4px;border-radius:12px;width:fit-content;max-width:100%;overflow:auto}
+/* ---- search box ---------------------------------------------------------
+   Deliberately narrow: three questions (make / model / year), one button.
+   Everything else — part name, city, condition, price — lives on the
+   search page's filters, reached in one tap, instead of crowding the
+   first screen a visitor sees. */
+.searchbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:18px}
+.searchbox-tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--surface-2);padding:4px;border-radius:12px;width:fit-content;max-width:100%;overflow:auto}
 .searchbox-tabs button{border:0;background:none;padding:8px 15px;border-radius:9px;font-family:inherit;font-weight:700;font-size:.9rem;color:var(--ink-3);cursor:pointer;white-space:nowrap}
 .searchbox-tabs button.is-active{background:var(--surface);color:var(--brand);box-shadow:var(--shadow)}
-.search-grid{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:10px;align-items:end}
+.search-grid{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:10px;align-items:end}
 .search-grid .field{margin:0}
-.chips-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.searchbox-alt{margin:14px 2px 2px;font-size:.88rem;color:var(--ink-3);text-align:center}
+.searchbox-alt a{color:var(--brand);font-weight:700}
+/* the three trust points that used to be four separate cards, now one
+   scannable line instead of a section of their own */
+.trust-strip{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 22px}
+.trust-strip li{display:flex;align-items:center;gap:7px;font-size:.88rem;font-weight:600;color:var(--ink-2)}
+.trust-strip svg{width:17px;height:17px;flex-shrink:0;fill:none;stroke:var(--brand);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .chip{border:1px solid var(--line);background:var(--surface);padding:6px 13px;border-radius:99px;font-size:.85rem;font-weight:600;color:var(--ink-2);cursor:pointer;font-family:inherit}
 .chip:hover{border-color:var(--brand);color:var(--brand)}
 .chip.is-on{background:var(--brand);border-color:var(--brand);color:#fff}
@@ -193,11 +204,11 @@ html[dir="ltr"] select{background-position:right 12px center;padding-inline-star
 .pcard-body{padding:13px;display:flex;flex-direction:column;gap:6px;flex:1}
 .pcard-title{font-weight:700;font-size:.97rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pcard-fit{font-size:.82rem;color:var(--ink-3);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.pcard-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px}
+.pcard-foot{margin-top:auto;display:flex;flex-direction:column;gap:3px;padding-top:8px}
 .price{font-family:var(--font-en);font-weight:800;font-size:1.05rem;color:var(--ink);display:inline-flex;align-items:baseline;gap:3px}
 .price small{font-size:.72rem;font-weight:600;color:var(--ink-3)}
-.price-old{font-size:.8rem;color:var(--ink-4);text-decoration:line-through;font-weight:600}
-.pcard-seller{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--ink-3)}
+.price-old{font-size:.78rem;color:var(--ink-4);font-weight:600;text-decoration:line-through}
+.pcard-meta{display:flex;align-items:center;gap:5px;font-size:.78rem;color:var(--ink-3)}
 .fav{position:absolute;inset-block-start:9px;inset-inline-end:9px;width:32px;height:32px;border-radius:50%;background:color-mix(in srgb,var(--surface) 85%,transparent);backdrop-filter:blur(6px);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;z-index:2}
 .fav svg{width:17px;height:17px;fill:none;stroke:var(--ink-2);stroke-width:1.8}
 .fav.is-on svg{fill:var(--red);stroke:var(--red)}
@@ -214,12 +225,15 @@ html[dir="ltr"] select{background-position:right 12px center;padding-inline-star
 .badge-row{display:flex;gap:6px;flex-wrap:wrap}
 .media-badges{position:absolute;inset-block-start:9px;inset-inline-start:9px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;z-index:2}
 
-/* condition meter */
+/* condition meter — the full bar-and-label version on the part page */
 .cond{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--ink-3)}
 .cond-bars{display:flex;gap:2px}
 .cond-bars i{width:13px;height:5px;border-radius:2px;background:var(--line)}
 .cond-bars i.on{background:var(--brand)}
 .cond-bars.warn i.on{background:var(--amber)}
+/* the one-dot version on a results card */
+.cond-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);flex-shrink:0}
+.cond-dot.warn{background:var(--amber)}
 
 /* ---- category tiles ---------------------------------------------------- */
 .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
@@ -253,6 +267,14 @@ html[dir="ltr"] select{background-position:right 12px center;padding-inline-star
 .filters h3{font-size:.95rem;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
 .fgroup{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 .fgroup > b{display:block;font-size:.85rem;margin-bottom:8px}
+/* the six occasional filters, collapsed by default so the panel opens
+   showing five fields instead of eleven */
+.fmore{border-top:1px solid var(--line);margin-top:12px}
+.fmore > summary{list-style:none;cursor:pointer;padding:12px 0;display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;color:var(--ink-2)}
+.fmore > summary::-webkit-details-marker{display:none}
+.fmore > summary::before{content:"";width:8px;height:8px;border-inline-end:2px solid var(--ink-4);border-block-end:2px solid var(--ink-4);transform:rotate(-45deg);transition:transform .15s}
+.fmore[open] > summary::before{transform:rotate(45deg)}
+.fmore .fgroup:first-of-type{border-top:0;margin-top:0;padding-top:0}
 .results-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .results-count{font-weight:700}
 .sortbar{display:flex;gap:8px;align-items:center}
